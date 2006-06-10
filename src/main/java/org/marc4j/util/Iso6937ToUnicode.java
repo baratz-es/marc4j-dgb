@@ -38,8 +38,8 @@ public class Iso6937ToUnicode implements CharacterConverter {
      * @param data the ISO 6937 data
      * @return {@link String} - the UCS/Unicode data
      */
-    public String convert(String s) {
-	return new String(convert(s.toCharArray()));
+    public String convert(String data) {
+	return new String(convert(data.toCharArray()));
     }
 
     /**

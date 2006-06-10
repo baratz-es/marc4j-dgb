@@ -167,7 +167,7 @@ public class MarcXmlReader
     /**
      * <p>Not supported.</p>
      *
-     * @param eh
+     * @param seh
      */
     public void setErrorHandler(org.xml.sax.ErrorHandler seh) {}
 

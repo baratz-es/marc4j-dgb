@@ -51,6 +51,18 @@ import org.marc4j.marcxml.Converter;
  * <p>For usage, run from the command-line with the following command:</p>
  * <p><code>java org.marc4j.util.XmlMarcWriter -usage</code></p>
  *
+ * <p><b>A note about character encodings:</b><br/>
+ * If no output encoding is specified on the command-line the 
+ * default charset is used. To specify an output encoding use a
+ * charset name supported by your Java virtual machine. For input
+ * MARC4J relies on the encoding in the XML declaration and the 
+ * underlying SAX2 XML parser implementation.
+ * The following command-line example converts UTF-8 to ANSEL:</p>
+ * <pre>
+ * java org.marc4j.util.XmlMarcWriter -convert ANSEL -oe ISO8859_1  -out output.mrc input.xml
+ * </pre>
+ * <p><b>Note:</b> the Latin-1 encoding (ISO8859_1) is used since ANSEL is not a supported character encoding.</p>
+ *
  * <p><b>Note:</b> this class requires a JAXP compliant SAX2 parser.
  * For W3C XML Schema support a JAXP 1.2 compliant parser is needed.</p> 
  *
@@ -75,9 +87,11 @@ public class XmlMarcWriter {
     private static final String JAXP_SCHEMA_SOURCE =
         "http://java.sun.com/xml/jaxp/properties/schemaSource";
 
-    static public void main(String[] args) {
+    public static void main(String[] args) {
         String input = null;
-	String output = null;
+	String inputEncoding = null;
+        String output = null;
+	String outputEncoding = null;
 	String stylesheet = null;
         String schemaSource = null;
 	String convert = null;
@@ -102,6 +116,11 @@ public class XmlMarcWriter {
                     usage();
                 }
                 output = args[++i];
+            } else if (args[i].equals("-oe")) {
+                if (i == args.length - 1) {
+                    usage();
+                }
+                outputEncoding = args[++i].trim();
             } else if (args[i].equals("-convert")) {
                 if (i == args.length - 1) {
                     usage();
@@ -131,19 +150,29 @@ public class XmlMarcWriter {
 
 	try {
 	    Writer writer;
-	    if (output == null) {
-		if (convert != null)
-		    writer = new BufferedWriter(new OutputStreamWriter(System.out, "ISO8859_1"));
-		else
-		    writer = new BufferedWriter(new OutputStreamWriter(System.out, "UTF8"));
-	    } else {
-		if (convert != null)
-		    writer = new BufferedWriter(new OutputStreamWriter(
-                        new FileOutputStream(output), "ISO8859_1"));
-		else
-		    writer = new BufferedWriter(new OutputStreamWriter(
-                        new FileOutputStream(output), "UTF8"));
-	    }
+// 	    if (output == null) {
+// 		if (convert != null)
+// 		    writer = new BufferedWriter(new OutputStreamWriter(System.out, "ISO8859_1"));
+// 		else
+// 		    writer = new BufferedWriter(new OutputStreamWriter(System.out, "UTF8"));
+// 	    } else {
+// 		if (convert != null)
+// 		    writer = new BufferedWriter(new OutputStreamWriter(
+//                         new FileOutputStream(output), "ISO8859_1"));
+// 		else
+// 		    writer = new BufferedWriter(new OutputStreamWriter(
+//                         new FileOutputStream(output), "UTF8"));
+// 	    }
+
+	    if (output == null && outputEncoding != null)
+		writer = new BufferedWriter(new OutputStreamWriter(System.out, outputEncoding));
+	    else if (output != null && outputEncoding == null)
+		writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(output)));
+	    else if (output != null && outputEncoding != null)
+		writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(output), outputEncoding));
+	    else
+		writer = new BufferedWriter(new OutputStreamWriter(System.out));
+
 	    MarcWriter handler = new MarcWriter(writer);
 	    if (convert != null) {
 		CharacterConverter charconv = null;
@@ -205,6 +234,7 @@ public class XmlMarcWriter {
         System.err.println("       -xsdss <file> = W3C XML Schema validation using schema source <file>");
         System.err.println("       -xsl <file> = Preprocess XML using XSLT stylesheet <file>");
         System.err.println("       -out <file> = Output using <file>");
+        System.err.println("       -oe <encoding> = Output using charset <encoding>");
         System.err.println("       -convert [ANSEL | ISO5426 | ISO6937] = convert from UTF-8");
 	System.err.println("          to specified character set");
         System.err.println("       -usage or -help = this message");

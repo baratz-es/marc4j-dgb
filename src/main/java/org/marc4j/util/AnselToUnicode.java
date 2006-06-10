@@ -123,8 +123,8 @@ public class AnselToUnicode
      * @param data the MARC-8 data
      * @return {@link String} - the UCS/Unicode data
      */
-    public String convert(String s) {
-	return new String(convert(s.toCharArray()));
+    public String convert(String data) {
+	return new String(convert(data.toCharArray()));
     }
 
     private void checkMode(char[] data, CodeTracker cdt) {

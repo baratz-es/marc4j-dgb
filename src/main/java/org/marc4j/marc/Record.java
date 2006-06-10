@@ -151,6 +151,9 @@ public class Record implements Serializable {
      * @return String - the control number value
      */
     public String getControlNumber() {
+        if (controlFieldList.size() == 0) 
+            return null;
+
         ControlField cf = (ControlField)controlFieldList.get(0);
         if (cf.getTag().equals("001"))
             return new String(cf.getData());

@@ -34,7 +34,7 @@ public class IllegalAddException extends IllegalArgumentException {
      * <p>Creates an <code>Exception</code> indicating that the addttion
      * of the supplied object is illegal.</p>
      *
-     * @param tag the tag name
+     * @param name the object name
      * @param reason the reason why the exception is thrown
      */
     public IllegalAddException(String name, String reason) {

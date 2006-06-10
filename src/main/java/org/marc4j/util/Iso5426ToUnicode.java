@@ -38,8 +38,8 @@ public class Iso5426ToUnicode implements CharacterConverter {
      * @param data the UNIMARC data
      * @return {@link String} - the UCS/Unicode data
      */
-    public String convert(String s) {
-	return new String(convert(s.toCharArray()));
+    public String convert(String data) {
+	return new String(convert(data.toCharArray()));
     }
 
     /**

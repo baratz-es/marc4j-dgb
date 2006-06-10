@@ -111,7 +111,7 @@ public class Leader implements Serializable {
     /**
      * <p>Registers the type of record (position 06).</p>
      *
-     * @param recordLength character representing the
+     * @param typeOfRecord character representing the
      *                     type of record
      */
     public void setTypeOfRecord(char typeOfRecord) {
