@@ -244,6 +244,7 @@ public class MarcReader {
             
             // Fin de registro
             if (mh != null) mh.endRecord();
+            
         }
         input.close();
         
@@ -252,7 +253,6 @@ public class MarcReader {
     }
 
     private void parseControlField(String tag, char[] field) {
-        
         // Si el tamaño del campo no es el correcto, reporta un mensaje de advertencia
         if (field.length < 2) {
             if (eh != null) reportWarning("Control Field contains no data elements for tag " + tag);
@@ -264,7 +264,11 @@ public class MarcReader {
             setControlNumber(trimFT(field));
         
         // Parsea el campo de control
+        try {
         if (mh != null) mh.controlField(tag, trimFT(field));
+        } catch (Exception e) {
+            if (eh != null) reportWarning("Control Field is not valid: " + tag + " - " + new String(field)); 
+        }
     }
 
     private void parseDataField(String tag, char[] field) throws IOException {
