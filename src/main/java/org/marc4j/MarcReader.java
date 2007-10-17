@@ -27,6 +27,8 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+
+import org.apache.commons.lang.StringUtils;
 import org.marc4j.marc.MarcConstants;
 import org.marc4j.marc.Tag;
 import org.marc4j.marc.Leader;
@@ -218,9 +220,20 @@ public class MarcReader {
                 while (charsRead != -1 && charsRead != field.length)
                     charsRead += input.read(field, charsRead, field.length - charsRead);
                 
-                // Comprueba que el campo termina con FT
-                if (field[field.length -1] != FT && eh != null)
-                    reportError("Field not terminated");
+                // Busca un FT por el final (al combinar caracteres por el encoding, puede devolver caracteres de más)
+                if (eh != null) {
+                    String sField = new String (field);
+                    int posFT = sField.lastIndexOf (FT);
+                    if (posFT < 0) {
+                        reportError("Field not terminated");
+                    } else if (posFT < (sField.length() - 1)) {
+                        String resto = sField.substring (posFT + 1);
+                        resto = StringUtils.replaceChars (resto, "\0", "");
+                        if (resto.length() > 0) {
+                            reportError ("Characters detected in field after FT");
+                        }
+                    }
+                }
                 
                 // Parsea el campo de control o de datos actual
                 recordCounter += length[i];
@@ -344,9 +357,9 @@ public class MarcReader {
                     getControlNumber()));
     }
 
-    private void setControlNumber(String controlNumber) {
-        this.controlNumber = controlNumber;
-    }
+//    private void setControlNumber(String controlNumber) {
+//        this.controlNumber = controlNumber;
+//    }
 
     private void setControlNumber(char[] controlNumber) {
         this.controlNumber = new String(controlNumber);
