@@ -24,6 +24,9 @@ import java.io.CharArrayReader;
 import java.io.IOException;
 import java.util.Hashtable;
 
+import com.digibis.commons.exceptions.ConfigException;
+import com.digibis.commons.util.ResourcesUtil;
+
 /**
  * <p>A utility to convert UCS/Unicode data to MARC-8.</p>
  *
@@ -46,7 +49,11 @@ public class UnicodeToAnsel implements CharacterConverter {
 	//  System.err.println("Unable to load character code table");
 	//  System.exit(1);
 	//}
-	rct = new ReverseCodeTable(getClass().getResourceAsStream("resources/codetables.xml"));
+    	try {
+            rct = new ReverseCodeTable(ResourcesUtil.getStream("resources/codetables.xml"));
+        } catch (IOException e) {
+            throw new ConfigException(e);
+        }
     }
 
     /**
