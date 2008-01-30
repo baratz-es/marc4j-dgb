@@ -20,7 +20,11 @@
  */
 package org.marc4j.util;
 
+import java.io.IOException;
 import java.util.*;
+
+import com.digibis.commons.exceptions.ConfigException;
+import com.digibis.commons.util.ResourcesUtil;
 
 /**
  * <p>A utility to convert MARC-8 data to non-precomposed UCS/Unicode.</p>
@@ -99,7 +103,11 @@ public class AnselToUnicode
 	//       System.err.println("Unable to load character code table");
 	//       System.exit(1);
 	//     }
-	ct = new CodeTable(getClass().getResourceAsStream("resources/codetablesnocjk.xml"));
+    	try {
+            ct = new CodeTable(ResourcesUtil.getStream("resources/codetablesnocjk.xml"));
+        } catch (IOException e) {
+            throw new ConfigException(e);
+        }
     }
 
     /**
@@ -114,7 +122,11 @@ public class AnselToUnicode
 	//       System.err.println("Unable to load character code table");
 	//       System.exit(1);
 	//     }
-	ct = new CodeTable(getClass().getResourceAsStream("resources/codetables.xml"));
+        try {
+            ct = new CodeTable(ResourcesUtil.getStream("resources/codetables.xml"));
+        } catch (IOException e) {
+            throw new ConfigException(e);
+        }
     }
 
     /**
