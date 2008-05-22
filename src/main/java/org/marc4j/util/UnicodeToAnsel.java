@@ -50,7 +50,7 @@ public class UnicodeToAnsel implements CharacterConverter {
 	//  System.exit(1);
 	//}
     	try {
-            rct = new ReverseCodeTable(ResourcesUtil.getStream("resources/codetables.xml"));
+            rct = new ReverseCodeTable(ResourcesUtil.getStream("/org/marc4j/util/resources/codetables.xml"));
         } catch (IOException e) {
             throw new ConfigException(e);
         }
