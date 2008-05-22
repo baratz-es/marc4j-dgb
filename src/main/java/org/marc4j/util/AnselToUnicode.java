@@ -104,7 +104,7 @@ public class AnselToUnicode
 	//       System.exit(1);
 	//     }
     	try {
-            ct = new CodeTable(ResourcesUtil.getStream("resources/codetablesnocjk.xml"));
+            ct = new CodeTable(ResourcesUtil.getStream("/org/marc4j/util/resources/codetablesnocjk.xml"));
         } catch (IOException e) {
             throw new ConfigException(e);
         }
@@ -123,7 +123,7 @@ public class AnselToUnicode
 	//       System.exit(1);
 	//     }
         try {
-            ct = new CodeTable(ResourcesUtil.getStream("resources/codetables.xml"));
+            ct = new CodeTable(ResourcesUtil.getStream("/org/marc4j/util/resources/codetables.xml"));
         } catch (IOException e) {
             throw new ConfigException(e);
         }
