@@ -120,7 +120,7 @@ public class UnicodeToAnsel implements CharacterConverter {
 	    }
 
 	    if (rct.isCombining(c))
-		sb.insert(sb.length()-1,marc);
+		sb.insert(sb.length()-1,marc.toString());
 	    else
 		sb.append(marc);
 	}
