@@ -366,7 +366,6 @@ public class MarcXmlReader
 	    if (prettyPrinting)
 		ch.ignorableWhitespace("\n  ".toCharArray(), 0, 3);
 	    
-	    //Se añade la localizacion del schema para que valide correctamente 
         AttributesImpl atts = new AttributesImpl();
         atts.addAttribute("", "xsi", "xmlns:xsi", "CDATA", NS_XSI);     
         atts.addAttribute(NS_XSI, "schemaLocation", "xsi:schemaLocation","CDATA", "http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd");	    
