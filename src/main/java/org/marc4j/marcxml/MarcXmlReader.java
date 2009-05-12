@@ -365,12 +365,7 @@ public class MarcXmlReader
 	try {
 	    if (prettyPrinting)
 		ch.ignorableWhitespace("\n  ".toCharArray(), 0, 3);
-	    
-        AttributesImpl atts = new AttributesImpl();
-        atts.addAttribute("", "xsi", "xmlns:xsi", "CDATA", NS_XSI);     
-        atts.addAttribute(NS_XSI, "schemaLocation", "xsi:schemaLocation","CDATA", "http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd");	    
-	    
-	    ch.startElement(NS_URI, "record", "record", atts);
+	    ch.startElement(NS_URI, "record", "record", EMPTY_ATTS);
 	    if (prettyPrinting)
 		ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
 	    writeElement(NS_URI,"leader","leader", EMPTY_ATTS, leader.marshal());
