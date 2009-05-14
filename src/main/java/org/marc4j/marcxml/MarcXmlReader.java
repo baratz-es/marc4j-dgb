@@ -368,7 +368,26 @@ public class MarcXmlReader
 	    ch.startElement(NS_URI, "record", "record", EMPTY_ATTS);
 	    if (prettyPrinting)
 		ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
-	    writeElement(NS_URI,"leader","leader", EMPTY_ATTS, leader.marshal());
+
+	    //Se mira si el tipo y el nivel de la cabecera son correctos.
+	    //Si no es así se modifican para que sean monografía
+	    Leader leaderCorrecto = null;
+	    if(this.isCorrectoTipoActual (leader)){
+	        if(this.isCorrectoNivelBibliografico (leader)){
+	            leaderCorrecto = leader;
+	        }else{
+	            leaderCorrecto = new Leader(leader.marshal ());
+	            setNivelBibliograficoMonografia (leaderCorrecto);
+	        }
+	    }else{
+	        leaderCorrecto = new Leader(leader.marshal ());
+            setTipoMonografia (leaderCorrecto);	        
+            if(!this.isCorrectoNivelBibliografico (leaderCorrecto)){
+                setNivelBibliograficoMonografia (leaderCorrecto);
+            }	        
+	    }
+	    
+	    writeElement(NS_URI,"leader","leader", EMPTY_ATTS, leaderCorrecto.marshal());
 	} catch (SAXException se) {
 	    se.printStackTrace();
 	}
@@ -515,4 +534,56 @@ public class MarcXmlReader
 	}
     }
 
+    /**
+     * Devuelve si el tipo de la cabecera es un tipo correcto
+     * @param leader
+     * @return
+     */
+    private boolean isCorrectoTipoActual(Leader leader){
+        char tipo = leader.getTypeOfRecord ();
+        switch (tipo) {
+            case 'a': case 'c': case 'd': case 'e': case 'f':case 'g': case 'i': case 'j': case 'k':
+            case 'm': case 'o': case 'p': case 'r': case 't':
+                return true;
+            default:
+                return false;
+        }
+    }
+    
+    /**
+     * Modifica el tipo de la cabecera para que sea una monografía  
+     * @param leader
+     * @return
+     */
+    private Leader setTipoMonografia (Leader leader){
+        leader.setTypeOfRecord ('a');
+        return leader;
+    }
+    
+    /**
+     * Devuelve si el nivel bibliográfico de la cabecera es de un tipo correcto
+     * @param leader
+     * @return
+     */
+    private boolean isCorrectoNivelBibliografico(Leader leader){
+        char tipo = leader.getImplDefined1 ()[0];
+        switch (tipo) {
+            case 'a': case 'b': case 'c': case 'd': case 'm':case 's':
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Modifica el nivel bibliográfico de la cabecera para que sea una monografía  
+     * @param leader
+     * @return
+     */
+    private Leader setNivelBibliograficoMonografia (Leader leader){
+        char implDefined[] = leader.getImplDefined1 ();
+        implDefined[0] = 'm';
+        leader.setImplDefined1 (implDefined);
+        return leader;
+    }    
 }
