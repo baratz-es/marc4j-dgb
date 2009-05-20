@@ -535,7 +535,8 @@ public class MarcXmlReader
     }
 
     /**
-     * Devuelve si el tipo de la cabecera es un tipo correcto
+     * Devuelve si el tipo de la cabecera es un tipo correcto, 
+     * es la posicion 6
      * @param leader
      * @return
      */
@@ -543,7 +544,8 @@ public class MarcXmlReader
         char tipo = leader.getTypeOfRecord ();
         switch (tipo) {
             case 'a': case 'c': case 'd': case 'e': case 'f':case 'g': case 'i': case 'j': case 'k':
-            case 'm': case 'o': case 'p': case 'r': case 't':
+            case 'm': case 'o': case 'p': case 'r': case 't': case 'z': case 'u': case 'v': case 'x':
+            case 'y': case 'w': case 'q':
                 return true;
             default:
                 return false;
@@ -562,13 +564,15 @@ public class MarcXmlReader
     
     /**
      * Devuelve si el nivel bibliográfico de la cabecera es de un tipo correcto
+     * es la posicion 7
      * @param leader
      * @return
      */
     private boolean isCorrectoNivelBibliografico(Leader leader){
         char tipo = leader.getImplDefined1 ()[0];
         switch (tipo) {
-            case 'a': case 'b': case 'c': case 'd': case 'm':case 's':
+            case 'a': case 'b': case 'c': case 'd': case 'i': case 'm':case 's':
+            case '#': case 'n': case 'o': case 'p': case 'q': case 'z':
                 return true;
             default:
                 return false;
