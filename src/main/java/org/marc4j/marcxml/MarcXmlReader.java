@@ -572,7 +572,7 @@ public class MarcXmlReader
         char tipo = leader.getImplDefined1 ()[0];
         switch (tipo) {
             case 'a': case 'b': case 'c': case 'd': case 'i': case 'm':case 's':
-            case '#': case 'n': case 'o': case 'p': case 'q': case 'z':
+            case 'n': case 'o': case 'p': case 'q': case 'z':
                 return true;
             default:
                 return false;
