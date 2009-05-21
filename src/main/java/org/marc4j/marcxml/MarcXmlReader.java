@@ -586,7 +586,12 @@ public class MarcXmlReader
      */
     private Leader setNivelBibliograficoMonografia (Leader leader){
         char implDefined[] = leader.getImplDefined1 ();
-        implDefined[0] = 'm';
+        //Si la posición 7 es #, se cambia a ' '
+        if(implDefined[0]=='#'){
+            implDefined[0] = ' ';
+        }else{
+            implDefined[0] = 'm';            
+        }
         leader.setImplDefined1 (implDefined);
         return leader;
     }    
