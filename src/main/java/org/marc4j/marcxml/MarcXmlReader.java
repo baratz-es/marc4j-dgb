@@ -420,6 +420,10 @@ public class MarcXmlReader
      */
     public void startDataField(String tag, char ind1, char ind2) {
 	try {
+	    //Se modifican los indicadores si no son válidos
+	    ind1 = this.getIndicadorValido (ind1);
+        ind2 = this.getIndicadorValido (ind2);
+
 	    AttributesImpl atts = new AttributesImpl();
 	    atts.addAttribute("", "tag", "tag", "CDATA", tag);
 	    atts.addAttribute("", "ind1", "ind1", "CDATA", String.valueOf(ind1));
@@ -594,5 +598,20 @@ public class MarcXmlReader
         }
         leader.setImplDefined1 (implDefined);
         return leader;
-    }    
+    }
+
+    /**
+     * Modifica el indicador pasado para que sea válido. Sólo son válidos un número, una letra
+     * de la a a la z o un espacio en blanco. Si no es válido, devuelve un espacio en blanco 
+     * @param indicador
+     * @return
+     */
+    private char getIndicadorValido(char indicador)
+    {
+        indicador = Character.toLowerCase (indicador);
+        if(!Character.isLetterOrDigit (indicador)){
+            indicador = ' ';
+        }
+        return indicador;
+    }
 }
