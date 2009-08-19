@@ -24,6 +24,8 @@ import java.text.DecimalFormat;
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 
+import com.digibis.commons.exceptions.ConfigException;
+
 /**
  * <p><code>Leader</code> defines behaviour for the record label
  * (record position 00-23).  </p>
@@ -46,7 +48,7 @@ import java.io.Serializable;
  * @version $Revision: 1.10 $
  *
  */
-public class Leader implements Serializable {
+public class Leader implements Serializable, Cloneable {
 
     /** The logical record length. */
     private int recordLength;
@@ -373,4 +375,34 @@ public class Leader implements Serializable {
 	} while (++i < len);
 	return true;
     }
+
+    /*
+     * @see java.lang.Object#clone()
+     */
+    public Object clone ()
+    {
+        try
+        {
+            // Creamos nueva instancia
+            Leader instance = (Leader)super.clone ();
+            
+            // Rellenamos la información
+            instance.recordLength = this.recordLength;
+            instance.recordStatus = this.recordStatus;
+            instance.typeOfRecord = this.typeOfRecord;
+            instance.implDefined1 = (char[])this.implDefined1.clone ();
+            instance.charCodingScheme = this.charCodingScheme;
+            instance.indicatorCount = this.indicatorCount;
+            instance.subfieldCodeLength = this.subfieldCodeLength;
+            instance.baseAddressOfData = this.baseAddressOfData;
+            instance.implDefined2 = (char[])this.implDefined2.clone ();
+            instance.entryMap = (char[])this.entryMap.clone ();
+            
+            return instance;
+        } 
+        catch (CloneNotSupportedException e) {
+            throw new ConfigException (e);
+        }
+    }
+    
 }

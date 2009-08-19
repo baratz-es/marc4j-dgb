@@ -23,8 +23,9 @@ package org.marc4j.marc;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Collections;
 import java.io.Serializable;
+
+import com.digibis.commons.exceptions.ConfigException;
 
 /**
  * <p><code>Record</code> defines behaviour for a record.  </p>
@@ -47,7 +48,7 @@ import java.io.Serializable;
  * @version $Revision: 1.7 $
  *
  */
-public class Record implements Serializable {
+public class Record implements Serializable, Cloneable {
 
     /** The record terminator. */
     private static final char RT = MarcConstants.RT;
@@ -427,4 +428,43 @@ public class Record implements Serializable {
             data + RT;
     }
 
+    /*
+     * @see java.lang.Object#clone()
+     */
+    public Object clone ()
+    {
+        try
+        {
+            // Creamos una nueva instancia
+            Record instance = (Record)super.clone ();
+            
+            // Clonamos la cabecera
+            instance.leader = (Leader)this.leader.clone ();
+            
+            // Clonamos la lista de campos de control
+            if (this.controlFieldList != null)
+            {
+                ArrayList newList = new ArrayList();
+                for (Iterator it = this.controlFieldList.iterator (); it.hasNext (); )
+                    newList.add (((ControlField)it.next ()).clone ());
+                instance.setControlFieldList (newList);
+            }
+            
+            // Clonamos la lista de campos de datos
+            if (this.dataFieldList != null)
+            {
+                ArrayList newList = new ArrayList();
+                for (Iterator it = this.dataFieldList.iterator (); it.hasNext (); )
+                    newList.add (((DataField)it.next ()).clone ());
+                instance.setDataFieldList (newList);
+            }
+            
+            // Devolvemos la nueva instancia
+            return instance;
+        } 
+        catch (CloneNotSupportedException e) {
+            throw new ConfigException (e);
+        }
+    }
+    
 }

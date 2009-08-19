@@ -22,6 +22,8 @@ package org.marc4j.marc;
 
 import java.io.Serializable;
 
+import com.digibis.commons.exceptions.ConfigException;
+
 /**
  * <p><code>ControlField</code> defines behaviour for a control
  * field (tag 001-009).  </p>
@@ -40,7 +42,7 @@ import java.io.Serializable;
  * @version $Revision: 1.6 $
  *
  */
-public class ControlField extends VariableField implements Serializable {
+public class ControlField extends VariableField implements Serializable, Cloneable {
 
     /** The MARC data element. */
     private char[] data;
@@ -149,4 +151,25 @@ public class ControlField extends VariableField implements Serializable {
         return this.marshal().length();
     }
 
+    /*
+     * @see java.lang.Object#clone()
+     */
+    public Object clone ()
+    {
+        try
+        {
+            // Creamos nueva instancia
+            ControlField instance = (ControlField)super.clone ();
+            
+            // Rellenamos la información
+            instance.setTag (this.getTag ());
+            instance.setData (String.copyValueOf (this.data));
+            
+            return instance;
+        } 
+        catch (CloneNotSupportedException e) {
+            throw new ConfigException (e);
+        }
+    }
+    
 }

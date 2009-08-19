@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.digibis.commons.exceptions.ConfigException;
+
 /**
  * <p><code>DataField</code> defines behaviour for a data field
  * (tag 010-999).  </p>
@@ -46,7 +48,7 @@ import java.util.Iterator;
  * @version $Revision: 1.6 $
  *
  */
-public class DataField extends VariableField implements Serializable {
+public class DataField extends VariableField implements Serializable, Cloneable {
 
     /** The first indicator value. */
     private char ind1;
@@ -264,6 +266,37 @@ public class DataField extends VariableField implements Serializable {
      */
     public int getLength() {
         return this.marshal().length();
+    }
+
+    /*
+     * @see java.lang.Object#clone()
+     */
+    public Object clone ()
+    {
+        try
+        {
+            // Creamos una nueva instancia
+            DataField instance = (DataField)super.clone ();
+            
+            // Rellenamos los indicadores
+            instance.setIndicator1 (this.ind1);
+            instance.setIndicator2 (this.ind2);
+            
+            // Recorremos la lista de subcampos y clonamos cada uno de ellos
+            if (this.list != null)
+            {
+                ArrayList newList = new ArrayList();
+                for (Iterator it = this.list.iterator (); it.hasNext (); )
+                    newList.add (((Subfield)it.next ()).clone ());
+                instance.setSubfieldList (newList);
+            }
+            
+            // Devolvemos la nueva instancia
+            return instance;
+        } 
+        catch (CloneNotSupportedException e) {
+            throw new ConfigException (e);
+        }
     }
 
 }
