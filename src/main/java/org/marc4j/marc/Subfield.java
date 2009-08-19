@@ -22,6 +22,8 @@ package org.marc4j.marc;
 
 import java.io.Serializable;
 
+import com.digibis.commons.exceptions.ConfigException;
+
 /**
  * <p><code>Subfield</code> defines behaviour for a subfield (a data
  * element within a data field).  </p>
@@ -39,7 +41,7 @@ import java.io.Serializable;
  * @version $Revision: 1.6 $
  *
  */
-public class Subfield implements Serializable {
+public class Subfield implements Serializable, Cloneable {
 
     private static final char US = MarcConstants.US;
 
@@ -139,4 +141,25 @@ public class Subfield implements Serializable {
 	    .toString();
     }
 
+    /*
+     * @see java.lang.Object#clone()
+     */
+    public Object clone ()
+    {
+        try
+        {
+            // Creamos nueva instancia
+            Subfield instance = (Subfield)super.clone ();
+            
+            // Rellenamos la información
+            instance.setCode (this.code);
+            instance.setData ((char[])this.data.clone ());
+            
+            return instance;
+        } 
+        catch (CloneNotSupportedException e) {
+            throw new ConfigException (e);
+        }
+    }
+    
 }
