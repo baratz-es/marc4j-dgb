@@ -20,8 +20,10 @@
  */
 package org.marc4j.helpers;
 
+import org.apache.log4j.Category;
 import org.marc4j.ErrorHandler;
 import org.marc4j.MarcReaderException;
+
 
 /**
  * <p>Implements the <code>ErrorHandler</code> interface to report about
@@ -34,16 +36,18 @@ import org.marc4j.MarcReaderException;
  */
 public class ErrorHandlerImpl implements ErrorHandler {
 
+    private static Category log = Category.getInstance (ErrorHandlerImpl.class.getName());
+    
     public void warning(MarcReaderException exception) {
-	System.err.println(printMarcException("Warning", exception));
+        log.warn (printMarcException("Warning", exception), exception);
     }
 
     public void error(MarcReaderException exception) {
-	System.err.println(printMarcException("Error", exception));
+        log.error (printMarcException("Error", exception), exception);
     }
 
     public void fatalError(MarcReaderException exception) {
-	System.err.println(printMarcException("FATAL", exception));
+        log.fatal (printMarcException("FATAL", exception), exception);
     }
 
     public static String printMarcException(String label, 
