@@ -114,8 +114,7 @@ public class CodeTable {
 	    charsets = saxUms.getCharSets();
 	    combining = saxUms.getCombiningChars();
 	}catch( Exception exc ) {
-	    log.error ((System.out), exc);
-	    System.err.println( "Exception: " + exc );
+	    log.error ("Exception: " + exc, exc);
 	}
     }
 
@@ -139,8 +138,7 @@ public class CodeTable {
 	    charsets = saxUms.getCharSets();
 	    combining = saxUms.getCombiningChars();
 	}catch( Exception exc ) {
-	    log.error (System.out, exc);
-	    System.err.println( "Exception: " + exc );
+	    log.error ("Exception: " + exc, exc);
 	}
     }
 

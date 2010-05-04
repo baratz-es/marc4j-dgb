@@ -19,6 +19,7 @@
  */
 package org.marc4j.util;
 
+import org.apache.log4j.Category;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.InputSource;
@@ -52,6 +53,8 @@ import javax.xml.transform.stream.StreamSource;
  * @see DefaultHandler
  */
 public class ReverseCodeTable {
+    
+    private static Category log = Category.getInstance (ReverseCodeTable.class.getName());
     protected static Hashtable charset = null;
     protected static Vector combining = null;
     
@@ -144,8 +147,7 @@ public class ReverseCodeTable {
 	    combining = saxUms.getCombiningChars();
 
 	}catch( Exception exc ) {
-	    exc.printStackTrace(System.out);
-	    System.err.println( "Exception: " + exc );
+	    log.error ("Exception: " + exc , exc);
 	}
     }
 
