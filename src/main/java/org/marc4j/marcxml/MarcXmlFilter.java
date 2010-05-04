@@ -30,6 +30,7 @@ import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.helpers.XMLFilterImpl;
 import org.xml.sax.helpers.AttributesImpl;
+import org.apache.log4j.Category;
 import org.marc4j.MarcHandler;
 import org.marc4j.ErrorHandler;
 import org.marc4j.MarcReader;
@@ -59,6 +60,8 @@ import org.marc4j.util.AnselToUnicode;
 public class MarcXmlFilter extends ExtendedFilter 
     implements MarcHandler {
 
+    private static Category log = Category.getInstance (MarcXmlFilter.class.getName());
+    
     /** Enables pretty printing */
     private boolean prettyPrinting = true;
 
@@ -316,7 +319,7 @@ public class MarcXmlFilter extends ExtendedFilter
             }
 	    ch.endElement(NS_URI,"subfield","subfield");
 	} catch (SAXException se) {
-	    se.printStackTrace();
+	    log.error ("Error al añadir la información de subcampo", se);
     	}
     }
     
