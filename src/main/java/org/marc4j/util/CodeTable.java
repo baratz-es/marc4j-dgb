@@ -19,6 +19,7 @@
  */
 package org.marc4j.util;
 
+import org.apache.log4j.Category;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.InputSource;
@@ -50,6 +51,7 @@ import javax.xml.transform.stream.StreamSource;
  *
  */
 public class CodeTable {
+    private static Category log = Category.getInstance (CodeTable.class.getName());
     protected static Hashtable charsets = null;
     protected static Hashtable combining = null;
 
@@ -112,7 +114,7 @@ public class CodeTable {
 	    charsets = saxUms.getCharSets();
 	    combining = saxUms.getCombiningChars();
 	}catch( Exception exc ) {
-	    exc.printStackTrace(System.out);
+	    log.error ((System.out), exc);
 	    System.err.println( "Exception: " + exc );
 	}
     }
