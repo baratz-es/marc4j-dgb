@@ -139,7 +139,7 @@ public class CodeTable {
 	    charsets = saxUms.getCharSets();
 	    combining = saxUms.getCombiningChars();
 	}catch( Exception exc ) {
-	    exc.printStackTrace(System.out);
+	    log.error (System.out, exc);
 	    System.err.println( "Exception: " + exc );
 	}
     }
