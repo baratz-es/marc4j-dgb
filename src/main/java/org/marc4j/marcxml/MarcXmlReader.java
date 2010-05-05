@@ -35,6 +35,7 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.ext.LexicalHandler; 
+import org.apache.log4j.Category;
 import org.marc4j.MarcHandler;
 //import org.marc4j.ErrorHandler;
 import org.marc4j.MarcReader;
@@ -61,6 +62,8 @@ import org.marc4j.util.AnselToUnicode;
 public class MarcXmlReader 
     implements XMLReader, MarcHandler {
 
+    private static Category log = Category.getInstance (MarcXmlReader.class.getName());
+    
     /** Enables pretty printing */
     private boolean prettyPrinting = true;
 
@@ -485,7 +488,7 @@ public class MarcXmlReader
 		ch.ignorableWhitespace("\n  ".toCharArray(), 0, 3);
 	    ch.endElement(NS_URI,"record","record");
 	} catch (SAXException se) {
-	    se.printStackTrace();
+	    log.error ("Se ha producido un error al añadir el elemento de fin de registro", se);
 	}
     }
     
