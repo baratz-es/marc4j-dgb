@@ -364,7 +364,7 @@ public class MarcXmlFilter extends ExtendedFilter
 	    ch.endPrefixMapping("");
 	    ch.endDocument();
 	} catch (SAXException e) {
-	    e.printStackTrace();
+	    log.error ("Se ha producido un error al finalizar la colección", e);
 	}
     }
 
