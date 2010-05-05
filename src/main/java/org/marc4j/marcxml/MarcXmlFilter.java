@@ -28,19 +28,15 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
-import org.xml.sax.helpers.XMLFilterImpl;
 import org.xml.sax.helpers.AttributesImpl;
 import org.apache.log4j.Category;
 import org.marc4j.MarcHandler;
 import org.marc4j.ErrorHandler;
 import org.marc4j.MarcReader;
-import org.marc4j.marc.MarcConstants;
 import org.marc4j.marc.Leader;
-import org.marc4j.marc.Tag;
 import org.marc4j.util.CharacterConverter;
 import org.marc4j.util.CharacterConverterLoader;
 import org.marc4j.util.CharacterConverterLoaderException;
-import org.marc4j.util.AnselToUnicode;
 
 /**
  * <p><code>MarcXmlFilter</code> is an <code>XMLFilter</code> that 
@@ -191,7 +187,7 @@ public class MarcXmlFilter extends ExtendedFilter
 	    marcReader.parse(br);
 
 	} catch (Exception e) {
-	    e.printStackTrace();
+	    log.error ("Se ha producido un error al realizar la conversión", e);
 	}
 
     }
@@ -237,7 +233,7 @@ public class MarcXmlFilter extends ExtendedFilter
             ch.startElement(NS_URI, "collection", "collection", atts);
 
         } catch (SAXException se) {
-            se.printStackTrace();
+            log.error ("Se ha producido un error al crear los elementos de inicio del documento", se);
         }
     }
 
@@ -333,7 +329,7 @@ public class MarcXmlFilter extends ExtendedFilter
             ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
 	    ch.endElement(NS_URI,"datafield","datafield");
 	} catch (SAXException se) {
-	    se.printStackTrace();
+	    log.error ("Se ha producido un error al añadir los elementos de fin de campo", se);
 	}
     }
 
@@ -347,7 +343,7 @@ public class MarcXmlFilter extends ExtendedFilter
 		ch.ignorableWhitespace("\n  ".toCharArray(), 0, 3);
 	    ch.endElement(NS_URI,"record","record");
 	} catch (SAXException se) {
-	    se.printStackTrace();
+	    log.error ("Se ha producido un error al añadir los elementos de fin de registro", se);
 	}
     }
     
@@ -364,7 +360,7 @@ public class MarcXmlFilter extends ExtendedFilter
 	    ch.endPrefixMapping("");
 	    ch.endDocument();
 	} catch (SAXException e) {
-	    log.error ("Se ha producido un error al finalizar la colección", e);
+	    log.error ("Se ha producido un error al añadir los elementos de fin de documento", e);
 	}
     }
 
