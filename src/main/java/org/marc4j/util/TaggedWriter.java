@@ -24,6 +24,8 @@ import java.io.Writer;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.IOException;
+
+import org.apache.log4j.Category;
 import org.marc4j.MarcHandler;
 import org.marc4j.marc.Leader;
 
@@ -38,6 +40,7 @@ import org.marc4j.marc.Leader;
  */
 public class TaggedWriter implements MarcHandler {
 
+    private static Category log = Category.getInstance (TaggedWriter.class.getName());
     /** The Writer object */
     private Writer out;
 
@@ -137,7 +140,7 @@ public class TaggedWriter implements MarcHandler {
 	    out.flush();
 	    out.close();
 	} catch (IOException e) {
-	    e.printStackTrace();
+	    log.error ("Error al finalizar la colección", e);
 	}
     }
 

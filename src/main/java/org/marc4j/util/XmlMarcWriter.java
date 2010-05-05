@@ -34,6 +34,8 @@ import javax.xml.transform.Source;
 import javax.xml.transform.Result;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
+
+import org.apache.log4j.Category;
 import org.marc4j.marcxml.SaxErrorHandler;
 import org.marc4j.marcxml.MarcXmlHandler;
 import org.marc4j.helpers.RecordBuilder;
@@ -78,6 +80,7 @@ import org.marc4j.marcxml.Converter;
  */
 public class XmlMarcWriter {
 
+    private static Category log = Category.getInstance (XmlMarcWriter.class.getName());
     private static final String JAXP_SCHEMA_LANGUAGE =
         "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
 
@@ -220,7 +223,7 @@ public class XmlMarcWriter {
 	} catch (SAXException e) {
 	    e.printStackTrace();
 	} catch (Exception e) {
-	    e.printStackTrace();
+	    log.error ("Se ha producido un error al convertir el documento MARCXML", e);
 	}
 	System.err.println("Total time: " + (System.currentTimeMillis() - start) + " miliseconds");
     }
