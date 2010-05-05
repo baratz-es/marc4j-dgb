@@ -20,6 +20,7 @@
  */
 package org.marc4j.marcxml;
 
+import org.apache.log4j.Category;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.ErrorHandler;
 
@@ -37,6 +38,7 @@ import org.xml.sax.ErrorHandler;
  */
 public class SaxErrorHandler implements ErrorHandler {
 
+    private static Category log = Category.getInstance (SaxErrorHandler.class.getName());
     private int flags;
 
     public static final int ERR_PRINT = 1;
@@ -55,7 +57,7 @@ public class SaxErrorHandler implements ErrorHandler {
 
     public void error(SAXParseException e) throws SAXParseException {
 	if ((flags & ERR_PRINT) != 0)
-	    System.err.print (printParseException ("Error", e));
+	    log.error(printParseException ("Error", e), e);
 	if ((flags & ERR_IGNORE) == 0)
 	    throw e;
     }

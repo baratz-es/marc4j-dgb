@@ -39,13 +39,10 @@ import org.apache.log4j.Category;
 import org.marc4j.MarcHandler;
 //import org.marc4j.ErrorHandler;
 import org.marc4j.MarcReader;
-import org.marc4j.marc.MarcConstants;
 import org.marc4j.marc.Leader;
-import org.marc4j.marc.Tag;
 import org.marc4j.util.CharacterConverter;
 import org.marc4j.util.CharacterConverterLoader;
 import org.marc4j.util.CharacterConverterLoaderException;
-import org.marc4j.util.AnselToUnicode;
 
 
 /**
@@ -355,7 +352,7 @@ public class MarcXmlReader
             ch.startElement(NS_URI, "collection", "collection", atts);
 
         } catch (SAXException se) {
-            se.printStackTrace();
+            log.error ("Se ha producido un error al añadir los elementos de inicio de documento", se);
         }
     }
 
@@ -536,7 +533,7 @@ public class MarcXmlReader
 		    .createCharacterConverter("org.marc4j.charconv", 
 					      "org.marc4j.util.AnselToUnicode");
 	    } catch (CharacterConverterLoaderException e) {
-		e.printStackTrace();
+	        log.error ("Se ha producido un error al obtener el carácter de conversión", e);
 	    }
 	}
     }
