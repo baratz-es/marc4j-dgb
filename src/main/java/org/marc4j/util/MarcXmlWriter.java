@@ -25,6 +25,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.InputSource;
+import org.apache.log4j.Category;
 import org.marc4j.helpers.ErrorHandlerImpl;
 import org.marc4j.marcxml.DoctypeDecl;
 import org.marc4j.marcxml.MarcXmlReader;
@@ -73,6 +74,8 @@ import org.marc4j.marcxml.Converter;
  */
 public class MarcXmlWriter {
 
+    private static Category log = Category.getInstance (MarcXmlWriter.class.getName());
+    
     /**
      * <p>Provides a static entry point.  </p>
      *
@@ -201,15 +204,15 @@ public class MarcXmlWriter {
 	    }
 
 	} catch (SAXNotSupportedException e) {
-            e.printStackTrace(System.err);
+	    log.error ("No se soporta la operación indicada", e);
 	} catch (SAXNotRecognizedException e) {
-            e.printStackTrace(System.err);
+	    log.error ("Identificador no reconocido", e);
 	} catch (SAXException e) {
-            e.printStackTrace(System.err);
+	    log.error ("Se ha producido un error al convertir los registros MARC", e);
 	} catch (TransformerException e) {
-            e.printStackTrace(System.err);
+        log.error ("Se ha producido un error durante la transformación de los registros", e);
 	} catch (IOException e) {
-            e.printStackTrace(System.err);
+	    log.error ("Se ha producido un error al escribir los registros en MARCXML", e);
 	}
 	System.err.println("Total time: " + (System.currentTimeMillis() - start) + " miliseconds");
     }

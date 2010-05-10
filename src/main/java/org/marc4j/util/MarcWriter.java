@@ -24,6 +24,8 @@ import java.io.Writer;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.IOException;
+
+import org.apache.log4j.Category;
 import org.marc4j.marc.*;
 import org.marc4j.MarcHandler;
 
@@ -39,6 +41,7 @@ import org.marc4j.MarcHandler;
 public class MarcWriter 
     implements MarcHandler {
 
+    private static Category log = Category.getInstance (MarcHandler.class.getName());
     /** Record object */
     private Record record;
 
@@ -169,9 +172,9 @@ public class MarcWriter
 	try {
 	    rawWrite(record.marshal());
 	} catch (IOException e) {
-	    e.printStackTrace();
+	    log.error ("Se ha producido un error al escribir en la salida", e);
 	} catch (MarcException e) {
-	    e.printStackTrace();
+	    log.error ("Se ha producido un error al procesar el registro", e);
 	}
     }
 
@@ -180,7 +183,7 @@ public class MarcWriter
 	    out.flush();
 	    out.close();
 	} catch (IOException e) {
-	    e.printStackTrace();
+	    log.error ("Se ha producido un error al finalizar la colección", e);
 	}
     }
 

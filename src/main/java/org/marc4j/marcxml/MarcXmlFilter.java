@@ -251,7 +251,7 @@ public class MarcXmlFilter extends ExtendedFilter
 		ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
 	    writeElement(NS_URI,"leader","leader", EMPTY_ATTS, leader.marshal());
 	} catch (SAXException se) {
-	    se.printStackTrace();
+	    log.error ("Se ha producido un error al añadir los elementos de inicio de registro", se);
 	}
     }
 
@@ -269,7 +269,7 @@ public class MarcXmlFilter extends ExtendedFilter
 		ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
 	    writeElement(NS_URI,"controlfield","controlfield", atts, data);
 	} catch (SAXException se) {
-	    se.printStackTrace();
+	   log.error ("Se ha producido un error al crear el campo de control", se);
 	}
     }
 
@@ -290,7 +290,7 @@ public class MarcXmlFilter extends ExtendedFilter
 		ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
 	    ch.startElement(NS_URI,"datafield","datafield", atts);
 	} catch (SAXException se) {
-	    se.printStackTrace();
+	    log.error ("Se ha producido un error al añadir los elementos de inicio de campo", se);
 	}
     }
 
@@ -391,7 +391,7 @@ public class MarcXmlFilter extends ExtendedFilter
 		    .createCharacterConverter("org.marc4j.charconv", 
 					      "org.marc4j.util.AnselToUnicode");
 	    } catch (CharacterConverterLoaderException e) {
-		e.printStackTrace();
+		log.error ("Se ha producido un error al realizar la conversión", e);
 	    }
 	}
     }
