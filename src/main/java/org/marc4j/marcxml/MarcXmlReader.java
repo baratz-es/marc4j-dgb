@@ -306,7 +306,7 @@ public class MarcXmlReader
 	    marcReader.parse(br);
 
 	} catch (Exception e) {
-	    e.printStackTrace();
+	    log.error ("Se ha producido un error al realizar la conversión", e);
 	}
 
     }
@@ -389,7 +389,7 @@ public class MarcXmlReader
 	    
 	    writeElement(NS_URI,"leader","leader", EMPTY_ATTS, leaderCorrecto.marshal());
 	} catch (SAXException se) {
-	    se.printStackTrace();
+	    log.error ("Se ha producido un error al añadir los elementos de inicio de registro", se);
 	}
     }
 
@@ -407,7 +407,7 @@ public class MarcXmlReader
 		ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
 	    writeElement(NS_URI,"controlfield","controlfield", atts, data);
 	} catch (SAXException se) {
-	    se.printStackTrace();
+	    log.error ("Se ha producido un error al añadir el nodo control", se);
 	}
     }
 
@@ -432,7 +432,7 @@ public class MarcXmlReader
 		ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
 	    ch.startElement(NS_URI,"datafield","datafield", atts);
 	} catch (SAXException se) {
-	    se.printStackTrace();
+	    log.error ("Se ha producido un error al añadir los elementos de inicio de campo", se);
 	}
     }
 
@@ -457,7 +457,7 @@ public class MarcXmlReader
             }
 	    ch.endElement(NS_URI,"subfield","subfield");
 	} catch (SAXException se) {
-	    se.printStackTrace();
+	    log.error ("Se ha producido un error al crear el subcampo", se);
     	}
     }
     
@@ -471,7 +471,7 @@ public class MarcXmlReader
             ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
 	    ch.endElement(NS_URI,"datafield","datafield");
 	} catch (SAXException se) {
-	    se.printStackTrace();
+	    log.error ("Se ha producido un error al añadir los elementos de fin de campo", se);
 	}
     }
 
@@ -502,7 +502,7 @@ public class MarcXmlReader
 	    ch.endPrefixMapping("");
 	    ch.endDocument();
 	} catch (SAXException e) {
-	    e.printStackTrace();
+	    log.error ("Se ha producido un error al añadir los elementos de fin de colección", e);
 	}
     }
 

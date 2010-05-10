@@ -64,14 +64,14 @@ public class SaxErrorHandler implements ErrorHandler {
 
     public void fatalError(SAXParseException e) throws SAXParseException {
 	if ((flags & FATAL_PRINT) != 0)
-	    System.err.print (printParseException ("FATAL", e));
+	    log.fatal (printParseException ("FATAL", e), e);
 	if ((flags & FATAL_IGNORE) == 0)
 	    throw e;
     }
 
     public void warning (SAXParseException e) throws SAXParseException {
 	if ((flags & WARN_PRINT) != 0)
-	    System.err.print (printParseException ("Warning", e));
+	    log.warn (printParseException ("Warning", e), e);
     }
 
     public static String printParseException(String label, SAXParseException e) {

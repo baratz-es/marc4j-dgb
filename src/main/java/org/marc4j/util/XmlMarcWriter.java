@@ -215,13 +215,13 @@ public class XmlMarcWriter {
 	    }
 
 	} catch (ParserConfigurationException e) {	    
-	    e.printStackTrace();
+	    log.error ("La configuración no es correcta", e);
 	} catch (SAXNotSupportedException e) {
-	    e.printStackTrace();
+	    log.error ("No se soporta la operación indicada", e);
 	} catch (SAXNotRecognizedException e) {
-	    e.printStackTrace();
+	    log.error ("Identificador no reconocido", e);
 	} catch (SAXException e) {
-	    e.printStackTrace();
+	    log.error ("Se ha producido un error al convertir el documento MARCXML", e);
 	} catch (Exception e) {
 	    log.error ("Se ha producido un error al convertir el documento MARCXML", e);
 	}

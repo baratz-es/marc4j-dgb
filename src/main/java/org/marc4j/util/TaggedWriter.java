@@ -156,7 +156,7 @@ public class TaggedWriter implements MarcHandler {
 	try {
 	    out.write(s);
 	} catch (IOException e) {
-	    e.printStackTrace();
+	    log.error ("Se ha producido un error al escribir en la salida", e);
 	} 
     }
     

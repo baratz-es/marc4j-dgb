@@ -122,8 +122,7 @@ public class ReverseCodeTable {
 	    combining = saxUms.getCombiningChars();
 
 	}catch( Exception exc ) {
-	    exc.printStackTrace(System.out);
-	    System.err.println( "Exception: " + exc );
+	    log.error ("Exception: " + exc, exc);
 	}
     }
 
@@ -171,8 +170,7 @@ public class ReverseCodeTable {
 	    combining = saxUms.getCombiningChars();
 
 	}catch( Exception exc ) {
-	    exc.printStackTrace(System.out);
-	    System.err.println( "Exception: " + exc );
+	    log.error ("Exception: " + exc, exc);
 	}
     }
 }
