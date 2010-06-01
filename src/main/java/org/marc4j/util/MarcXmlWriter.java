@@ -218,18 +218,18 @@ public class MarcXmlWriter {
     }
 
     private static void usage() {
-	System.err.println("MARC4J version beta 7, Copyright (C) 2002-2003 Bas Peters");
-        System.err.println("Usage: org.marc4j.util.MarcXmlWriter [-options] <file.xml>");
-        System.err.println("       -xsd = Add W3C XML Schema Location to root element");
-        System.err.println("       -xsl <file> = Postprocess MARCXML using XSLT stylesheet <file>");
-        System.err.println("       -out <file> = Output using <file>");
-        System.err.println("       -ie <encoding> = Input using charset <encoding>");
-        System.err.println("       -oe <encoding> = Output using charset <encoding>");
-        System.err.println("       -convert [ANSEL | ISO5426 | ISO6937] = convert to UTF-8 using");
-	System.err.println("          specified character set");
-        System.err.println("       -usage or -help = this message");
-        System.err.println("Without a stylesheet the program outputs well-formed MARCXML");
-	System.err.println("See http://marc4j.tigris.org for more information.");
+        log.error("MARC4J version beta 7, Copyright (C) 2002-2003 Bas Peters");
+        log.error("Usage: org.marc4j.util.MarcXmlWriter [-options] <file.xml>");
+        log.error("       -xsd = Add W3C XML Schema Location to root element");
+        log.error("       -xsl <file> = Postprocess MARCXML using XSLT stylesheet <file>");
+        log.error("       -out <file> = Output using <file>");
+        log.error("       -ie <encoding> = Input using charset <encoding>");
+        log.error("       -oe <encoding> = Output using charset <encoding>");
+        log.error("       -convert [ANSEL | ISO5426 | ISO6937] = convert to UTF-8 using");
+        log.error("          specified character set");
+        log.error("       -usage or -help = this message");
+        log.error("Without a stylesheet the program outputs well-formed MARCXML");
+        log.error("See http://marc4j.tigris.org for more information.");
         System.exit(1);
     }
 }
