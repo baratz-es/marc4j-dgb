@@ -72,7 +72,7 @@ public class CodeTable {
 	    Hashtable charset = (Hashtable)charsets.get(new Integer(mode));
 
 	    if (charset == null) {
-		System.err.println("Hashtable not found: " + Integer.toHexString(mode));
+		log.error ("Hashtable not found: " + Integer.toHexString(mode));
 		return (char)c;
 	    } else {
 		Character ch = (Character)charset.get(new Integer(c));
@@ -85,7 +85,7 @@ public class CodeTable {
 			newc = c - 0x80;
 		    ch = (Character)charset.get(new Integer(newc));
 		    if (ch == null) {
-			System.err.println("Character not found: " + Integer.toHexString(c) + " in Code Table: " + Integer.toHexString(mode));
+			log.error("Character not found: " + Integer.toHexString(c) + " in Code Table: " + Integer.toHexString(mode));
 			return (char)c;
 		    } else
 			return ch.charValue();
