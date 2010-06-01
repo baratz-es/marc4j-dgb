@@ -186,7 +186,7 @@ public class XmlMarcWriter {
 		else if ("ISO6937".equals(convert))
 		    charconv = new UnicodeToIso6937();
 		else {
-		    System.err.println("Unknown character set");
+		    log.error("Unknown character set");
 		    System.exit(1);
 		}
 	    	handler.setCharacterConverter(charconv);
@@ -225,7 +225,7 @@ public class XmlMarcWriter {
 	} catch (Exception e) {
 	    log.error ("Se ha producido un error al convertir el documento MARCXML", e);
 	}
-	System.err.println("Total time: " + (System.currentTimeMillis() - start) + " miliseconds");
+	log.error("Total time: " + (System.currentTimeMillis() - start) + " miliseconds");
     }
 
     private static void usage() {
