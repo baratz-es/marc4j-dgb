@@ -74,7 +74,7 @@ public class ReverseCodeTable {
     public static boolean inPreviousCharCodeTable(Character c, CodeTableTracker ctt) {
 	Hashtable chars = (Hashtable)charset.get(c);
 	if (chars == null) {
-	    System.out.println("Not Found: " + c);
+	    log.error("Not Found: " + c);
 	    return false;
 	} else {
 	
