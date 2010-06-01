@@ -65,7 +65,7 @@ public class ReverseCodeTable {
     public static Hashtable codeTableHash(Character c) {
 	Hashtable chars = (Hashtable)charset.get(c);
 	if (chars == null) {
-	    System.err.println("Not Found: " + c);
+	    log.error("Not Found: " + c);
 	    return chars;
 	} else 
 	    return chars;
