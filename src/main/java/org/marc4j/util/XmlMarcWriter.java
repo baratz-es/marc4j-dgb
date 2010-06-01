@@ -230,18 +230,18 @@ public class XmlMarcWriter {
 
     private static void usage() {
 	System.err.println("MARC4J version beta 7, Copyright (C) 2002-2003 Bas Peters");
-        System.err.println("Usage: org.marc4j.util.XmlMarcWriter [-options] <file.xml>");
-        System.err.println("Usage: MarcXmlWriter [-options] <file.xml>");
-        System.err.println("       -dtd = DTD validation");
-        System.err.println("       -xsd = W3C XML Schema validation: hints in instance document");
-        System.err.println("       -xsdss <file> = W3C XML Schema validation using schema source <file>");
-        System.err.println("       -xsl <file> = Preprocess XML using XSLT stylesheet <file>");
-        System.err.println("       -out <file> = Output using <file>");
-        System.err.println("       -oe <encoding> = Output using charset <encoding>");
-        System.err.println("       -convert [ANSEL | ISO5426 | ISO6937] = convert from UTF-8");
-	System.err.println("          to specified character set");
-        System.err.println("       -usage or -help = this message");
-	System.err.println("See http://marc4j.tigris.org for more information.");
+        log.error("Usage: org.marc4j.util.XmlMarcWriter [-options] <file.xml>");
+        log.error("Usage: MarcXmlWriter [-options] <file.xml>");
+        log.error("       -dtd = DTD validation");
+        log.error("       -xsd = W3C XML Schema validation: hints in instance document");
+        log.error("       -xsdss <file> = W3C XML Schema validation using schema source <file>");
+        log.error("       -xsl <file> = Preprocess XML using XSLT stylesheet <file>");
+        log.error("       -out <file> = Output using <file>");
+        log.error("       -oe <encoding> = Output using charset <encoding>");
+        log.error("       -convert [ANSEL | ISO5426 | ISO6937] = convert from UTF-8");
+        log.error("          to specified character set");
+        log.error("       -usage or -help = this message");
+        log.error("See http://marc4j.tigris.org for more information.");
         System.exit(1);
     }
    
