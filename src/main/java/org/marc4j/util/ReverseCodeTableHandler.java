@@ -19,6 +19,7 @@
  */
 package org.marc4j.util;
 
+import org.apache.log4j.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.InputSource;
@@ -49,6 +50,9 @@ import javax.xml.transform.stream.StreamSource;
  * @see DefaultHandler
  */
 public class ReverseCodeTableHandler extends DefaultHandler {
+
+    private static Logger log = Logger.getLogger (ReverseCodeTableHandler.class);
+    
     private Hashtable charset;
     private Vector combiningchars;
 
@@ -160,8 +164,7 @@ public class ReverseCodeTableHandler extends DefaultHandler {
 	    rdr.setContentHandler( saxUms );
 	    rdr.parse( src );
 	}catch( Exception exc ) {
-	    exc.printStackTrace(System.out);
-	    System.err.println( "Exception: " + exc );
+        log.error ("Exception: " + exc, exc);
 	}
     }
 }
