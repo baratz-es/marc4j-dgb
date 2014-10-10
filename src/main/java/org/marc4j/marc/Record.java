@@ -24,6 +24,9 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.digibis.commons.exceptions.ConfigException;
 
@@ -427,6 +430,86 @@ public class Record implements Serializable, Cloneable {
             directory.marshal() +
             data + RT;
     }
+    
+    /**
+     * <p>Returns a <code>String</code> representation for a record
+     * following the structure of a MARC record (tape format).  </p>
+     *
+     * <p>Variable fields are sorted by tag name.</p>
+     *
+     * @param encoding charset enconding used to calculate the 
+     *        datafield length.
+     * @return <code>String</code> - the MARC record
+     * @throws MarcException if the record contains no leader or no
+     *                       control number field
+     */
+    /*
+     * NOTA IMPORTANTE: Se sobrecarga el método original marshal haciendo
+     * una copia del original. En el método original se podría utilizar
+     * éste pasándole un encoding null, pero no se hace para evitar que
+     * pudiese haber posibles errores con una clase que se utiliza en
+     * bastantes sitios. 
+     */
+    public String marshal(String encoding) throws MarcException {
+
+        // throw exception if record contains no leader
+        if (leader == null)
+            throw new MarcException("Record contains no leader");
+
+        // throw exception if record contains no control number field
+        if (! hasControlNumberField())
+            throw new MarcException(
+            "Record contains no control number field (tag 001)");
+
+        StringBuffer data = new StringBuffer();
+        Directory directory = new Directory();
+
+        try {
+            // append control fields to directory and data
+            for (Iterator i = controlFieldList.iterator(); i.hasNext();) {
+                ControlField cf = (ControlField)i.next();
+                int fieldLength = 0;
+                if (StringUtils.isNotBlank (encoding)) {
+                        fieldLength = cf.marshal ().getBytes (encoding).length;
+                } else {
+                    fieldLength = cf.getLength();
+                }
+                directory.add(cf.getTag(), fieldLength);
+                data.append(cf.marshal());
+            }
+    
+            // append data fields to directory and data
+            for (Iterator i = dataFieldList.iterator(); i.hasNext();) {
+                DataField df = (DataField)i.next();
+                int fieldLength = 0;
+                if (StringUtils.isNotBlank (encoding)) {
+                    fieldLength = df.marshal ().getBytes (encoding).length;
+                } else {
+                    fieldLength = df.getLength();
+                }
+                directory.add(df.getTag(), fieldLength);
+                data.append(df.marshal());
+            }
+            
+            // add base address of data and logical record length tp the leader
+            int baseAddress = 24 + directory.getLength();
+            int recordLength = baseAddress + data.length() + 1;
+            if (StringUtils.isNotBlank (encoding)) {
+                recordLength = baseAddress + data.toString ().getBytes (encoding).length + 1;
+            }
+            leader.setRecordLength(recordLength);
+            leader.setBaseAddressOfData(baseAddress);
+            
+        } catch (UnsupportedEncodingException ex) {
+            throw new ConfigException (ex);
+        }
+        
+        // return record in tape format
+        return leader.marshal() +
+            directory.marshal() +
+            data + RT;
+    }
+    
 
     /*
      * @see java.lang.Object#clone()
