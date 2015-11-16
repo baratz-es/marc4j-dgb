@@ -20,11 +20,12 @@
  */
 package org.marc4j.marc;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -53,20 +54,19 @@ import com.digibis.commons.exceptions.ConfigException;
  */
 public class Record implements Serializable, Cloneable {
 
+    private static final long serialVersionUID = 1L;
+
     /** The record terminator. */
     private static final char RT = MarcConstants.RT;
-
-    /** The field terminator. */
-    private static final char FT = MarcConstants.FT;
 
     /** The leader (record label). */
     private Leader leader;
 
     /** A collection of control fields. */
-    private List controlFieldList = new ArrayList();
+    private List<ControlField> controlFieldList = new ArrayList<ControlField>();
 
     /** A collection of data fields. */
-    private List dataFieldList = new ArrayList();
+    private List<DataField> dataFieldList = new ArrayList<DataField>();
 
 
     /**
@@ -174,7 +174,7 @@ public class Record implements Serializable, Cloneable {
         if (! Tag.isControlField(tag))
             return null;
 
-        for (Iterator i = controlFieldList.iterator(); i.hasNext();) {
+        for (Iterator<ControlField> i = controlFieldList.iterator(); i.hasNext();) {
             ControlField cf = (ControlField)i.next();
             if (cf.getTag().equals(tag))
                 return cf;
@@ -189,8 +189,8 @@ public class Record implements Serializable, Cloneable {
      * @return true if the variable field exists, false if not
      */
     public boolean hasVariableField(String tag) {
-        List list = getVariableFieldList();
-        for (Iterator i = list.iterator(); i.hasNext();) {
+        List<VariableField> list = getVariableFieldList();
+        for (Iterator<VariableField> i = list.iterator(); i.hasNext();) {
             VariableField vf = (VariableField)i.next();
             if (vf.getTag().equals(tag))
                 return true;
@@ -208,7 +208,7 @@ public class Record implements Serializable, Cloneable {
         if (! Tag.isDataField(tag))
             return null;
 
-        for (Iterator i = dataFieldList.iterator(); i.hasNext();) {
+        for (Iterator<DataField> i = dataFieldList.iterator(); i.hasNext();) {
             DataField df = (DataField)i.next();
             if (df.getTag().equals(tag))
                 return df;
@@ -246,7 +246,7 @@ public class Record implements Serializable, Cloneable {
      * @return {@link List} - the control field collection
      * @see ControlField
      */
-    public List getControlFieldList() {
+    public List<ControlField> getControlFieldList() {
         return controlFieldList;
     }
 
@@ -261,13 +261,13 @@ public class Record implements Serializable, Cloneable {
      *
      * @param newList the new control field collection
      */
-    public void setControlFieldList(List newList) {
+    public void setControlFieldList(List<ControlField> newList) {
         if (newList == null) {
-            controlFieldList = new ArrayList();
+            controlFieldList = new ArrayList<ControlField>();
             return;
         }
-        controlFieldList = new ArrayList();
-        for (Iterator i = newList.iterator(); i.hasNext();) {
+        controlFieldList = new ArrayList<ControlField>();
+        for (Iterator<ControlField> i = newList.iterator(); i.hasNext();) {
             Object obj = i.next();
             if (obj instanceof ControlField) {
                 this.add((ControlField)obj);
@@ -286,7 +286,7 @@ public class Record implements Serializable, Cloneable {
      * @return {@link List} - the data field collection
      * @see DataField
      */
-    public List getDataFieldList() {
+    public List<DataField> getDataFieldList() {
         return dataFieldList;
     }
 
@@ -301,13 +301,13 @@ public class Record implements Serializable, Cloneable {
      *
      * @param newList the new data field collection
      */
-    public void setDataFieldList(List newList) {
+    public void setDataFieldList(List<DataField> newList) {
         if (newList == null) {
-            dataFieldList = new ArrayList();
+            dataFieldList = new ArrayList<DataField>();
             return;
         }
-        dataFieldList = new ArrayList();
-        for (Iterator i = newList.iterator(); i.hasNext();) {
+        dataFieldList = new ArrayList<DataField>();
+        for (Iterator<DataField> i = newList.iterator(); i.hasNext();) {
 	        Object obj = i.next();
             if (obj instanceof DataField) {
 		        this.add((DataField)obj);
@@ -335,12 +335,12 @@ public class Record implements Serializable, Cloneable {
      * @see ControlField
      * @see DataField
      */
-    public List getVariableFieldList() {
-	List variableFields = new ArrayList();
-        for (Iterator i = controlFieldList.iterator(); i.hasNext();) {
+    public List<VariableField> getVariableFieldList() {
+	List<VariableField> variableFields = new ArrayList<VariableField>();
+        for (Iterator<ControlField> i = controlFieldList.iterator(); i.hasNext();) {
 	    variableFields.add(i.next());
         }
-        for (Iterator i = dataFieldList.iterator(); i.hasNext();) {
+        for (Iterator<DataField> i = dataFieldList.iterator(); i.hasNext();) {
 	    variableFields.add(i.next());
         }
 	return variableFields;
@@ -358,15 +358,15 @@ public class Record implements Serializable, Cloneable {
      *
      * @param newList the new variable field collection
      */
-    public void setVariableFieldList(List newList) {
+    public void setVariableFieldList(List<VariableField> newList) {
         if (newList == null) {
-            controlFieldList = new ArrayList();
-            dataFieldList = new ArrayList();
+            controlFieldList = new ArrayList<ControlField>();
+            dataFieldList = new ArrayList<DataField>();
             return;
         }
-        controlFieldList = new ArrayList();
-        dataFieldList = new ArrayList();
-        for (Iterator i = newList.iterator(); i.hasNext();) {
+        controlFieldList = new ArrayList<ControlField>();
+        dataFieldList = new ArrayList<DataField>();
+        for (Iterator<VariableField> i = newList.iterator(); i.hasNext();) {
             Object obj = i.next();
             if (obj instanceof ControlField) {
                 this.add((ControlField)obj);
@@ -406,14 +406,14 @@ public class Record implements Serializable, Cloneable {
         Directory directory = new Directory();
 
         // append control fields to directory and data
-        for (Iterator i = controlFieldList.iterator(); i.hasNext();) {
+        for (Iterator<ControlField> i = controlFieldList.iterator(); i.hasNext();) {
             ControlField cf = (ControlField)i.next();
             directory.add(cf.getTag(), cf.getLength());
             data.append(cf.marshal());
         }
 
         // append data fields to directory and data
-        for (Iterator i = dataFieldList.iterator(); i.hasNext();) {
+        for (Iterator<DataField> i = dataFieldList.iterator(); i.hasNext();) {
             DataField df = (DataField)i.next();
             directory.add(df.getTag(), df.getLength());
             data.append(df.marshal());
@@ -466,7 +466,7 @@ public class Record implements Serializable, Cloneable {
 
         try {
             // append control fields to directory and data
-            for (Iterator i = controlFieldList.iterator(); i.hasNext();) {
+            for (Iterator<ControlField> i = controlFieldList.iterator(); i.hasNext();) {
                 ControlField cf = (ControlField)i.next();
                 int fieldLength = 0;
                 if (StringUtils.isNotBlank (encoding)) {
@@ -479,7 +479,7 @@ public class Record implements Serializable, Cloneable {
             }
     
             // append data fields to directory and data
-            for (Iterator i = dataFieldList.iterator(); i.hasNext();) {
+            for (Iterator<DataField> i = dataFieldList.iterator(); i.hasNext();) {
                 DataField df = (DataField)i.next();
                 int fieldLength = 0;
                 if (StringUtils.isNotBlank (encoding)) {
@@ -527,18 +527,18 @@ public class Record implements Serializable, Cloneable {
             // Clonamos la lista de campos de control
             if (this.controlFieldList != null)
             {
-                ArrayList newList = new ArrayList();
-                for (Iterator it = this.controlFieldList.iterator (); it.hasNext (); )
-                    newList.add (((ControlField)it.next ()).clone ());
+                ArrayList<ControlField> newList = new ArrayList<ControlField>();
+                for (Iterator<ControlField> it = this.controlFieldList.iterator (); it.hasNext (); )
+                    newList.add ((ControlField) it.next ().clone ());
                 instance.setControlFieldList (newList);
             }
             
             // Clonamos la lista de campos de datos
             if (this.dataFieldList != null)
             {
-                ArrayList newList = new ArrayList();
-                for (Iterator it = this.dataFieldList.iterator (); it.hasNext (); )
-                    newList.add (((DataField)it.next ()).clone ());
+                ArrayList<DataField> newList = new ArrayList<DataField>();
+                for (Iterator<DataField> it = this.dataFieldList.iterator (); it.hasNext (); )
+                    newList.add ((DataField) it.next ().clone ());
                 instance.setDataFieldList (newList);
             }
             
@@ -549,5 +549,15 @@ public class Record implements Serializable, Cloneable {
             throw new ConfigException (e);
         }
     }
-    
+
+    @Override
+    public String toString ()
+    {
+        final StringBuilder sb = new StringBuilder();
+        sb.append ("RECORD \n leader:[ ").append (leader).append (" ]")
+        .append ("\n controlFieldList:[ ").append (Arrays.toString (controlFieldList.toArray ())).append (" ] ")
+        .append ("\n dataFieldList:[ ").append (Arrays.toString (dataFieldList.toArray ())).append (" ] ");
+        return sb.toString ();
+        
+    }
 }

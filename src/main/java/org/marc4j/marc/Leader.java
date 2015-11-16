@@ -20,9 +20,9 @@
  */
 package org.marc4j.marc;
 
-import java.text.DecimalFormat;
-import java.io.ByteArrayInputStream;
 import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.util.Arrays;
 
 import com.digibis.commons.exceptions.ConfigException;
 
@@ -49,6 +49,8 @@ import com.digibis.commons.exceptions.ConfigException;
  *
  */
 public class Leader implements Serializable, Cloneable {
+
+    private static final long serialVersionUID = 1L;
 
     /** The logical record length. */
     private int recordLength;
@@ -296,7 +298,7 @@ public class Leader implements Serializable, Cloneable {
      * if they are not integer values.</p>
      * @param ldr the leader
      */
-    public void unmarshal(String ldr) throws MarcException {
+    public void unmarshal(final String ldr) throws MarcException {
 	try {
 	    String s;
 	    s = ldr.substring(0, 5);
@@ -404,5 +406,26 @@ public class Leader implements Serializable, Cloneable {
             throw new ConfigException (e);
         }
     }
+
+    @Override
+    public String toString ()
+    {
+        StringBuilder builder = new StringBuilder ();
+        builder.append ("Leader [recordLength=").append (recordLength);
+        builder.append (",  recordStatus=").append (recordStatus);
+        builder.append (",  typeOfRecord=").append (typeOfRecord);
+        builder.append (",  implDefined1=").append (Arrays.toString (implDefined1));
+        builder.append (",  charCodingScheme=").append (charCodingScheme);
+        builder.append (",  indicatorCount=").append (indicatorCount);
+        builder.append (",  subfieldCodeLength=").append (subfieldCodeLength);
+        builder.append (",  baseAddressOfData=").append (baseAddressOfData);
+        builder.append (",  implDefined2=").append (Arrays.toString (implDefined2));
+        builder.append (",  entryMap=").append (Arrays.toString (entryMap));
+        builder.append (",  df=").append (df);
+        builder.append ("]");
+        return builder.toString ();
+    }
+    
+    
     
 }

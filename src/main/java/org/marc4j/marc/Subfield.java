@@ -21,6 +21,7 @@
 package org.marc4j.marc;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 import com.digibis.commons.exceptions.ConfigException;
 
@@ -160,6 +161,13 @@ public class Subfield implements Serializable, Cloneable {
         catch (CloneNotSupportedException e) {
             throw new ConfigException (e);
         }
+    }
+    public String toString ()
+    {
+        final StringBuilder sb = new StringBuilder();
+        sb.append ("\n                                  SUBFIELD - code:[ ").append (code)
+            .append (", Data:").append (Arrays.toString (data)).append (" ] ");
+        return sb.toString ();
     }
     
 }

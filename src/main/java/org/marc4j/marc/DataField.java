@@ -21,6 +21,7 @@
 package org.marc4j.marc;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -50,6 +51,8 @@ import com.digibis.commons.exceptions.ConfigException;
  */
 public class DataField extends VariableField implements Serializable, Cloneable {
 
+    private static final long serialVersionUID = 1L;
+
     /** The first indicator value. */
     private char ind1;
 
@@ -57,14 +60,14 @@ public class DataField extends VariableField implements Serializable, Cloneable 
     private char ind2;
 
     /** A collection of data elements. */
-    private ArrayList list;
+    private ArrayList<Subfield> list;
 
     /**
      * <p>Default constructor.</p>
      */
     public DataField() {
         super();
-	this.list = new ArrayList();
+        this.list = new ArrayList<Subfield>();
     }
 
     /**
@@ -75,7 +78,7 @@ public class DataField extends VariableField implements Serializable, Cloneable 
      */
     public DataField(String tag) {
         super(tag);
-	this.list = new ArrayList();
+        this.list = new ArrayList<Subfield>();
     }
 
     /**
@@ -90,7 +93,7 @@ public class DataField extends VariableField implements Serializable, Cloneable 
         super(tag);
         setIndicator1(ind1);
         setIndicator2(ind2);
-        this.list = new ArrayList();
+        this.list = new ArrayList<Subfield>();
     }
 
     /**
@@ -175,7 +178,7 @@ public class DataField extends VariableField implements Serializable, Cloneable 
      * @return {@link List} - the data element collection
      * @see Subfield
      */
-    public List getSubfieldList() {
+    public List<Subfield> getSubfieldList() {
         return list;
     }
 
@@ -187,8 +190,8 @@ public class DataField extends VariableField implements Serializable, Cloneable 
      * @see Subfield
      */
     public Subfield getSubfield(char code) {
-        for (Iterator i = list.iterator(); i.hasNext();) {
-            Subfield sf = (Subfield)i.next();
+        for (Iterator<Subfield> i = list.iterator(); i.hasNext();) {
+            Subfield sf = i.next();
             if (sf.getCode() == code)
                 return sf;
         }
@@ -202,8 +205,8 @@ public class DataField extends VariableField implements Serializable, Cloneable 
      * @return true if the data element exists, false if not
      */
     public boolean hasSubfield(char code) {
-        for (Iterator i = list.iterator(); i.hasNext();) {
-            Subfield sf = (Subfield)i.next();
+        for (Iterator<Subfield> i = list.iterator(); i.hasNext();) {
+            Subfield sf = i.next();
             if (sf.getCode() == code)
                 return true;
         }
@@ -221,13 +224,13 @@ public class DataField extends VariableField implements Serializable, Cloneable 
      *
      * @param newList the new data element collection
      */
-    public void setSubfieldList(List newList) {
+    public void setSubfieldList(List<Subfield> newList) {
         if (newList == null) {
-            list = new ArrayList();
+            list = new ArrayList<Subfield>();
             return;
         }
-        list = new ArrayList();
-        for (Iterator i = newList.iterator(); i.hasNext();) {
+        list = new ArrayList<Subfield>();
+        for (Iterator<Subfield> i = newList.iterator(); i.hasNext();) {
             Object obj = i.next();
             if (obj instanceof Subfield) {
                 add((Subfield)obj);
@@ -249,7 +252,7 @@ public class DataField extends VariableField implements Serializable, Cloneable 
      public String marshal() {
         StringBuffer dataField = new StringBuffer()
 	    .append(ind1).append(ind2);
-        Iterator iterator = list.iterator();
+        Iterator<Subfield> iterator = list.iterator();
         while (iterator.hasNext()) {
             Subfield subfield = (Subfield)iterator.next();
             dataField.append(subfield.marshal());
@@ -285,9 +288,9 @@ public class DataField extends VariableField implements Serializable, Cloneable 
             // Recorremos la lista de subcampos y clonamos cada uno de ellos
             if (this.list != null)
             {
-                ArrayList newList = new ArrayList();
-                for (Iterator it = this.list.iterator (); it.hasNext (); )
-                    newList.add (((Subfield)it.next ()).clone ());
+                ArrayList<Subfield> newList = new ArrayList<Subfield>();
+                for (Iterator<Subfield> it = this.list.iterator (); it.hasNext (); )
+                    newList.add ( (Subfield) it.next ().clone ());
                 instance.setSubfieldList (newList);
             }
             
@@ -298,5 +301,15 @@ public class DataField extends VariableField implements Serializable, Cloneable 
             throw new ConfigException (e);
         }
     }
-
+    
+    @Override
+    public String toString ()
+    {
+        final StringBuilder sb = new StringBuilder();
+        sb.append ("\n    DATAFIELD    [  tag: ").append (getTag ()).append (", Ind1:").append (getIndicator1 ())
+        .append (", Ind2:").append (getIndicator2 ()).append (",\n                             Elements: ")
+        .append (Arrays.toString (list.toArray ())).append (" ] ");
+        return sb.toString ();
+    }
+    
 }

@@ -47,6 +47,8 @@ import java.text.DecimalFormat;
  */
 public class Directory implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private static final char FT = MarcConstants.FT;
 
     /** The directory. */

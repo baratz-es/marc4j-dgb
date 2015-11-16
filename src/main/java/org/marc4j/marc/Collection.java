@@ -83,4 +83,16 @@ public class Collection implements Serializable {
 	}
     }
 
+    @Override
+    public String toString ()
+    {
+        StringBuilder builder = new StringBuilder ();
+        builder.append ("Collection [list=");
+        builder.append (list);
+        builder.append ("]");
+        return builder.toString ();
+    }
+    
+    
+
 }
