@@ -21,6 +21,7 @@
 package org.marc4j.marc;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 import com.digibis.commons.exceptions.ConfigException;
 
@@ -44,6 +45,8 @@ import com.digibis.commons.exceptions.ConfigException;
  */
 public class ControlField extends VariableField implements Serializable, Cloneable {
 
+    private static final long serialVersionUID = 1L;
+    
     /** The MARC data element. */
     private char[] data;
 
@@ -170,6 +173,14 @@ public class ControlField extends VariableField implements Serializable, Cloneab
         catch (CloneNotSupportedException e) {
             throw new ConfigException (e);
         }
+    }
+    
+    @Override    
+    public String toString ()
+    {
+        final StringBuilder sb = new StringBuilder();
+        sb.append ("\n    CONTROLFIELD [  tag: ").append (getTag ()).append (", Data:").append (Arrays.toString (data)).append (" ] ");
+        return sb.toString ();
     }
     
 }
