@@ -22,6 +22,7 @@ package org.marc4j.marcxml;
 
 import java.io.*;
 import java.net.URL;
+
 import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.Attributes;
@@ -260,8 +261,10 @@ public class MarcXmlFilter extends ExtendedFilter
      *
      * @param tag the tag name
      * @param data the data element
+     * @param id the field id if exists.
      */
-    public void controlField(String tag, char[] data) {
+    @Override
+    public void controlField(String tag, char[] data, Long id) {
 	try {
 	    AttributesImpl atts = new AttributesImpl();
 	    atts.addAttribute("", "tag", "tag", "CDATA", tag);
@@ -279,8 +282,10 @@ public class MarcXmlFilter extends ExtendedFilter
      * @param tag the tag name
      * @param ind1 the first indicator value
      * @param ind2 the second indicator value
+     * @param id the field id if exists.
      */
-    public void startDataField(String tag, char ind1, char ind2) {
+    @Override
+    public void startDataField(String tag, char ind1, char ind2, Long id) {
 	try {
 	    AttributesImpl atts = new AttributesImpl();
 	    atts.addAttribute("", "tag", "tag", "CDATA", tag);
@@ -299,8 +304,10 @@ public class MarcXmlFilter extends ExtendedFilter
      *
      * @param code the data element identifier
      * @param data the data element
+     * @param linkCode a code if the subfield has a link with another Record     
      */
-    public void subfield(char code, char[] data) {
+    @Override
+    public void subfield(char code, char[] data, String linkCode) {
 	try {
 	    AttributesImpl atts = new AttributesImpl();
 	    atts.addAttribute("", "code", "code", "CDATA", String.valueOf(code));
@@ -368,12 +375,6 @@ public class MarcXmlFilter extends ExtendedFilter
 			      String qName, Attributes atts, String content)
         throws SAXException {
         writeElement(uri, localName, qName, atts, content.toCharArray());
-    }
-
-    private void writeElement(String uri, String localName,
-			      String qName, Attributes atts, char content)
-        throws SAXException {
-        writeElement(uri, localName, qName, atts, String.valueOf(content).toCharArray());
     }
 
     private void writeElement(String uri, String localName,

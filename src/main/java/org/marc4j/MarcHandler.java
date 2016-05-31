@@ -57,8 +57,9 @@ public interface MarcHandler {
      *
      * @param tag the tag name
      * @param data the control field data
+     * @param id the field id if exists.
      */
-    public abstract void controlField(String tag, char[] data);
+    public abstract void controlField(String tag, char[] data, Long id);
 
     /**
      * <p>Receives notification at the start of each data field.</p>
@@ -66,8 +67,9 @@ public interface MarcHandler {
      * @param tag the tag name
      * @param ind1 the first indicator value
      * @param ind2 the second indicator value
+     * @param id the field id if exists.
      */
-    public abstract void startDataField(String tag, char ind1, char ind2);
+    public abstract void startDataField(String tag, char ind1, char ind2, Long id);
 
     /**
      * <p>Receives notification at the end of each data field</p>
@@ -81,7 +83,8 @@ public interface MarcHandler {
      *
      * @param code the data element identifier
      * @param data the data element
+     * @param linkCode a code if the subfield has a link with another Record     
      */
-    public abstract void subfield(char code, char[] data);
+    public abstract void subfield(char code, char[] data, String linkCode);
 
 }

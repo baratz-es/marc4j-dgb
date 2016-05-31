@@ -29,7 +29,10 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.lang.StringUtils;
+import org.marc4j.marc.ControlField;
+import org.marc4j.marc.DataField;
 import org.marc4j.marc.MarcConstants;
+import org.marc4j.marc.Subfield;
 import org.marc4j.marc.Tag;
 import org.marc4j.marc.Leader;
 import org.marc4j.marc.MarcException;
@@ -278,7 +281,7 @@ public class MarcReader {
         
         // Parsea el campo de control
         try {
-        if (mh != null) mh.controlField(tag, trimFT(field));
+        if (mh != null) mh.controlField(tag, trimFT(field), ControlField.EMPTY_ID);
         } catch (Exception e) {
             if (eh != null) reportWarning("Control Field is not valid: " + tag + " - " + new String(field)); 
         }
@@ -301,7 +304,7 @@ public class MarcReader {
         } else {
             ind1 = field[0];
             ind2 = field[1];
-            if (mh != null) mh.startDataField(tag, ind1, ind2);
+            if (mh != null) mh.startDataField(tag, ind1, ind2, DataField.EMPTY_ID);
         
             // Si la longitud del campo es correcta pero tras los indicadores no está US, advertencia
             if (field.length > 3 && field[2] != US) {
@@ -333,7 +336,7 @@ public class MarcReader {
     }
 
     private void reportSubfield(char code, StringBuffer data) {
-        if (mh != null) mh.subfield(code, new String(data).toCharArray());
+        if (mh != null) mh.subfield(code, new String(data).toCharArray(), Subfield.EMPTY_LINK_CODE);
     }
 
     private void reportWarning(String message) {

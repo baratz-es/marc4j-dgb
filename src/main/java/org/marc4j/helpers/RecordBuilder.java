@@ -21,8 +21,6 @@
 package org.marc4j.helpers;
 
 import org.marc4j.MarcHandler;
-import org.marc4j.MarcReader;
-import org.marc4j.MarcReaderException;
 import org.marc4j.marc.*;
 
 /**
@@ -73,22 +71,25 @@ public class RecordBuilder implements MarcHandler {
     /**
      * <p>Adds a control field to the record object.  </p>
      */
-    public void controlField(String tag, char[] data) {
-    	record.add(new ControlField(tag, data));
+    @Override
+    public void controlField(String tag, char[] data, Long id) {
+    	record.add(new ControlField(tag, data, id));
     }
 
     /**
      * <p>Creates a new data field object.  </p>
      */
-    public void startDataField(String tag, char ind1, char ind2) {
-	    datafield = new DataField(tag, ind1, ind2);
+    @Override
+    public void startDataField(String tag, char ind1, char ind2, Long id) {
+	    datafield = new DataField(tag, ind1, ind2, id);
     }
 
     /**
      * <p>Adds a subfield to the data field.  </p>
      */
-    public void subfield(char identifier, char[] data) {
-	    datafield.add(new Subfield(identifier, data));
+    @Override
+    public void subfield(char identifier, char[] data, String linkCode) {
+	    datafield.add(new Subfield(identifier, data, linkCode));
     }
 
     /**

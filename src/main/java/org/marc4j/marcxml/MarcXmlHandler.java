@@ -30,8 +30,11 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 import org.marc4j.MarcHandler;
+import org.marc4j.marc.ControlField;
+import org.marc4j.marc.DataField;
 import org.marc4j.marc.Leader;
 import org.marc4j.marc.MarcException;
+import org.marc4j.marc.Subfield;
 import org.marc4j.util.UnicodeToAnsel;
 
 /**
@@ -159,7 +162,7 @@ public class MarcXmlHandler extends DefaultHandler {
                 String ind1 = atts.getValue(IND_1_ATTR);
                 String ind2 = atts.getValue(IND_2_ATTR);
                 if (mh != null)
-                    mh.startDataField(tag, ind1.charAt(0), ind2.charAt(0));
+                    mh.startDataField(tag, ind1.charAt(0), ind2.charAt(0), DataField.EMPTY_ID);
 
                 data.delete(0, data.length());
                 break;
@@ -211,7 +214,7 @@ public class MarcXmlHandler extends DefaultHandler {
 
             case CONTROLFIELD_ID:
                 if (mh != null)
-                    mh.controlField(tag, data.toString().toCharArray());
+                    mh.controlField(tag, data.toString().toCharArray(), ControlField.EMPTY_ID);
                 break;
 
             case DATAFIELD_ID:
@@ -223,7 +226,7 @@ public class MarcXmlHandler extends DefaultHandler {
             case SUBFIELD_ID:
                 char[] ch = data.toString().toCharArray();
                 if (mh != null)
-                    mh.subfield(code.charAt(0), ch);
+                    mh.subfield(code.charAt(0), ch, Subfield.EMPTY_LINK_CODE);
                 code = null;
                 break;
         }

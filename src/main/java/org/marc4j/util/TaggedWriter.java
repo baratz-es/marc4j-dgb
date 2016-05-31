@@ -107,21 +107,24 @@ public class TaggedWriter implements MarcHandler {
 	rawWrite('\n');
     }
 
-    public void controlField(String tag, char[] data) {
+    @Override
+    public void controlField(String tag, char[] data, Long id) {
 	rawWrite(tag);
 	rawWrite(' ');
 	rawWrite(new String(data));
 	rawWrite('\n');
     }
 
-    public void startDataField(String tag, char ind1, char ind2) {
+    @Override
+    public void startDataField(String tag, char ind1, char ind2, Long id) {
 	rawWrite(tag);
 	rawWrite(' ');
 	rawWrite(ind1);
 	rawWrite(ind2);
     }
 
-    public void subfield(char code, char[] data) {
+    @Override
+    public void subfield(char code, char[] data, String linkCode) {
 	rawWrite('$');
 	rawWrite(code);
 	rawWrite(new String(data));

@@ -131,8 +131,8 @@ public class MarcWriter
      * @param convert the conversion option
      */
     public void setWriter(Writer out, boolean convert) {
-	this.out = out;
-	setUnicodeToAnsel(convert);
+        this.out = out;
+        setUnicodeToAnsel(convert);
     }
 
     /**
@@ -145,23 +145,26 @@ public class MarcWriter
     }
 
     public void startRecord(Leader leader) {
-	this.record = new Record();
-	record.add(leader);
+        this.record = new Record();
+        record.add(leader);
     }
 
-    public void controlField(String tag, char[] data) {
-	record.add(new ControlField(tag, data));
+    @Override
+    public void controlField(String tag, char[] data, Long id) {
+        record.add(new ControlField(tag, data, id));
     }
 
-    public void startDataField(String tag, char ind1, char ind2) {
-	datafield = new DataField(tag, ind1, ind2);
+    @Override
+    public void startDataField(String tag, char ind1, char ind2, Long id) {
+        datafield = new DataField(tag, ind1, ind2, id);
     }
 
-    public void subfield(char code, char[] data) {
+    @Override
+    public void subfield(char code, char[] data, String linkCode) {
 	if (charconv != null)
-	    datafield.add(new Subfield(code, charconv.convert(data)));
+	    datafield.add(new Subfield(code, charconv.convert(data), linkCode));
 	else
-	    datafield.add(new Subfield(code, data));
+	    datafield.add(new Subfield(code, data, linkCode));
     }
 
     public void endDataField(String tag) {

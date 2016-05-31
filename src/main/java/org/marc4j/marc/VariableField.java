@@ -40,9 +40,17 @@ import java.io.Serializable;
  */
 public abstract class VariableField implements Serializable {
 
+    private static final long serialVersionUID = -5303416788186473947L;
+
     /** The field terminator */
     public static final char FT = MarcConstants.FT;
+    
+    /** Empty value for the field id */
+    public static final Long EMPTY_ID = null;
 
+    /** Field id */
+    private Long id;
+    
     /** The tag name. */
     private String tag;
 
@@ -79,6 +87,23 @@ public abstract class VariableField implements Serializable {
     public String getTag() {
     	return tag;
     }
+
+    /**
+     * @return Devuelve el valor de id.
+     */
+    public Long getId ()
+    {
+        return id;
+    }
+
+    /**
+     * @param id Nuevo valor para id.
+     */
+    public void setId (Long id)
+    {
+        this.id = id;
+    }
+    
 }
 
 // End of VariableField.java
