@@ -82,6 +82,31 @@ public class ControlField extends VariableField implements Serializable, Cloneab
     }
 
     /**
+     * <p>Creates a new control field instance and registers the tag
+     * and the control field data.</p>
+     *
+     * @param tag the tag name
+     * @param data the control field data
+     * @param id the field id if exists.
+     */
+    public ControlField(String tag, char[] data, Long id) {
+        this (tag, data);
+        this.setId(id);
+    }
+
+    /**
+     * <p>Creates a new control field instance and registers the tag
+     * and the control field data.</p>
+     *
+     * @param tag the tag name
+     * @param data the control field data
+     * @param id the field id if exists.
+     */
+    public ControlField(String tag, String data, Long id) {
+        this (tag, data.toCharArray (), id);
+    }
+    
+    /**
      * <p>Registers the tag.</p>
      *
      * @param tag the tag name

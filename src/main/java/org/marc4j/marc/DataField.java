@@ -97,6 +97,20 @@ public class DataField extends VariableField implements Serializable, Cloneable 
     }
 
     /**
+     * <p>Creates a new <code>DataField</code> instance and
+     * registers the id, the tag name and the indicator values.</p>
+     *
+     * @param tag the tag name
+     * @param ind1 the first indicator
+     * @param ind2 the second indicator
+     * @param id the id for the field
+     */
+    public DataField(String tag, char ind1, char ind2, Long id) {
+        this (tag, ind1, ind2);
+        this.setId (id);
+    }
+    
+    /**
      * <p>Registers the tag.</p>
      *
      * @param tag the tag name

@@ -58,11 +58,13 @@ public class DefaultHandler implements
 	// Do nothing.
     }
 
-    public void controlField(String tag, char[] data) {
+    @Override
+    public void controlField(String tag, char[] data, Long id) {
 	// Do nothing.
     }
 
-    public void startDataField(String tag, char ind1, char ind2) {
+    @Override
+    public void startDataField(String tag, char ind1, char ind2, Long id) {
 	// Do nothing.
     }
 
@@ -70,7 +72,8 @@ public class DefaultHandler implements
 	// Do nothing.
     }
 
-    public void subfield(char identifier, char[] data) {
+    @Override
+    public void subfield(char identifier, char[] data, String linkCode) {
 	// Do nothing.
     }
 

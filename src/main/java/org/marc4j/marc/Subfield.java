@@ -44,6 +44,9 @@ import com.digibis.commons.exceptions.ConfigException;
  */
 public class Subfield implements Serializable, Cloneable {
 
+    /** Empty value for the link code */
+    public static final String EMPTY_LINK_CODE = null;
+    
     private static final char US = MarcConstants.US;
 
     /** The data element identifier. */
@@ -51,6 +54,9 @@ public class Subfield implements Serializable, Cloneable {
 
     /** The data element. */
     private char[] data;
+    
+    /** A code if the subfield has a link with another Record */
+    private String linkCode;
 
     /** Default constructor */
     public Subfield() {}
@@ -79,6 +85,34 @@ public class Subfield implements Serializable, Cloneable {
         setData(data.toCharArray());
     }
 
+    /**
+     * <p>Creates a new <code>Subfield</code> instance and registers the
+     * data element identifier and the data element.</p>
+     *
+     * @param code the data element identifier
+     * @param data the data element
+     * @param linkCode A code if the subfield has a link with another Record. 
+     */
+    public Subfield(char code, char[] data, String linkCode) {
+        setCode(code);
+        setData(data);
+        setLinkCode (linkCode);
+    }
+    
+    /**
+     * <p>Creates a new <code>Subfield</code> instance and registers the
+     * data element identifier and the data element.</p>
+     *
+     * @param code the data element identifier
+     * @param data the data element
+     * @param linkCode A code if the subfield has a link with another Record. 
+     */
+    public Subfield(char code, String data, String linkCode) {
+        setCode(code);
+        setData(data.toCharArray());
+        setLinkCode (linkCode);
+    }
+    
     /**
      * <p>Registers the data element identifier.</p>
      *
@@ -126,6 +160,23 @@ public class Subfield implements Serializable, Cloneable {
      */
     public char[] getData() {
 	return data;
+    }
+
+    
+    /**
+     * @return Devuelve el valor de linkCode.
+     */
+    public String getLinkCode ()
+    {
+        return linkCode;
+    }
+
+    /**
+     * @param linkCode Nuevo valor para linkCode.
+     */
+    public void setLinkCode (String linkCode)
+    {
+        this.linkCode = linkCode;
     }
 
     /**
