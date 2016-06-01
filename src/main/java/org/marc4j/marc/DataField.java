@@ -294,6 +294,7 @@ public class DataField extends VariableField implements Serializable, Cloneable 
         {
             // Creamos una nueva instancia
             DataField instance = (DataField)super.clone ();
+            instance.setId (null);
             
             // Rellenamos los indicadores
             instance.setIndicator1 (this.ind1);

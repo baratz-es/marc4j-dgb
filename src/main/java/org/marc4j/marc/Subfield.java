@@ -206,6 +206,7 @@ public class Subfield implements Serializable, Cloneable {
             // Rellenamos la información
             instance.setCode (this.code);
             instance.setData ((char[])this.data.clone ());
+            instance.setLinkCode (this.linkCode);
             
             return instance;
         } 
