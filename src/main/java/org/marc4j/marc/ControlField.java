@@ -188,7 +188,7 @@ public class ControlField extends VariableField implements Serializable, Cloneab
         {
             // Creamos nueva instancia
             ControlField instance = (ControlField)super.clone ();
-            instance.setId (null);
+            instance.setId (ControlField.EMPTY_ID);
             
             // Rellenamos la información
             instance.setTag (this.getTag ());
@@ -205,7 +205,8 @@ public class ControlField extends VariableField implements Serializable, Cloneab
     public String toString ()
     {
         final StringBuilder sb = new StringBuilder();
-        sb.append ("\n    CONTROLFIELD [  tag: ").append (getTag ()).append (", Data:").append (Arrays.toString (data)).append (" ] ");
+        sb.append ("\n    CONTROLFIELD [  tag: ").append (getTag ()).append (", Data:").append (Arrays.toString (data)).
+            append(this.getId() != null ? (", id: ") + this.getId () : "").append (" ] ");
         return sb.toString ();
     }
     

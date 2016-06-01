@@ -218,7 +218,8 @@ public class Subfield implements Serializable, Cloneable {
     {
         final StringBuilder sb = new StringBuilder();
         sb.append ("\n                                  SUBFIELD - code:[ ").append (code)
-            .append (", Data:").append (Arrays.toString (data)).append (" ] ");
+            .append (", Data:").append (Arrays.toString (data))
+            .append(this.getLinkCode () != null ? (", linkCode: ") + this.getLinkCode () : "").append (" ] ");
         return sb.toString ();
     }
     

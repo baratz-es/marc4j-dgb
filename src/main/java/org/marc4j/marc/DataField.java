@@ -294,7 +294,7 @@ public class DataField extends VariableField implements Serializable, Cloneable 
         {
             // Creamos una nueva instancia
             DataField instance = (DataField)super.clone ();
-            instance.setId (null);
+            instance.setId (DataField.EMPTY_ID);
             
             // Rellenamos los indicadores
             instance.setIndicator1 (this.ind1);
@@ -322,8 +322,8 @@ public class DataField extends VariableField implements Serializable, Cloneable 
     {
         final StringBuilder sb = new StringBuilder();
         sb.append ("\n    DATAFIELD    [  tag: ").append (getTag ()).append (", Ind1:").append (getIndicator1 ())
-        .append (", Ind2:").append (getIndicator2 ()).append (",\n                             Elements: ")
-        .append (Arrays.toString (list.toArray ())).append (" ] ");
+        .append (", Ind2:").append (getIndicator2 ()).append(this.getId() != null ? (", id: ") + this.getId () : "")
+        .append (",\n                             Elements: ").append (Arrays.toString (list.toArray ())).append (" ] ");
         return sb.toString ();
     }
     
