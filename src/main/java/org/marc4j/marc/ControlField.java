@@ -23,7 +23,8 @@ package org.marc4j.marc;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import com.digibis.commons.exceptions.ConfigException;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 
 /**
  * <p><code>ControlField</code> defines behaviour for a control
@@ -113,6 +114,7 @@ public class ControlField extends VariableField implements Serializable, Cloneab
      * @throws IllegalTagException when the tag is not a valid
      *                                     control field identifier
      */
+    @Override
     public void setTag(String tag) {
         if (Tag.isControlField(tag)) {
             super.setTag(tag);
@@ -127,6 +129,7 @@ public class ControlField extends VariableField implements Serializable, Cloneab
      *
      * @return {@link String} - the tag name
      */
+    @Override
     public String getTag() {
 	    return super.getTag();
     }
@@ -182,25 +185,42 @@ public class ControlField extends VariableField implements Serializable, Cloneab
     /*
      * @see java.lang.Object#clone()
      */
+    @Override
     public Object clone ()
     {
-        try
-        {
-            // Creamos nueva instancia
-            ControlField instance = (ControlField)super.clone ();
-            instance.setId (ControlField.EMPTY_ID);
-            
-            // Rellenamos la información
-            instance.setTag (this.getTag ());
-            instance.setData (String.copyValueOf (this.data));
-            
-            return instance;
-        } 
-        catch (CloneNotSupportedException e) {
-            throw new ConfigException (e);
-        }
+    	ControlField instance = new ControlField (this.getTag(), String.copyValueOf (this.data), ControlField.EMPTY_ID);
+        return instance;
     }
-    
+
+    /*
+     * @see java.lang.Object#equals()
+     */
+    @Override
+    public boolean equals(Object obj) {
+		if (obj == null) 
+	   		return false; 
+		if (obj == this) 
+			return true;
+		if (obj.getClass() != getClass()) 
+			return false;
+	   
+		ControlField that = (ControlField) obj;
+		return new EqualsBuilder()
+	                 .append(this.getTag(), that.getTag())
+	                 .append(this.getId(), that.getId())
+	                 .append(this.data, that.data)
+	                 .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+		return new HashCodeBuilder()
+	                 .append(this.getTag())
+	                 .append(this.getId())
+	                 .append(this.data)
+	                 .toHashCode();
+    }
+
     @Override    
     public String toString ()
     {
