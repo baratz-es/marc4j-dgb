@@ -21,12 +21,13 @@
 package org.marc4j.marc;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
-import com.digibis.commons.exceptions.ConfigException;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 
 /**
  * <p><code>DataField</code> defines behaviour for a data field
@@ -67,7 +68,7 @@ public class DataField extends VariableField implements Serializable, Cloneable 
      */
     public DataField() {
         super();
-        this.list = new ArrayList<Subfield>();
+        this.list = new ArrayList<>();
     }
 
     /**
@@ -78,7 +79,7 @@ public class DataField extends VariableField implements Serializable, Cloneable 
      */
     public DataField(String tag) {
         super(tag);
-        this.list = new ArrayList<Subfield>();
+        this.list = new ArrayList<>();
     }
 
     /**
@@ -93,7 +94,7 @@ public class DataField extends VariableField implements Serializable, Cloneable 
         super(tag);
         setIndicator1(ind1);
         setIndicator2(ind2);
-        this.list = new ArrayList<Subfield>();
+        this.list = new ArrayList<>();
     }
 
     /**
@@ -117,6 +118,7 @@ public class DataField extends VariableField implements Serializable, Cloneable 
      * @throws IllegalTagException when the tag is not a valid
      *                                     data field identifier
      */
+    @Override
     public void setTag(String tag) {
         if (Tag.isDataField(tag)) {
             super.setTag(tag);
@@ -131,6 +133,7 @@ public class DataField extends VariableField implements Serializable, Cloneable 
      *
      * @return {@link String} - the tag name
      */
+    @Override
     public String getTag() {
 	    return super.getTag();
     }
@@ -290,41 +293,62 @@ public class DataField extends VariableField implements Serializable, Cloneable 
      */
     public Object clone ()
     {
-        try
+        // Creamos una nueva instancia
+        DataField instance = new DataField(this.getTag(), this.ind1, this.ind2, DataField.EMPTY_ID);
+        
+        // Recorremos la lista de subcampos y clonamos cada uno de ellos
+        if (this.list != null)
         {
-            // Creamos una nueva instancia
-            DataField instance = (DataField)super.clone ();
-            instance.setId (DataField.EMPTY_ID);
-            
-            // Rellenamos los indicadores
-            instance.setIndicator1 (this.ind1);
-            instance.setIndicator2 (this.ind2);
-            
-            // Recorremos la lista de subcampos y clonamos cada uno de ellos
-            if (this.list != null)
-            {
-                ArrayList<Subfield> newList = new ArrayList<Subfield>();
-                for (Iterator<Subfield> it = this.list.iterator (); it.hasNext (); )
-                    newList.add ( (Subfield) it.next ().clone ());
-                instance.setSubfieldList (newList);
-            }
-            
-            // Devolvemos la nueva instancia
-            return instance;
-        } 
-        catch (CloneNotSupportedException e) {
-            throw new ConfigException (e);
+            ArrayList<Subfield> newList = new ArrayList<>();
+            for (Iterator<Subfield> it = this.list.iterator (); it.hasNext (); )
+                newList.add ( (Subfield) it.next ().clone ());
+            instance.setSubfieldList (newList);
         }
+        
+        // Devolvemos la nueva instancia
+        return instance;
     }
-    
+
+	@Override
+    public boolean equals (Object obj) {
+		if (obj == null) 
+	   		return false; 
+		if (obj == this) 
+			return true;
+		if (obj.getClass() != getClass()) 
+			return false;
+	   
+		DataField that = (DataField) obj;
+		return new EqualsBuilder()
+	                 .append(this.getTag(), that.getTag())
+	                 .append(this.getId(), that.getId())
+	                 .append(this.ind1, that.ind1)
+	                 .append(this.ind2, that.ind2)
+	                 .append(this.list, that.list) //ArrayList.equals hace un deep equals
+	                 .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+		return new HashCodeBuilder()
+	                 .append(this.getTag())
+	                 .append(this.getId())
+	                 .append(this.ind1)
+	                 .append(this.ind2)
+	                 .append(this.list)
+	                 .toHashCode();
+    }
+
     @Override
     public String toString ()
     {
         final StringBuilder sb = new StringBuilder();
-        sb.append ("\n    DATAFIELD    [  tag: ").append (getTag ()).append (", Ind1:").append (getIndicator1 ())
-        .append (", Ind2:").append (getIndicator2 ()).append(this.getId() != null ? (", id: ") + this.getId () : "")
-        .append (",\n                             Elements: ").append (Arrays.toString (list.toArray ())).append (" ] ");
+        sb.append ("\n    DATAFIELD    [  tag: ").append (getTag ())
+        		.append (", Ind1:").append (getIndicator1 ())
+        		.append (", Ind2:").append (getIndicator2 ())
+        		.append(this.getId() != null ? (", id: ") + this.getId () : "")
+        		.append (",\n        Elements: ").append (Arrays.toString (list.toArray ())).append (" ] ");
         return sb.toString ();
     }
-    
+
 }

@@ -23,7 +23,8 @@ package org.marc4j.marc;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import com.digibis.commons.exceptions.ConfigException;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 
 /**
  * <p><code>Subfield</code> defines behaviour for a subfield (a data
@@ -44,7 +45,7 @@ import com.digibis.commons.exceptions.ConfigException;
  */
 public class Subfield implements Serializable, Cloneable {
 
-    /** Empty value for the link code */
+	/** Empty value for the link code */
     public static final String EMPTY_LINK_CODE = null;
     
     private static final char US = MarcConstants.US;
@@ -196,28 +197,44 @@ public class Subfield implements Serializable, Cloneable {
     /*
      * @see java.lang.Object#clone()
      */
+    @Override
     public Object clone ()
     {
-        try
-        {
-            // Creamos nueva instancia
-            Subfield instance = (Subfield)super.clone ();
-            
-            // Rellenamos la información
-            instance.setCode (this.code);
-            instance.setData ((char[])this.data.clone ());
-            instance.setLinkCode (this.linkCode);
-            
-            return instance;
-        } 
-        catch (CloneNotSupportedException e) {
-            throw new ConfigException (e);
-        }
+        // Creamos nueva instancia
+    	return new Subfield (this.code, String.copyValueOf (this.data), this.linkCode);
     }
+    
+    @Override
+    public boolean equals(Object obj) {
+		if (obj == null) 
+	   		return false; 
+		if (obj == this) 
+			return true;
+		if (obj.getClass() != getClass()) 
+			return false;
+	   
+		Subfield that = (Subfield) obj;
+		return new EqualsBuilder()
+	                 .append(this.code, that.code)
+	                 .append(this.data, that.data)
+	                 .append(this.linkCode, that.linkCode)
+	                 .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+		return new HashCodeBuilder()
+	                 .append(this.code)
+	                 .append(this.data)
+	                 .append(this.linkCode)
+	                 .toHashCode();
+    }
+
+    @Override
     public String toString ()
     {
         final StringBuilder sb = new StringBuilder();
-        sb.append ("\n                                  SUBFIELD - code:[ ").append (code)
+        sb.append ("\n            SUBFIELD - code:[ ").append (code)
             .append (", Data:").append (Arrays.toString (data))
             .append(this.getLinkCode () != null ? (", linkCode: ") + this.getLinkCode () : "").append (" ] ");
         return sb.toString ();

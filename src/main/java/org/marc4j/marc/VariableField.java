@@ -38,7 +38,7 @@ import java.io.Serializable;
  * @see ControlField
  * @see DataField
  */
-public abstract class VariableField implements Serializable {
+public abstract class VariableField implements Serializable, Cloneable {
 
     private static final long serialVersionUID = -5303416788186473947L;
 
@@ -103,6 +103,10 @@ public abstract class VariableField implements Serializable {
     {
         this.id = id;
     }
+    
+    public abstract Object clone();
+    public abstract boolean equals(Object obj);
+    public abstract int hashCode();
     
 }
 
