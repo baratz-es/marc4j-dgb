@@ -68,6 +68,7 @@ public class MarcException extends RuntimeException {
      *
      * @return the root cause of this exception
      */
+    @Override
     public Throwable getCause() {
         return cause;  
     }
@@ -81,11 +82,13 @@ public class MarcException extends RuntimeException {
      * @return the root cause of this exception
      * @throws IllegalStateException if this method is called twice.
      */
-    public Throwable initCause(Throwable cause) {
-        if (cause == null) 
-	    cause = cause; 
-        else 
-	    throw new IllegalStateException("Cannot reset the cause");
+    @Override
+    public Throwable initCause (Throwable cause) {
+        if (this.cause == null) {
+            this.cause = cause; 
+        } else {
+            throw new IllegalStateException("Cannot reset the cause");
+        }
         return cause;
     }
 
