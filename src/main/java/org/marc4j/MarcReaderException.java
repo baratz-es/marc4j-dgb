@@ -100,11 +100,13 @@ public class MarcReaderException extends Exception {
      * @return the root cause of this exception
      * @throws IllegalStateException if this method is called twice.
      */
+    @Override
     public Throwable initCause(Throwable cause) {
-        if (cause == null) 
-	    cause = cause; 
-        else 
-	    throw new IllegalStateException("Cannot reset the cause");
+        if (this.cause == null) {
+            this.cause = cause; 
+        } else {
+            throw new IllegalStateException("Cannot reset the cause");
+        }
         return cause;
     }
 
