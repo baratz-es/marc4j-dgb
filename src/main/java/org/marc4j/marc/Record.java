@@ -444,9 +444,9 @@ public class Record implements Serializable, Cloneable {
      *                       control number field
      */
     /*
-     * NOTA IMPORTANTE: Se sobrecarga el método original marshal haciendo
-     * una copia del original. En el método original se podría utilizar
-     * éste pasándole un encoding null, pero no se hace para evitar que
+     * NOTA IMPORTANTE: Se sobrecarga el m\E9todo original marshal haciendo
+     * una copia del original. En el m\E9todo original se podr\EDa utilizar
+     * \E9ste pas\E1ndole un encoding null, pero no se hace para evitar que
      * pudiese haber posibles errores con una clase que se utiliza en
      * bastantes sitios. 
      */
