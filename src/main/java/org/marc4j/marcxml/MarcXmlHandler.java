@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with MARC4J; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 package org.marc4j.marcxml;
 
@@ -38,8 +38,10 @@ import org.marc4j.marc.Subfield;
 import org.marc4j.util.UnicodeToAnsel;
 
 /**
- * <p><code>MarcXmlHandler</code> is a SAX2 <code>ContentHandler</code>
- * that reports events to the <code>MarcHandler</code> interface.</p>
+ * <p>
+ * <code>MarcXmlHandler</code> is a SAX2 <code>ContentHandler</code>
+ * that reports events to the <code>MarcHandler</code> interface.
+ * </p>
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
  * @version $Revision: 1.8 $
@@ -47,7 +49,9 @@ import org.marc4j.util.UnicodeToAnsel;
  * @see MarcHandler
  * @see DefaultHandler
  */
-public class MarcXmlHandler extends DefaultHandler {
+public class MarcXmlHandler
+    extends DefaultHandler
+{
 
     /** Constants representing each valid tag type */
     private static final int COLLECTION_ID = 1;
@@ -103,44 +107,49 @@ public class MarcXmlHandler extends DefaultHandler {
     /**
      * Construct a new default instance of the handler
      */
-    public MarcXmlHandler() {
+    public MarcXmlHandler()
+    {
         data = new StringBuffer();
     }
 
     /**
-     * <p>Registers the <code>MarcHandler</code> object.  </p>
+     * <p>
+     * Registers the <code>MarcHandler</code> object.
+     * </p>
      *
      * @param mh the {@link MarcHandler} object
      */
-    public void setMarcHandler(MarcHandler mh) {
-            this.mh = mh;
+    public void setMarcHandler(MarcHandler mh)
+    {
+        this.mh = mh;
     }
 
     /**
-     * <p>Registers the SAX2 <code>Locator</code> object.  </p>
+     * <p>
+     * Registers the SAX2 <code>Locator</code> object.
+     * </p>
      *
      * @param locator the {@link Locator} object
      */
-    public void setDocumentLocator(Locator locator) {
+    public void setDocumentLocator(Locator locator)
+    {
         this.locator = locator;
     }
 
-    public void startElement(String uri, String name, String qName,
-                             Attributes atts) throws SAXParseException {
-
+    public void startElement(String uri, String name, String qName, Attributes atts)
+        throws SAXParseException
+    {
 
         String realname = (name.length() == 0) ? qName : name;
         Integer el_type = (Integer)elementMap.get(realname);
 
         // If the element isn't in the map, ignore it. Might be part of a
         // different namespace.
-        if(el_type == null)
-            return;
+        if(el_type == null) return;
 
         switch(el_type.intValue()) {
             case COLLECTION_ID:
-                if (mh != null)
-                    mh.startCollection();
+                if(mh != null) mh.startCollection();
                 break;
 
             case LEADER_ID:
@@ -148,21 +157,18 @@ public class MarcXmlHandler extends DefaultHandler {
                 break;
 
             case CONTROLFIELD_ID:
-                if (atts.getLength() < 1)
-                    throw new SAXParseException("Invalid controlfield", locator);
+                if(atts.getLength() < 1) throw new SAXParseException("Invalid controlfield", locator);
                 tag = atts.getValue(TAG_ATTR);
 
                 data.delete(0, data.length());
                 break;
 
             case DATAFIELD_ID:
-                if (atts.getLength() < 3)
-                    throw new SAXParseException("Invalid datafield", locator);
+                if(atts.getLength() < 3) throw new SAXParseException("Invalid datafield", locator);
                 tag = atts.getValue(TAG_ATTR);
                 String ind1 = atts.getValue(IND_1_ATTR);
                 String ind2 = atts.getValue(IND_2_ATTR);
-                if (mh != null)
-                    mh.startDataField(tag, ind1.charAt(0), ind2.charAt(0), DataField.EMPTY_ID);
+                if(mh != null) mh.startDataField(tag, ind1.charAt(0), ind2.charAt(0), DataField.EMPTY_ID);
 
                 data.delete(0, data.length());
                 break;
@@ -174,59 +180,54 @@ public class MarcXmlHandler extends DefaultHandler {
         }
     }
 
-    public void characters(char[] ch, int start, int length) {
-        if (data != null) {
-          data.append(ch, start, length);
+    public void characters(char[] ch, int start, int length)
+    {
+        if(data != null) {
+            data.append(ch, start, length);
         }
     }
 
     public void endElement(String uri, String name, String qName)
-        throws SAXParseException {
+        throws SAXParseException
+    {
 
         String realname = (name.length() == 0) ? qName : name;
         Integer el_type = (Integer)elementMap.get(realname);
 
         // If the element isn't in the map, ignore it. Might be part of a
         // different namespace.
-        if(el_type == null)
-            return;
+        if(el_type == null) return;
 
         switch(el_type.intValue()) {
             case COLLECTION_ID:
-                if (mh != null)
-                    mh.endCollection();
+                if(mh != null) mh.endCollection();
 
                 break;
 
             case RECORD_ID:
-                if (mh != null)
-                    mh.endRecord();
+                if(mh != null) mh.endRecord();
                 break;
 
             case LEADER_ID:
                 try {
-                    if (mh != null)
-                        mh.startRecord(new Leader(data.toString()));
-                } catch (MarcException e) {
+                    if(mh != null) mh.startRecord(new Leader(data.toString()));
+                } catch(MarcException e) {
                     throw new SAXParseException("Unable to unmarshal leader", locator);
                 }
                 break;
 
             case CONTROLFIELD_ID:
-                if (mh != null)
-                    mh.controlField(tag, data.toString().toCharArray(), ControlField.EMPTY_ID);
+                if(mh != null) mh.controlField(tag, data.toString().toCharArray(), ControlField.EMPTY_ID);
                 break;
 
             case DATAFIELD_ID:
-                if (mh != null)
-                    mh.endDataField(tag);
+                if(mh != null) mh.endDataField(tag);
                 tag = null;
                 break;
 
             case SUBFIELD_ID:
                 char[] ch = data.toString().toCharArray();
-                if (mh != null)
-                    mh.subfield(code.charAt(0), ch, Subfield.EMPTY_LINK_CODE);
+                if(mh != null) mh.subfield(code.charAt(0), ch, Subfield.EMPTY_LINK_CODE);
                 code = null;
                 break;
         }

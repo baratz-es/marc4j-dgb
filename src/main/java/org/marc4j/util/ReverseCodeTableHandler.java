@@ -15,7 +15,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with MARC4J; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 package org.marc4j.util;
 
@@ -41,7 +41,8 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
 
 /**
- * <p><code>ReverseCodeTableHandler</code> is a SAX2 <code>ContentHandler</code>
+ * <p>
+ * <code>ReverseCodeTableHandler</code> is a SAX2 <code>ContentHandler</code>
  * that builds a data structure to facilitate <code>UnicodeToAnsel</code> character conversion.
  *
  * @author <a href="mailto:ckeith@loc.gov">Corey Keith</a>
@@ -49,10 +50,12 @@ import javax.xml.transform.stream.StreamSource;
  *
  * @see DefaultHandler
  */
-public class ReverseCodeTableHandler extends DefaultHandler {
+public class ReverseCodeTableHandler
+    extends DefaultHandler
+{
 
-    private static Logger log = Logger.getLogger (ReverseCodeTableHandler.class);
-    
+    private static Logger log = Logger.getLogger(ReverseCodeTableHandler.class);
+
     private Hashtable charset;
     private Vector combiningchars;
 
@@ -71,100 +74,109 @@ public class ReverseCodeTableHandler extends DefaultHandler {
     /** Locator object */
     private Locator locator;
 
-    public Hashtable getCharSets() { return charset; }
-    public Vector getCombiningChars() { return combiningchars; }
+    public Hashtable getCharSets()
+    {
+        return charset;
+    }
 
-
+    public Vector getCombiningChars()
+    {
+        return combiningchars;
+    }
 
     /**
-     * <p>Registers the SAX2 <code>Locator</code> object.  </p>
+     * <p>
+     * Registers the SAX2 <code>Locator</code> object.
+     * </p>
      *
      * @param locator the {@link Locator} object
      */
-    public void setDocumentLocator(Locator locator) {
-	this.locator = locator;
+    public void setDocumentLocator(Locator locator)
+    {
+        this.locator = locator;
     }
 
-    public void startElement(String uri, String name, String qName,
-			     Attributes atts) throws SAXParseException {
-	if (name.equals("characterSet"))
-	    isocode = Integer.valueOf(atts.getValue("ISOcode"),16);
-	else if (name.equals("marc"))
-	    data = new StringBuffer();
-	else if (name.equals("codeTables")) {
-	    charset = new Hashtable();
-	    combiningchars = new Vector();
-	} else if (name.equals("ucs"))
-	    data = new StringBuffer();
-	else if (name.equals("code"))
-	    combining = false;
-	else if (name.equals("isCombining"))
-	    data = new StringBuffer();
+    public void startElement(String uri, String name, String qName, Attributes atts)
+        throws SAXParseException
+    {
+        if(name.equals("characterSet"))
+            isocode = Integer.valueOf(atts.getValue("ISOcode"), 16);
+        else if(name.equals("marc"))
+            data = new StringBuffer();
+        else if(name.equals("codeTables")) {
+            charset = new Hashtable();
+            combiningchars = new Vector();
+        } else if(name.equals("ucs"))
+            data = new StringBuffer();
+        else if(name.equals("code"))
+            combining = false;
+        else if(name.equals("isCombining")) data = new StringBuffer();
 
     }
 
-    public void characters(char[] ch, int start, int length) {
-	if (data != null) {
-	    data.append(ch, start, length);
-	}
+    public void characters(char[] ch, int start, int length)
+    {
+        if(data != null) {
+            data.append(ch, start, length);
+        }
     }
 
     public void endElement(String uri, String name, String qName)
-	throws SAXParseException {
-	if (name.equals("marc")) {
-	    String marcstr = data.toString();
-	    if (marcstr.length() == 6) {
-		marc = new char[3];
-		marc[0] = (char)Integer.parseInt(marcstr.substring(0,2),16);
-		marc[1] = (char)Integer.parseInt(marcstr.substring(2,4),16);
-		marc[2] = (char)Integer.parseInt(marcstr.substring(4,6),16);
-	    } else {
-		marc = new char[1];
-		marc[0] = (char)Integer.parseInt(marcstr,16);
-	    }
-	} else if (name.equals("ucs")) {
-	    ucs = new Character((char)Integer.parseInt(data.toString(),16));
-	}
-	else if (name.equals("code")) {
-	    if (combining) {
-		combiningchars.add(ucs);
-	    }
+        throws SAXParseException
+    {
+        if(name.equals("marc")) {
+            String marcstr = data.toString();
+            if(marcstr.length() == 6) {
+                marc = new char[3];
+                marc[0] = (char)Integer.parseInt(marcstr.substring(0, 2), 16);
+                marc[1] = (char)Integer.parseInt(marcstr.substring(2, 4), 16);
+                marc[2] = (char)Integer.parseInt(marcstr.substring(4, 6), 16);
+            } else {
+                marc = new char[1];
+                marc[0] = (char)Integer.parseInt(marcstr, 16);
+            }
+        } else if(name.equals("ucs")) {
+            ucs = new Character((char)Integer.parseInt(data.toString(), 16));
+        } else if(name.equals("code")) {
+            if(combining) {
+                combiningchars.add(ucs);
+            }
 
-	    if (charset.get(ucs) == null) {
-		Hashtable h = new Hashtable(1);
-		h.put(isocode,marc);
-		charset.put(ucs,h);
-	    } else {
-		Hashtable h = (Hashtable)charset.get(ucs);
-		h.put(isocode,marc);
-	    }
-	} else if (name.equals("isCombining")) {
-	    if (data.toString().equals("true"))
-		combining = true;
-	}
-	data = null;
+            if(charset.get(ucs) == null) {
+                Hashtable h = new Hashtable(1);
+                h.put(isocode, marc);
+                charset.put(ucs, h);
+            } else {
+                Hashtable h = (Hashtable)charset.get(ucs);
+                h.put(isocode, marc);
+            }
+        } else if(name.equals("isCombining")) {
+            if(data.toString().equals("true")) combining = true;
+        }
+        data = null;
     }
 
-    public static void main( String[] args ) {
-	Hashtable charsets = null;
+    public static void main(String[] args)
+    {
+        Hashtable charsets = null;
 
-	try {
+        try {
 
-	    SAXParserFactory factory = SAXParserFactory.newInstance();
-	    factory.setNamespaceAware(true);
-	    factory.setValidating(false);
-	    SAXParser saxParser = factory.newSAXParser();
-	    XMLReader rdr = saxParser.getXMLReader();
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+            factory.setValidating(false);
+            SAXParser saxParser = factory.newSAXParser();
+            XMLReader rdr = saxParser.getXMLReader();
 
-	    File file = new File( "C:\\Documents and Settings\\ckeith\\Desktop\\Projects\\Code Tables\\codetables.xml" );
-	    InputSource src = new InputSource( new FileInputStream( file ) );
+            File file = new File("C:\\Documents and Settings\\ckeith\\Desktop\\Projects\\Code Tables\\codetables.xml");
+            InputSource src = new InputSource(new FileInputStream(file));
 
-	    ReverseCodeTableHandler saxUms = new ReverseCodeTableHandler();
+            ReverseCodeTableHandler saxUms = new ReverseCodeTableHandler();
 
-	    rdr.setContentHandler( saxUms );
-	    rdr.parse( src );
-	}catch( Exception exc ) {
-        log.error ("Exception: " + exc, exc);
-	}
+            rdr.setContentHandler(saxUms);
+            rdr.parse(src);
+        } catch(Exception exc) {
+            log.error("Exception: " + exc, exc);
+        }
     }
 }
