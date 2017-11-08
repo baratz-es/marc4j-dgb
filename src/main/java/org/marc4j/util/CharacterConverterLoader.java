@@ -5,8 +5,8 @@
  * This file is part of MARC4J
  *
  * MARC4J is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public 
- * License as published by the Free Software Foundation; either 
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  *
  * MARC4J is distributed in the hope that it will be useful,
@@ -14,9 +14,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
+ * You should have received a copy of the GNU Lesser General Public
  * License along with MARC4J; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 package org.marc4j.util;
 
@@ -25,64 +25,72 @@ import java.io.FileInputStream;
 import java.util.Properties;
 
 /**
- * <p>Loads a character converter using a system property.</p>
+ * <p>
+ * Loads a character converter using a system property.
+ * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a> 
+ * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
  * @version $Revision: 1.2 $
  *
  */
-public final class CharacterConverterLoader {
+public final class CharacterConverterLoader
+{
 
-    private CharacterConverterLoader() {}
+    private CharacterConverterLoader()
+    {
+    }
 
     /**
-     * <p>Returns a new instance for the class defined by the given system 
-     * property, or default class.</p>
+     * <p>
+     * Returns a new instance for the class defined by the given system
+     * property, or default class.
+     * </p>
      *
-     * <p>The method will first look for a system property, then for 
-     * a properties file named <code>marc4j.properties</code>. If these 
-     * options fail, an instance of the default class is returned.</p>
+     * <p>
+     * The method will first look for a system property, then for
+     * a properties file named <code>marc4j.properties</code>. If these
+     * options fail, an instance of the default class is returned.
+     * </p>
      *
      * @param label the label for the system property
      * @param defaultClass the default class to use if the system property is null
      * @exception CharacterConverterLoaderException is thrown if an error occurs
      */
-    public static Object createCharacterConverter(String label, String defaultClass) 
-	throws CharacterConverterLoaderException {
-	String name = null;
-	ClassLoader loader = Thread.currentThread().getContextClassLoader();
-	try {
-	    // System property
-	    name = System.getProperty(label);
+    public static Object createCharacterConverter(String label, String defaultClass)
+        throws CharacterConverterLoaderException
+    {
+        String name = null;
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        try {
+            // System property
+            name = System.getProperty(label);
 
-	    // Properties file
-	    if (name == null) {
-		String javaHome = System.getProperty ("java.home");
-		File file = new File(new File(javaHome, "lib"), "marc4j.properties");
-		if (file.exists() == true) {
-		    FileInputStream in = new FileInputStream(file);
-		    Properties props = new Properties();
-		    
-		    props.load(in);
-		    name  = props.getProperty(label);
-		    in.close();
-		}
-	    }
+            // Properties file
+            if(name == null) {
+                String javaHome = System.getProperty("java.home");
+                File file = new File(new File(javaHome, "lib"), "marc4j.properties");
+                if(file.exists() == true) {
+                    FileInputStream in = new FileInputStream(file);
+                    Properties props = new Properties();
 
-	    // Use default class
-	    if (name == null)
-		name = defaultClass;
+                    props.load(in);
+                    name = props.getProperty(label);
+                    in.close();
+                }
+            }
 
-	    if (name != null) {
-		// Create an instance of the converter class
-		Class c = loader.loadClass(name);
-		return c.newInstance();
-	    } else
-		return null;
+            // Use default class
+            if(name == null) name = defaultClass;
 
-	} catch (Throwable e) {
-	    throw new CharacterConverterLoaderException
-		("Unable to load converter class", e);
-	}
+            if(name != null) {
+                // Create an instance of the converter class
+                Class c = loader.loadClass(name);
+                return c.newInstance();
+            } else
+                return null;
+
+        } catch(Throwable e) {
+            throw new CharacterConverterLoaderException("Unable to load converter class", e);
+        }
     }
 }

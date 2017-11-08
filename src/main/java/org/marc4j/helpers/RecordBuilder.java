@@ -5,8 +5,8 @@
  * This file is part of MARC4J
  *
  * MARC4J is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public 
- * License as published by the Free Software Foundation; either 
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  *
  * MARC4J is distributed in the hope that it will be useful,
@@ -14,9 +14,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
+ * You should have received a copy of the GNU Lesser General Public
  * License along with MARC4J; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 package org.marc4j.helpers;
 
@@ -24,15 +24,19 @@ import org.marc4j.MarcHandler;
 import org.marc4j.marc.*;
 
 /**
- * <p>Creates record objects from <code>MarcHandler</code> events and reports
- * events to the <code>RecordHandler</code>.   </p>
+ * <p>
+ * Creates record objects from <code>MarcHandler</code> events and reports
+ * events to the <code>RecordHandler</code>.
+ * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a> 
+ * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
  * @version $Revision: 1.5 $
  *
  * @see RecordHandler
  */
-public class RecordBuilder implements MarcHandler {
+public class RecordBuilder
+    implements MarcHandler
+{
 
     /** The RecordHandler object. */
     private RecordHandler recordHandler;
@@ -44,75 +48,99 @@ public class RecordBuilder implements MarcHandler {
     private DataField datafield;
 
     /**
-     * <p>Registers the <code>RecordHandler</code> object.  </p>
+     * <p>
+     * Registers the <code>RecordHandler</code> object.
+     * </p>
      *
      * @param recordHandler the record handler object
      */
-    public void setRecordHandler(RecordHandler recordHandler) {
-	    this.recordHandler = recordHandler;
+    public void setRecordHandler(RecordHandler recordHandler)
+    {
+        this.recordHandler = recordHandler;
     }
 
     /**
-     * <p>Reports the start of the file.  </p>
+     * <p>
+     * Reports the start of the file.
+     * </p>
      */
-    public void startCollection() {
-        if (recordHandler != null)
-            recordHandler.startCollection();
+    public void startCollection()
+    {
+        if(recordHandler != null) recordHandler.startCollection();
     }
 
     /**
-     * <p>Creates a new record object.  </p>
+     * <p>
+     * Creates a new record object.
+     * </p>
      */
-    public void startRecord(Leader leader) {
+    public void startRecord(Leader leader)
+    {
         this.record = new Record();
         record.add(leader);
     }
 
     /**
-     * <p>Adds a control field to the record object.  </p>
+     * <p>
+     * Adds a control field to the record object.
+     * </p>
      */
     @Override
-    public void controlField(String tag, char[] data, Long id) {
-    	record.add(new ControlField(tag, data, id));
+    public void controlField(String tag, char[] data, Long id)
+    {
+        record.add(new ControlField(tag, data, id));
     }
 
     /**
-     * <p>Creates a new data field object.  </p>
+     * <p>
+     * Creates a new data field object.
+     * </p>
      */
     @Override
-    public void startDataField(String tag, char ind1, char ind2, Long id) {
-	    datafield = new DataField(tag, ind1, ind2, id);
+    public void startDataField(String tag, char ind1, char ind2, Long id)
+    {
+        datafield = new DataField(tag, ind1, ind2, id);
     }
 
     /**
-     * <p>Adds a subfield to the data field.  </p>
+     * <p>
+     * Adds a subfield to the data field.
+     * </p>
      */
     @Override
-    public void subfield(char identifier, char[] data, String linkCode) {
-	    datafield.add(new Subfield(identifier, data, linkCode));
+    public void subfield(char identifier, char[] data, String linkCode)
+    {
+        datafield.add(new Subfield(identifier, data, linkCode));
     }
 
     /**
-     * <p>Adds a data field to the record object.  </p>
+     * <p>
+     * Adds a data field to the record object.
+     * </p>
      */
-    public void endDataField(String tag) {
-	    record.add(datafield);
+    public void endDataField(String tag)
+    {
+        record.add(datafield);
     }
 
     /**
-     * <p>Reports the end of a record and sets the record object.  </p>
+     * <p>
+     * Reports the end of a record and sets the record object.
+     * </p>
      */
-    public void endRecord() {
-        if (recordHandler != null)
-            recordHandler.record(record);
+    public void endRecord()
+    {
+        if(recordHandler != null) recordHandler.record(record);
     }
 
     /**
-     * <p>Reports the end of the file.  </p>
+     * <p>
+     * Reports the end of the file.
+     * </p>
      */
-    public void endCollection() {
-        if (recordHandler != null)
-            recordHandler.endCollection();
+    public void endCollection()
+    {
+        if(recordHandler != null) recordHandler.endCollection();
     }
 
 }
