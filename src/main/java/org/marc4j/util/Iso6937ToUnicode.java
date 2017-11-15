@@ -21,8 +21,6 @@
  */
 package org.marc4j.util;
 
-import java.util.*;
-
 /**
  * <p>
  * A utility to convert ISO 6937 data to UCS/Unicode.
@@ -61,14 +59,14 @@ public class Iso6937ToUnicode
     {
         StringBuffer sb = new StringBuffer();
 
-        for(int i = 0; i < data.length; i++) {
+        for (int i = 0; i < data.length; i++) {
             char c = data[i];
             int len = data.length;
-            if(isAscii(c))
+            if (isAscii(c))
                 sb.append(c);
-            else if(isCombining(c) && hasNext(i, len)) {
+            else if (isCombining(c) && hasNext(i, len)) {
                 char d = getCombiningChar(c * 256 + data[i + 1]);
-                if(d != 0) {
+                if (d != 0) {
                     sb.append(d);
                     i++;
                 } else {
@@ -82,26 +80,26 @@ public class Iso6937ToUnicode
 
     private boolean hasNext(int pos, int len)
     {
-        if(pos < (len - 1)) return true;
+        if (pos < (len - 1)) return true;
         return false;
     }
 
     private boolean isAscii(int i)
     {
-        if(i >= 0x00 && i <= 0x7F) return true;
+        if (i >= 0x00 && i <= 0x7F) return true;
         return false;
     }
 
     private boolean isCombining(int i)
     {
-        if(i >= 0xC0 && i <= 0xDF) return true;
+        if (i >= 0xC0 && i <= 0xDF) return true;
         return false;
     }
 
     // Source : http://anubis.dkuug.dk/JTC1/SC2/WG3/docs/6937cd.pdf
     private char getChar(int i)
     {
-        switch(i) {
+        switch (i) {
             case 0xA0:
                 return 0x00A0; // 10/00 NO-BREAK SPACE
             case 0xA1:
@@ -265,7 +263,7 @@ public class Iso6937ToUnicode
 
     private char getCombiningChar(int i)
     {
-        switch(i) {
+        switch (i) {
             // 12/00 (This position shall not be used)
 
             // 12/01 non-spacing grave accent

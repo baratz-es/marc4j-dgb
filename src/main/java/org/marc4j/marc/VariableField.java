@@ -90,7 +90,7 @@ public abstract class VariableField
      */
     public void setTag(String tag)
     {
-        if(!Tag.isValid(tag)) throw new IllegalTagException(tag);
+        if (!Tag.isValid(tag)) throw new IllegalTagException(tag);
         this.tag = tag;
     }
 

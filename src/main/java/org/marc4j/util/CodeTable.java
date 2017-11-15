@@ -16,29 +16,19 @@
  */
 package org.marc4j.util;
 
-import org.apache.log4j.Category;
-import org.xml.sax.Attributes;
-import org.xml.sax.Locator;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
-import java.net.URI;
-import java.net.URL;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.Hashtable;
 import java.util.Vector;
-import javax.xml.parsers.SAXParserFactory;
+
 import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Source;
-import javax.xml.transform.Result;
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.stream.StreamSource;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.apache.log4j.Category;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
 
 /**
  * <p>
@@ -57,7 +47,7 @@ public class CodeTable
 
     public static boolean isCombining(int i, int g0, int g1)
     {
-        if(i <= 0x7E) {
+        if (i <= 0x7E) {
             Vector v = (Vector)combining.get(new Integer(g0));
             return v.contains(new Integer(i));
         } else {
@@ -68,25 +58,25 @@ public class CodeTable
 
     public static char getChar(int c, int mode)
     {
-        if(c == 0x20)
+        if (c == 0x20)
             return (char)c;
         else {
             Hashtable charset = (Hashtable)charsets.get(new Integer(mode));
 
-            if(charset == null) {
+            if (charset == null) {
                 log.error("Hashtable not found: " + Integer.toHexString(mode));
                 return (char)c;
             } else {
                 Character ch = (Character)charset.get(new Integer(c));
-                if(ch == null) {
+                if (ch == null) {
 
                     int newc;
-                    if(c < 0x80)
+                    if (c < 0x80)
                         newc = c + 0x80;
                     else
                         newc = c - 0x80;
                     ch = (Character)charset.get(new Integer(newc));
-                    if(ch == null) {
+                    if (ch == null) {
                         log.error("Character not found: " + Integer.toHexString(c) + " in Code Table: "
                             + Integer.toHexString(mode));
                         return (char)c;
@@ -117,7 +107,7 @@ public class CodeTable
 
             charsets = saxUms.getCharSets();
             combining = saxUms.getCombiningChars();
-        } catch(Exception exc) {
+        } catch (Exception exc) {
             log.error("Exception: " + exc, exc);
         }
     }
@@ -142,7 +132,7 @@ public class CodeTable
 
             charsets = saxUms.getCharSets();
             combining = saxUms.getCombiningChars();
-        } catch(Exception exc) {
+        } catch (Exception exc) {
             log.error("Exception: " + exc, exc);
         }
     }
@@ -166,7 +156,7 @@ public class CodeTable
 
             charsets = saxUms.getCharSets();
             combining = saxUms.getCombiningChars();
-        } catch(Exception exc) {
+        } catch (Exception exc) {
             log.error("Exception: " + exc, exc);
         }
     }

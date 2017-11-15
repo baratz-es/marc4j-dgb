@@ -21,11 +21,11 @@
 package org.marc4j.marc;
 
 import java.io.IOException;
-import java.io.Writer;
 import java.io.Serializable;
-import java.util.List;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * <p>
@@ -63,7 +63,7 @@ public class Collection
      */
     public Record getRecord(int index)
     {
-        if(list.size() < index) return null;
+        if (list.size() < index) return null;
         return (Record)list.get(index);
     }
 
@@ -91,7 +91,7 @@ public class Collection
     public void marshal(Writer out)
         throws IOException, MarcException
     {
-        for(Iterator i = list.iterator(); i.hasNext();) {
+        for (Iterator i = list.iterator(); i.hasNext();) {
             Record record = (Record)i.next();
             out.write(record.marshal());
         }

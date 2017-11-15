@@ -19,26 +19,21 @@
  */
 package org.marc4j.util;
 
-import org.apache.log4j.Logger;
-import org.xml.sax.Attributes;
-import org.xml.sax.Locator;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Hashtable;
 import java.util.Vector;
-import javax.xml.parsers.SAXParserFactory;
+
 import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Source;
-import javax.xml.transform.Result;
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.stream.StreamSource;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.apache.log4j.Logger;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.Locator;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * <p>
@@ -99,24 +94,24 @@ public class ReverseCodeTableHandler
     public void startElement(String uri, String name, String qName, Attributes atts)
         throws SAXParseException
     {
-        if(name.equals("characterSet"))
+        if (name.equals("characterSet"))
             isocode = Integer.valueOf(atts.getValue("ISOcode"), 16);
-        else if(name.equals("marc"))
+        else if (name.equals("marc"))
             data = new StringBuffer();
-        else if(name.equals("codeTables")) {
+        else if (name.equals("codeTables")) {
             charset = new Hashtable();
             combiningchars = new Vector();
-        } else if(name.equals("ucs"))
+        } else if (name.equals("ucs"))
             data = new StringBuffer();
-        else if(name.equals("code"))
+        else if (name.equals("code"))
             combining = false;
-        else if(name.equals("isCombining")) data = new StringBuffer();
+        else if (name.equals("isCombining")) data = new StringBuffer();
 
     }
 
     public void characters(char[] ch, int start, int length)
     {
-        if(data != null) {
+        if (data != null) {
             data.append(ch, start, length);
         }
     }
@@ -124,9 +119,9 @@ public class ReverseCodeTableHandler
     public void endElement(String uri, String name, String qName)
         throws SAXParseException
     {
-        if(name.equals("marc")) {
+        if (name.equals("marc")) {
             String marcstr = data.toString();
-            if(marcstr.length() == 6) {
+            if (marcstr.length() == 6) {
                 marc = new char[3];
                 marc[0] = (char)Integer.parseInt(marcstr.substring(0, 2), 16);
                 marc[1] = (char)Integer.parseInt(marcstr.substring(2, 4), 16);
@@ -135,14 +130,14 @@ public class ReverseCodeTableHandler
                 marc = new char[1];
                 marc[0] = (char)Integer.parseInt(marcstr, 16);
             }
-        } else if(name.equals("ucs")) {
+        } else if (name.equals("ucs")) {
             ucs = new Character((char)Integer.parseInt(data.toString(), 16));
-        } else if(name.equals("code")) {
-            if(combining) {
+        } else if (name.equals("code")) {
+            if (combining) {
                 combiningchars.add(ucs);
             }
 
-            if(charset.get(ucs) == null) {
+            if (charset.get(ucs) == null) {
                 Hashtable h = new Hashtable(1);
                 h.put(isocode, marc);
                 charset.put(ucs, h);
@@ -150,8 +145,8 @@ public class ReverseCodeTableHandler
                 Hashtable h = (Hashtable)charset.get(ucs);
                 h.put(isocode, marc);
             }
-        } else if(name.equals("isCombining")) {
-            if(data.toString().equals("true")) combining = true;
+        } else if (name.equals("isCombining")) {
+            if (data.toString().equals("true")) combining = true;
         }
         data = null;
     }
@@ -175,7 +170,7 @@ public class ReverseCodeTableHandler
 
             rdr.setContentHandler(saxUms);
             rdr.parse(src);
-        } catch(Exception exc) {
+        } catch (Exception exc) {
             log.error("Exception: " + exc, exc);
         }
     }

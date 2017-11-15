@@ -21,7 +21,7 @@
 package org.marc4j.util;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Vector;
 
 import com.digibis.commons.exceptions.ConfigException;
 import com.digibis.commons.util.ResourcesUtil;
@@ -117,7 +117,7 @@ public class AnselToUnicode
         // }
         try {
             ct = new CodeTable(ResourcesUtil.getStream("/org/marc4j/util/resources/codetablesnocjk.xml"));
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new ConfigException(e);
         }
     }
@@ -139,7 +139,7 @@ public class AnselToUnicode
         // }
         try {
             ct = new CodeTable(ResourcesUtil.getStream("/org/marc4j/util/resources/codetables.xml"));
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new ConfigException(e);
         }
     }
@@ -159,8 +159,8 @@ public class AnselToUnicode
 
     private void checkMode(char[] data, CodeTracker cdt)
     {
-        while(cdt.offset < data.length && isEscape(data[cdt.offset])) {
-            switch(data[cdt.offset + 1]) {
+        while (cdt.offset < data.length && isEscape(data[cdt.offset])) {
+            switch (data[cdt.offset + 1]) {
                 case 0x28:
                 case 0x2c:
                     cdt.g0 = data[cdt.offset + 2];
@@ -175,11 +175,11 @@ public class AnselToUnicode
                     break;
                 case 0x24:
                     cdt.multibyte = true;
-                    if(!loadedMultibyte) {
+                    if (!loadedMultibyte) {
                         loadMultibyte();
                         loadedMultibyte = true;
                     }
-                    switch(data[cdt.offset + 1]) {
+                    switch (data[cdt.offset + 1]) {
                         case 0x29:
                         case 0x2d:
                             cdt.g1 = data[cdt.offset + 3];
@@ -236,10 +236,10 @@ public class AnselToUnicode
 
         Queue diacritics = new Queue();
 
-        while(cdt.offset < data.length) {
-            if(ct.isCombining(data[cdt.offset], cdt.g0, cdt.g1) && hasNext(cdt.offset, len)) {
+        while (cdt.offset < data.length) {
+            if (ct.isCombining(data[cdt.offset], cdt.g0, cdt.g1) && hasNext(cdt.offset, len)) {
 
-                while(ct.isCombining(data[cdt.offset], cdt.g0, cdt.g1) && hasNext(cdt.offset, len)) {
+                while (ct.isCombining(data[cdt.offset], cdt.g0, cdt.g1) && hasNext(cdt.offset, len)) {
                     diacritics.put(new Character(getChar(data[cdt.offset], cdt.g0, cdt.g1)));
                     cdt.offset++;
                     checkMode(data, cdt);
@@ -250,12 +250,12 @@ public class AnselToUnicode
                 checkMode(data, cdt);
                 sb.append(c2);
 
-                while(!diacritics.isEmpty()) {
+                while (!diacritics.isEmpty()) {
                     char c1 = ((Character)diacritics.get()).charValue();
                     sb.append(c1);
                 }
 
-            } else if(cdt.multibyte) {
+            } else if (cdt.multibyte) {
                 sb.append(ct.getChar(
                     makeMultibyte(new String(data).substring(cdt.offset, cdt.offset + 4).toCharArray()), cdt.g0));
                 cdt.offset += 3;
@@ -263,7 +263,7 @@ public class AnselToUnicode
                 sb.append(getChar(data[cdt.offset], cdt.g0, cdt.g1));
                 cdt.offset += 1;
             }
-            if(hasNext(cdt.offset, len)) checkMode(data, cdt);
+            if (hasNext(cdt.offset, len)) checkMode(data, cdt);
         }
         return sb.toString().toCharArray();
     }
@@ -279,7 +279,7 @@ public class AnselToUnicode
 
     private char getChar(int ch, int g0, int g1)
     {
-        if(ch <= 0x7E)
+        if (ch <= 0x7E)
             return ct.getChar(ch, g0);
         else
             return ct.getChar(ch, g1);
@@ -292,13 +292,13 @@ public class AnselToUnicode
 
     private static boolean hasNext(int pos, int len)
     {
-        if(pos < (len - 1)) return true;
+        if (pos < (len - 1)) return true;
         return false;
     }
 
     private static boolean isEscape(int i)
     {
-        if(i == 0x1B) return true;
+        if (i == 0x1B) return true;
         return false;
     }
 }

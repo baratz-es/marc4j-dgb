@@ -57,7 +57,7 @@ public class Verifier
      */
     public static void checkTag(String tag)
     {
-        if(tag.length() != 3) throw new IllegalTagException(tag, "not a variable field identifier");
+        if (tag.length() != 3) throw new IllegalTagException(tag, "not a variable field identifier");
         return;
     }
 
@@ -73,11 +73,11 @@ public class Verifier
     public static void checkDataElement(char[] data)
     {
         int len = data.length;
-        if(len == 0) return;
+        if (len == 0) return;
         int i = 0;
         do {
             checkDataElement(data[i]);
-        } while(++i < len);
+        } while (++i < len);
     }
 
     /**
@@ -91,7 +91,7 @@ public class Verifier
      */
     public static void checkDataElement(char ch)
     {
-        switch(ch) {
+        switch (ch) {
             case RT:
                 throw new IllegalDataElementException("Invalid character: record terminator");
             case FT:

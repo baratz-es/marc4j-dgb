@@ -20,11 +20,11 @@
  */
 package org.marc4j.marcxml;
 
-import org.xml.sax.helpers.XMLFilterImpl;
-import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
+import org.xml.sax.ext.LexicalHandler;
+import org.xml.sax.helpers.XMLFilterImpl;
 
 /**
  * <p>
@@ -58,7 +58,7 @@ public class ExtendedFilter
     public void setProperty(String uri, Object obj)
         throws SAXNotRecognizedException, SAXNotSupportedException
     {
-        if(LEXICAL_HANDLER.equals(uri))
+        if (LEXICAL_HANDLER.equals(uri))
             lh = (LexicalHandler)obj;
         else
             super.setProperty(uri, obj);
@@ -67,42 +67,42 @@ public class ExtendedFilter
     public void startEntity(String name)
         throws SAXException
     {
-        if(lh != null) lh.startEntity(name);
+        if (lh != null) lh.startEntity(name);
     }
 
     public void endEntity(String name)
         throws SAXException
     {
-        if(lh != null) lh.endEntity(name);
+        if (lh != null) lh.endEntity(name);
     }
 
     public void startCDATA()
         throws SAXException
     {
-        if(lh != null) lh.startCDATA();
+        if (lh != null) lh.startCDATA();
     }
 
     public void endCDATA()
         throws SAXException
     {
-        if(lh != null) lh.endCDATA();
+        if (lh != null) lh.endCDATA();
     }
 
     public void startDTD(String name, String publicId, String systemId)
         throws SAXException
     {
-        if(lh != null) lh.startDTD(name, publicId, systemId);
+        if (lh != null) lh.startDTD(name, publicId, systemId);
     }
 
     public void endDTD()
         throws SAXException
     {
-        if(lh != null) lh.endDTD();
+        if (lh != null) lh.endDTD();
     }
 
     public void comment(char ch[], int start, int length)
         throws SAXException
     {
-        if(lh != null) lh.comment(ch, start, length);
+        if (lh != null) lh.comment(ch, start, length);
     }
 }

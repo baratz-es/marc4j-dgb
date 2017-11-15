@@ -21,8 +21,6 @@
  */
 package org.marc4j.util;
 
-import java.util.*;
-
 /**
  * <p>
  * A utility to convert UNIMARC data to UCS/Unicode.
@@ -61,14 +59,14 @@ public class Iso5426ToUnicode
     {
         StringBuffer sb = new StringBuffer();
 
-        for(int i = 0; i < data.length; i++) {
+        for (int i = 0; i < data.length; i++) {
             char c = data[i];
             int len = data.length;
-            if(isAscii(c))
+            if (isAscii(c))
                 sb.append(c);
-            else if(isCombining(c) && hasNext(i, len)) {
+            else if (isCombining(c) && hasNext(i, len)) {
                 char d = getCombiningChar(c * 256 + data[i + 1]);
-                if(d != 0) {
+                if (d != 0) {
                     sb.append(d);
                     i++;
                 } else {
@@ -82,27 +80,27 @@ public class Iso5426ToUnicode
 
     private boolean hasNext(int pos, int len)
     {
-        if(pos < (len - 1)) return true;
+        if (pos < (len - 1)) return true;
         return false;
     }
 
     private boolean isAscii(int i)
     {
-        if(i >= 0x00 && i <= 0x7F) return true;
+        if (i >= 0x00 && i <= 0x7F) return true;
         return false;
     }
 
     private boolean isCombining(int i)
     {
         // if (i > 0xE0 && i < 0xFF)
-        if(i >= 0xC0 && i <= 0xDF) return true;
+        if (i >= 0xC0 && i <= 0xDF) return true;
         return false;
     }
 
     // Source : http://www.itscj.ipsj.or.jp/ISO-IR/053.pdf
     private char getChar(int i)
     {
-        switch(i) {
+        switch (i) {
             case 0xA1:
                 return 0x00A1; // 2/1 inverted exclamation mark
             case 0xA2:
@@ -218,7 +216,7 @@ public class Iso5426ToUnicode
 
     private char getCombiningChar(int i)
     {
-        switch(i) {
+        switch (i) {
             // 4/0 low rising tone mark
             case 0xC041:
                 return 0x1EA2; // CAPITAL A WITH HOOK ABOVE

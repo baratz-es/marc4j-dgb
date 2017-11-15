@@ -20,22 +20,22 @@
  */
 package org.marc4j;
 
-import java.io.Reader;
-import java.io.InputStreamReader;
-import java.io.FileInputStream;
 import java.io.BufferedReader;
-import java.io.InputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.lang.StringUtils;
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
+import org.marc4j.marc.Leader;
 import org.marc4j.marc.MarcConstants;
+import org.marc4j.marc.MarcException;
 import org.marc4j.marc.Subfield;
 import org.marc4j.marc.Tag;
-import org.marc4j.marc.Leader;
-import org.marc4j.marc.MarcException;
 
 /**
  * <p>
@@ -137,7 +137,7 @@ public class MarcReader
     public void parse(InputStreamReader input)
         throws IOException
     {
-        if(!input.getEncoding().equals("ISO8859_1")) {
+        if (!input.getEncoding().equals("ISO8859_1")) {
             throw new UnsupportedEncodingException("found " + input.getEncoding() + ", require ISO8859_1");
         }
         parse(new BufferedReader(input));
@@ -150,17 +150,17 @@ public class MarcReader
         final int DIRENTRYLENGTH = 12;
 
         // Comienza colección de registros
-        if(mh != null) mh.startCollection();
+        if (mh != null) mh.startCollection();
 
         // Recorre registros
-        while(true) {
+        while (true) {
             Leader leader = null;
 
             // Lee los bytes de la cabecera. Si no los lee todos, termina de leer
             char[] ldr = new char[LDRLENGTH];
             int charsRead = input.read(ldr);
 
-            if(charsRead < LDRLENGTH) break;
+            if (charsRead < LDRLENGTH) break;
 
             // if (charsRead == -1)
             // break;
@@ -171,20 +171,20 @@ public class MarcReader
             // Compone la cabecera
             try {
                 leader = new Leader(new String(ldr));
-            } catch(MarcException e) {
-                if(eh != null) reportFatalError("Unable to parse leader");
+            } catch (MarcException e) {
+                if (eh != null) reportFatalError("Unable to parse leader");
                 return;
             }
 
-            if(leader.getBaseAddressOfData() == 0 || leader.getRecordLength() == 0) {
-                if(eh != null) reportFatalError("Invalid MARC ISO 2709 file");
+            if (leader.getBaseAddressOfData() == 0 || leader.getRecordLength() == 0) {
+                if (eh != null) reportFatalError("Invalid MARC ISO 2709 file");
                 return;
             }
 
             recordCounter += LDRLENGTH;
 
             // Comienza registro
-            if(mh != null) mh.startRecord(leader);
+            if (mh != null) mh.startRecord(leader);
 
             // Obtiene datos del directorio
             int dirLength = leader.getBaseAddressOfData() - (LDRLENGTH + 1);
@@ -192,64 +192,64 @@ public class MarcReader
             String[] tag = new String[dirEntries];
             int[] length = new int[dirEntries];
 
-            if((dirLength % DIRENTRYLENGTH) != 0) {
-                if(eh != null) reportError("Invalid directory length");
+            if ((dirLength % DIRENTRYLENGTH) != 0) {
+                if (eh != null) reportError("Invalid directory length");
                 return;
             }
 
             // Recorre el directorio
-            for(int i = 0; i < dirEntries; i++) {
+            for (int i = 0; i < dirEntries; i++) {
 
                 // Lee código de campo
                 char[] d = new char[3];
                 charsRead = input.read(d);
-                while(charsRead != -1 && charsRead != d.length)
+                while (charsRead != -1 && charsRead != d.length)
                     charsRead += input.read(d, charsRead, d.length - charsRead);
 
                 // Lee longitud de campo
                 char[] e = new char[4];
                 charsRead = input.read(e);
-                while(charsRead != -1 && charsRead != e.length)
+                while (charsRead != -1 && charsRead != e.length)
                     charsRead += input.read(e, charsRead, e.length - charsRead);
 
                 // Lee offset de campo
                 char[] f = new char[5];
                 charsRead = input.read(f);
-                while(charsRead != -1 && charsRead != f.length)
+                while (charsRead != -1 && charsRead != f.length)
                     charsRead += input.read(f, charsRead, f.length - charsRead);
 
                 recordCounter += DIRENTRYLENGTH;
                 tag[i] = new String(d);
                 try {
                     length[i] = Integer.parseInt(new String(e));
-                } catch(NumberFormatException nfe) {
-                    if(eh != null) reportError("Invalid directory entry");
+                } catch (NumberFormatException nfe) {
+                    if (eh != null) reportError("Invalid directory entry");
                 }
             }
 
             // Comprueba que tras el directorio está el carácter FT
-            if(input.read() != FT && eh != null) reportError("Directory not terminated");
+            if (input.read() != FT && eh != null) reportError("Directory not terminated");
             recordCounter++;
 
             // Recorre las entradas del directorio
-            for(int i = 0; i < dirEntries; i++) {
+            for (int i = 0; i < dirEntries; i++) {
 
                 // Lee el campo actual
                 char field[] = new char[length[i]];
                 charsRead = input.read(field);
-                while(charsRead != -1 && charsRead != field.length)
+                while (charsRead != -1 && charsRead != field.length)
                     charsRead += input.read(field, charsRead, field.length - charsRead);
 
                 // Busca un FT por el final (al combinar caracteres por el encoding, puede devolver caracteres de más)
-                if(eh != null) {
+                if (eh != null) {
                     String sField = new String(field);
                     int posFT = sField.lastIndexOf(FT);
-                    if(posFT < 0) {
+                    if (posFT < 0) {
                         reportError("Field not terminated");
-                    } else if(posFT < (sField.length() - 1)) {
+                    } else if (posFT < (sField.length() - 1)) {
                         String resto = sField.substring(posFT + 1);
                         resto = StringUtils.replaceChars(resto, "\0", "");
-                        if(resto.length() > 0) {
+                        if (resto.length() > 0) {
                             reportError("Characters detected in field after FT");
                         }
                     }
@@ -257,7 +257,7 @@ public class MarcReader
 
                 // Parsea el campo de control o de datos actual
                 recordCounter += length[i];
-                if(Tag.isControlField(tag[i])) {
+                if (Tag.isControlField(tag[i])) {
                     parseControlField(tag[i], field);
                 } else {
                     parseDataField(tag[i], field);
@@ -265,42 +265,42 @@ public class MarcReader
             }
 
             // Comprueba que el carácter de fin de registro es RT
-            if(input.read() != RT && eh != null) reportError("Record not terminated");
+            if (input.read() != RT && eh != null) reportError("Record not terminated");
             recordCounter++;
 
             // Verifica que el tamaño del registro coincide con el reportado en la cabecera
-            if(recordCounter != leader.getRecordLength() && eh != null)
+            if (recordCounter != leader.getRecordLength() && eh != null)
                 reportError("Record length not equal to characters read");
 
             fileCounter += recordCounter;
             recordCounter = 0;
 
             // Fin de registro
-            if(mh != null) mh.endRecord();
+            if (mh != null) mh.endRecord();
 
         }
         input.close();
 
         // Fin de colección
-        if(mh != null) mh.endCollection();
+        if (mh != null) mh.endCollection();
     }
 
     private void parseControlField(String tag, char[] field)
     {
         // Si el tamaño del campo no es el correcto, reporta un mensaje de advertencia
-        if(field.length < 2) {
-            if(eh != null) reportWarning("Control Field contains no data elements for tag " + tag);
+        if (field.length < 2) {
+            if (eh != null) reportWarning("Control Field contains no data elements for tag " + tag);
             return;
         }
 
         // Si el código es de control, lo anota
-        if(Tag.isControlNumberField(tag)) setControlNumber(trimFT(field));
+        if (Tag.isControlNumberField(tag)) setControlNumber(trimFT(field));
 
         // Parsea el campo de control
         try {
-            if(mh != null) mh.controlField(tag, trimFT(field), ControlField.EMPTY_ID);
-        } catch(Exception e) {
-            if(eh != null) reportWarning("Control Field is not valid: " + tag + " - " + new String(field));
+            if (mh != null) mh.controlField(tag, trimFT(field), ControlField.EMPTY_ID);
+        } catch (Exception e) {
+            if (eh != null) reportWarning("Control Field is not valid: " + tag + " - " + new String(field));
         }
     }
 
@@ -315,60 +315,60 @@ public class MarcReader
         StringBuffer data = null;
 
         // Si el tamaño del campo es demasiado pequeño, reporta advertencia y sale
-        if(field.length < 4) {
-            if(eh != null) reportWarning("Data field contains no data elements for tag " + tag);
+        if (field.length < 4) {
+            if (eh != null) reportWarning("Data field contains no data elements for tag " + tag);
             return;
 
             // En otro caso parsea el campo de datos
         } else {
             ind1 = field[0];
             ind2 = field[1];
-            if(mh != null) mh.startDataField(tag, ind1, ind2, DataField.EMPTY_ID);
+            if (mh != null) mh.startDataField(tag, ind1, ind2, DataField.EMPTY_ID);
 
             // Si la longitud del campo es correcta pero tras los indicadores no está US, advertencia
-            if(field.length > 3 && field[2] != US) {
-                if(eh != null) reportWarning("Expected a data element identifier");
+            if (field.length > 3 && field[2] != US) {
+                if (eh != null) reportWarning("Expected a data element identifier");
             }
 
             // Recorre los caracteres del campo de datos
-            for(int i = 2; i < field.length; i++) {
+            for (int i = 2; i < field.length; i++) {
                 char c = field[i];
-                switch(c) {
+                switch (c) {
                     case US:
-                        if(data != null) reportSubfield(code, data);
+                        if (data != null) reportSubfield(code, data);
                         code = field[i + 1];
                         i++;
                         data = new StringBuffer();
                         break;
                     case FT:
-                        if(data != null) reportSubfield(code, data);
+                        if (data != null) reportSubfield(code, data);
                         break;
                     default:
-                        if(data != null) data.append(c);
+                        if (data != null) data.append(c);
                 }
             }
-            if(mh != null) mh.endDataField(tag);
+            if (mh != null) mh.endDataField(tag);
         }
     }
 
     private void reportSubfield(char code, StringBuffer data)
     {
-        if(mh != null) mh.subfield(code, new String(data).toCharArray(), Subfield.EMPTY_LINK_CODE);
+        if (mh != null) mh.subfield(code, new String(data).toCharArray(), Subfield.EMPTY_LINK_CODE);
     }
 
     private void reportWarning(String message)
     {
-        if(eh != null) eh.warning(new MarcReaderException(message, getFileName(), getPosition(), getControlNumber()));
+        if (eh != null) eh.warning(new MarcReaderException(message, getFileName(), getPosition(), getControlNumber()));
     }
 
     private void reportError(String message)
     {
-        if(eh != null) eh.error(new MarcReaderException(message, getFileName(), getPosition(), getControlNumber()));
+        if (eh != null) eh.error(new MarcReaderException(message, getFileName(), getPosition(), getControlNumber()));
     }
 
     private void reportFatalError(String message)
     {
-        if(eh != null)
+        if (eh != null)
             eh.fatalError(new MarcReaderException(message, getFileName(), getPosition(), getControlNumber()));
     }
 
@@ -404,9 +404,9 @@ public class MarcReader
     private char[] trimFT(char[] field)
     {
         StringBuffer sb = new StringBuffer();
-        for(int i = 0; i < field.length; i++) {
+        for (int i = 0; i < field.length; i++) {
             char c = field[i];
-            switch(c) {
+            switch (c) {
                 case FT:
                     break;
                 default:

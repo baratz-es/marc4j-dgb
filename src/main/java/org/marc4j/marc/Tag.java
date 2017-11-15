@@ -81,7 +81,7 @@ public class Tag
     public static boolean isControlNumberField(String tag)
     {
         Verifier.checkTag(tag);
-        if(!tag.equals("001")) return false;
+        if (!tag.equals("001")) return false;
         return true;
     }
 
@@ -102,8 +102,8 @@ public class Tag
     public static boolean isControlField(String tag)
     {
         Verifier.checkTag(tag);
-        if(tag.charAt(0) != ZERO) return false;
-        if(tag.charAt(1) != ZERO) return false;
+        if (tag.charAt(0) != ZERO) return false;
+        if (tag.charAt(1) != ZERO) return false;
         return true;
     }
 
@@ -123,7 +123,7 @@ public class Tag
     public static boolean isDataField(String tag)
     {
         Verifier.checkTag(tag);
-        if(!isControlField(tag)) return true;
+        if (!isControlField(tag)) return true;
         return false;
     }
 

@@ -145,8 +145,8 @@ public class Record
     public void add(ControlField field)
     {
         String tag = field.getTag();
-        if(Tag.isControlNumberField(tag)) {
-            if(this.hasControlNumberField())
+        if (Tag.isControlNumberField(tag)) {
+            if (this.hasControlNumberField())
                 throw new IllegalAddException(field.getClass().getName(), "control field number already exists");
             this.controlFieldList.add(0, field);
         } else {
@@ -177,7 +177,7 @@ public class Record
     public ControlField getControlNumberField()
     {
         ControlField cf = (ControlField)controlFieldList.get(0);
-        if(cf.getTag().equals("001")) return cf;
+        if (cf.getTag().equals("001")) return cf;
         return null;
     }
 
@@ -190,10 +190,10 @@ public class Record
      */
     public String getControlNumber()
     {
-        if(controlFieldList.size() == 0) return null;
+        if (controlFieldList.size() == 0) return null;
 
         ControlField cf = (ControlField)controlFieldList.get(0);
-        if(cf.getTag().equals("001")) return new String(cf.getData());
+        if (cf.getTag().equals("001")) return new String(cf.getData());
         return null;
     }
 
@@ -207,11 +207,11 @@ public class Record
      */
     public ControlField getControlField(String tag)
     {
-        if(!Tag.isControlField(tag)) return null;
+        if (!Tag.isControlField(tag)) return null;
 
-        for(Iterator<ControlField> i = controlFieldList.iterator(); i.hasNext();) {
+        for (Iterator<ControlField> i = controlFieldList.iterator(); i.hasNext();) {
             ControlField cf = (ControlField)i.next();
-            if(cf.getTag().equals(tag)) return cf;
+            if (cf.getTag().equals(tag)) return cf;
         }
         return null;
     }
@@ -227,9 +227,9 @@ public class Record
     public boolean hasVariableField(String tag)
     {
         List<VariableField> list = getVariableFieldList();
-        for(Iterator<VariableField> i = list.iterator(); i.hasNext();) {
+        for (Iterator<VariableField> i = list.iterator(); i.hasNext();) {
             VariableField vf = (VariableField)i.next();
-            if(vf.getTag().equals(tag)) return true;
+            if (vf.getTag().equals(tag)) return true;
         }
         return false;
     }
@@ -244,11 +244,11 @@ public class Record
      */
     public DataField getDataField(String tag)
     {
-        if(!Tag.isDataField(tag)) return null;
+        if (!Tag.isDataField(tag)) return null;
 
-        for(Iterator<DataField> i = dataFieldList.iterator(); i.hasNext();) {
+        for (Iterator<DataField> i = dataFieldList.iterator(); i.hasNext();) {
             DataField df = (DataField)i.next();
-            if(df.getTag().equals(tag)) return df;
+            if (df.getTag().equals(tag)) return df;
         }
         return null;
     }
@@ -265,9 +265,9 @@ public class Record
      */
     public boolean hasControlNumberField()
     {
-        if(controlFieldList.isEmpty()) return false;
+        if (controlFieldList.isEmpty()) return false;
         ControlField cf = (ControlField)controlFieldList.get(0);
-        if(cf.getTag().equals("001")) return true;
+        if (cf.getTag().equals("001")) return true;
         return false;
     }
 
@@ -312,14 +312,14 @@ public class Record
      */
     public void setControlFieldList(List<ControlField> newList)
     {
-        if(newList == null) {
+        if (newList == null) {
             controlFieldList = new ArrayList<ControlField>();
             return;
         }
         controlFieldList = new ArrayList<ControlField>();
-        for(Iterator<ControlField> i = newList.iterator(); i.hasNext();) {
+        for (Iterator<ControlField> i = newList.iterator(); i.hasNext();) {
             Object obj = i.next();
-            if(obj instanceof ControlField) {
+            if (obj instanceof ControlField) {
                 this.add((ControlField)obj);
             } else {
                 throw new IllegalAddException(obj.getClass().getName(),
@@ -360,14 +360,14 @@ public class Record
      */
     public void setDataFieldList(List<DataField> newList)
     {
-        if(newList == null) {
+        if (newList == null) {
             dataFieldList = new ArrayList<DataField>();
             return;
         }
         dataFieldList = new ArrayList<DataField>();
-        for(Iterator<DataField> i = newList.iterator(); i.hasNext();) {
+        for (Iterator<DataField> i = newList.iterator(); i.hasNext();) {
             Object obj = i.next();
-            if(obj instanceof DataField) {
+            if (obj instanceof DataField) {
                 this.add((DataField)obj);
             } else {
                 throw new IllegalAddException(obj.getClass().getName(),
@@ -398,10 +398,10 @@ public class Record
     public List<VariableField> getVariableFieldList()
     {
         List<VariableField> variableFields = new ArrayList<VariableField>();
-        for(Iterator<ControlField> i = controlFieldList.iterator(); i.hasNext();) {
+        for (Iterator<ControlField> i = controlFieldList.iterator(); i.hasNext();) {
             variableFields.add(i.next());
         }
-        for(Iterator<DataField> i = dataFieldList.iterator(); i.hasNext();) {
+        for (Iterator<DataField> i = dataFieldList.iterator(); i.hasNext();) {
             variableFields.add(i.next());
         }
         return variableFields;
@@ -427,18 +427,18 @@ public class Record
      */
     public void setVariableFieldList(List<VariableField> newList)
     {
-        if(newList == null) {
+        if (newList == null) {
             controlFieldList = new ArrayList<ControlField>();
             dataFieldList = new ArrayList<DataField>();
             return;
         }
         controlFieldList = new ArrayList<ControlField>();
         dataFieldList = new ArrayList<DataField>();
-        for(Iterator<VariableField> i = newList.iterator(); i.hasNext();) {
+        for (Iterator<VariableField> i = newList.iterator(); i.hasNext();) {
             Object obj = i.next();
-            if(obj instanceof ControlField) {
+            if (obj instanceof ControlField) {
                 this.add((ControlField)obj);
-            } else if(obj instanceof DataField) {
+            } else if (obj instanceof DataField) {
                 this.add((DataField)obj);
             } else {
                 throw new IllegalAddException(obj.getClass().getName(),
@@ -466,23 +466,23 @@ public class Record
     {
 
         // throw exception if record contains no leader
-        if(leader == null) throw new MarcException("Record contains no leader");
+        if (leader == null) throw new MarcException("Record contains no leader");
 
         // throw exception if record contains no control number field
-        if(!hasControlNumberField()) throw new MarcException("Record contains no control number field (tag 001)");
+        if (!hasControlNumberField()) throw new MarcException("Record contains no control number field (tag 001)");
 
         StringBuffer data = new StringBuffer();
         Directory directory = new Directory();
 
         // append control fields to directory and data
-        for(Iterator<ControlField> i = controlFieldList.iterator(); i.hasNext();) {
+        for (Iterator<ControlField> i = controlFieldList.iterator(); i.hasNext();) {
             ControlField cf = (ControlField)i.next();
             directory.add(cf.getTag(), cf.getLength());
             data.append(cf.marshal());
         }
 
         // append data fields to directory and data
-        for(Iterator<DataField> i = dataFieldList.iterator(); i.hasNext();) {
+        for (Iterator<DataField> i = dataFieldList.iterator(); i.hasNext();) {
             DataField df = (DataField)i.next();
             directory.add(df.getTag(), df.getLength());
             data.append(df.marshal());
@@ -526,20 +526,20 @@ public class Record
     {
 
         // throw exception if record contains no leader
-        if(leader == null) throw new MarcException("Record contains no leader");
+        if (leader == null) throw new MarcException("Record contains no leader");
 
         // throw exception if record contains no control number field
-        if(!hasControlNumberField()) throw new MarcException("Record contains no control number field (tag 001)");
+        if (!hasControlNumberField()) throw new MarcException("Record contains no control number field (tag 001)");
 
         StringBuffer data = new StringBuffer();
         Directory directory = new Directory();
 
         try {
             // append control fields to directory and data
-            for(Iterator<ControlField> i = controlFieldList.iterator(); i.hasNext();) {
+            for (Iterator<ControlField> i = controlFieldList.iterator(); i.hasNext();) {
                 ControlField cf = (ControlField)i.next();
                 int fieldLength = 0;
-                if(StringUtils.isNotBlank(encoding)) {
+                if (StringUtils.isNotBlank(encoding)) {
                     fieldLength = cf.marshal().getBytes(encoding).length;
                 } else {
                     fieldLength = cf.getLength();
@@ -549,10 +549,10 @@ public class Record
             }
 
             // append data fields to directory and data
-            for(Iterator<DataField> i = dataFieldList.iterator(); i.hasNext();) {
+            for (Iterator<DataField> i = dataFieldList.iterator(); i.hasNext();) {
                 DataField df = (DataField)i.next();
                 int fieldLength = 0;
-                if(StringUtils.isNotBlank(encoding)) {
+                if (StringUtils.isNotBlank(encoding)) {
                     fieldLength = df.marshal().getBytes(encoding).length;
                 } else {
                     fieldLength = df.getLength();
@@ -564,13 +564,13 @@ public class Record
             // add base address of data and logical record length tp the leader
             int baseAddress = 24 + directory.getLength();
             int recordLength = baseAddress + data.length() + 1;
-            if(StringUtils.isNotBlank(encoding)) {
+            if (StringUtils.isNotBlank(encoding)) {
                 recordLength = baseAddress + data.toString().getBytes(encoding).length + 1;
             }
             leader.setRecordLength(recordLength);
             leader.setBaseAddressOfData(baseAddress);
 
-        } catch(UnsupportedEncodingException ex) {
+        } catch (UnsupportedEncodingException ex) {
             throw new ConfigException(ex);
         }
 
@@ -591,24 +591,24 @@ public class Record
             instance.leader = (Leader)this.leader.clone();
 
             // Clonamos la lista de campos de control
-            if(this.controlFieldList != null) {
+            if (this.controlFieldList != null) {
                 ArrayList<ControlField> newList = new ArrayList<ControlField>();
-                for(Iterator<ControlField> it = this.controlFieldList.iterator(); it.hasNext();)
+                for (Iterator<ControlField> it = this.controlFieldList.iterator(); it.hasNext();)
                     newList.add((ControlField)it.next().clone());
                 instance.setControlFieldList(newList);
             }
 
             // Clonamos la lista de campos de datos
-            if(this.dataFieldList != null) {
+            if (this.dataFieldList != null) {
                 ArrayList<DataField> newList = new ArrayList<DataField>();
-                for(Iterator<DataField> it = this.dataFieldList.iterator(); it.hasNext();)
+                for (Iterator<DataField> it = this.dataFieldList.iterator(); it.hasNext();)
                     newList.add((DataField)it.next().clone());
                 instance.setDataFieldList(newList);
             }
 
             // Devolvemos la nueva instancia
             return instance;
-        } catch(CloneNotSupportedException e) {
+        } catch (CloneNotSupportedException e) {
             throw new ConfigException(e);
         }
     }

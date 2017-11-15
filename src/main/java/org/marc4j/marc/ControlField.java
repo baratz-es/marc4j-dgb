@@ -144,7 +144,7 @@ public class ControlField
     @Override
     public void setTag(String tag)
     {
-        if(Tag.isControlField(tag)) {
+        if (Tag.isControlField(tag)) {
             super.setTag(tag);
         } else {
             throw new IllegalTagException(tag, "not a control field identifier");
@@ -243,9 +243,9 @@ public class ControlField
     @Override
     public boolean equals(Object obj)
     {
-        if(obj == null) return false;
-        if(obj == this) return true;
-        if(obj.getClass() != getClass()) return false;
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (obj.getClass() != getClass()) return false;
 
         ControlField that = (ControlField)obj;
         return new EqualsBuilder()

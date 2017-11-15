@@ -120,7 +120,7 @@ public class MarcReaderException
     @Override
     public Throwable initCause(Throwable cause)
     {
-        if(this.cause == null) {
+        if (this.cause == null) {
             this.cause = cause;
         } else {
             throw new IllegalStateException("Cannot reset the cause");

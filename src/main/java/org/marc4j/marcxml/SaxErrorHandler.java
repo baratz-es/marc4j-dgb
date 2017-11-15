@@ -21,8 +21,8 @@
 package org.marc4j.marcxml;
 
 import org.apache.log4j.Category;
-import org.xml.sax.SAXParseException;
 import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXParseException;
 
 // This class is derived from an ErrorHandler example
 // in the SAX2 book by David Brownell.
@@ -64,21 +64,21 @@ public class SaxErrorHandler
     public void error(SAXParseException e)
         throws SAXParseException
     {
-        if((flags & ERR_PRINT) != 0) log.error(printParseException("Error", e), e);
-        if((flags & ERR_IGNORE) == 0) throw e;
+        if ((flags & ERR_PRINT) != 0) log.error(printParseException("Error", e), e);
+        if ((flags & ERR_IGNORE) == 0) throw e;
     }
 
     public void fatalError(SAXParseException e)
         throws SAXParseException
     {
-        if((flags & FATAL_PRINT) != 0) log.fatal(printParseException("FATAL", e), e);
-        if((flags & FATAL_IGNORE) == 0) throw e;
+        if ((flags & FATAL_PRINT) != 0) log.fatal(printParseException("FATAL", e), e);
+        if ((flags & FATAL_IGNORE) == 0) throw e;
     }
 
     public void warning(SAXParseException e)
         throws SAXParseException
     {
-        if((flags & WARN_PRINT) != 0) log.warn(printParseException("Warning", e), e);
+        if ((flags & WARN_PRINT) != 0) log.warn(printParseException("Warning", e), e);
     }
 
     public static String printParseException(String label, SAXParseException e)
@@ -90,17 +90,17 @@ public class SaxErrorHandler
         buf.append(": ");
         buf.append(e.getMessage());
         buf.append('\n');
-        if(e.getSystemId() != null) {
+        if (e.getSystemId() != null) {
             buf.append("   URI:  ");
             buf.append(e.getSystemId());
             buf.append('\n');
         }
-        if((temp = e.getLineNumber()) != -1) {
+        if ((temp = e.getLineNumber()) != -1) {
             buf.append("   Line: ");
             buf.append(temp);
             buf.append('\n');
         }
-        if((temp = e.getColumnNumber()) != -1) {
+        if ((temp = e.getColumnNumber()) != -1) {
             buf.append("   Character: ");
             buf.append(temp);
             buf.append('\n');

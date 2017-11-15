@@ -20,28 +20,30 @@
  */
 package org.marc4j.util;
 
-import java.io.*;
-import org.xml.sax.XMLReader;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.XMLReaderFactory;
-import org.xml.sax.SAXNotSupportedException;
-import org.xml.sax.SAXNotRecognizedException;
-import javax.xml.parsers.SAXParserFactory;
-import javax.xml.parsers.SAXParser;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Source;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Result;
+import javax.xml.transform.Source;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Category;
-import org.marc4j.marcxml.SaxErrorHandler;
-import org.marc4j.marcxml.MarcXmlHandler;
-import org.marc4j.helpers.RecordBuilder;
-import org.marc4j.MarcHandler;
-import org.marc4j.marcxml.MarcResult;
 import org.marc4j.marcxml.Converter;
+import org.marc4j.marcxml.MarcResult;
+import org.marc4j.marcxml.MarcXmlHandler;
+import org.marc4j.marcxml.SaxErrorHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
+import org.xml.sax.XMLReader;
 
 /**
  * <p>
@@ -117,51 +119,51 @@ public class XmlMarcWriter
         boolean xsdValidate = false;
         long start = System.currentTimeMillis();
 
-        for(int i = 0; i < args.length; i++) {
-            if(args[i].equals("-dtd")) {
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("-dtd")) {
                 dtdValidate = true;
-            } else if(args[i].equals("-xsd")) {
+            } else if (args[i].equals("-xsd")) {
                 xsdValidate = true;
-            } else if(args[i].equals("-xsdss")) {
-                if(i == args.length - 1) {
+            } else if (args[i].equals("-xsdss")) {
+                if (i == args.length - 1) {
                     usage();
                 }
                 xsdValidate = true;
                 schemaSource = args[++i];
-            } else if(args[i].equals("-out")) {
-                if(i == args.length - 1) {
+            } else if (args[i].equals("-out")) {
+                if (i == args.length - 1) {
                     usage();
                 }
                 output = args[++i];
-            } else if(args[i].equals("-oe")) {
-                if(i == args.length - 1) {
+            } else if (args[i].equals("-oe")) {
+                if (i == args.length - 1) {
                     usage();
                 }
                 outputEncoding = args[++i].trim();
-            } else if(args[i].equals("-convert")) {
-                if(i == args.length - 1) {
+            } else if (args[i].equals("-convert")) {
+                if (i == args.length - 1) {
                     usage();
                 }
                 convert = args[++i].trim();
-            } else if(args[i].equals("-xsl")) {
-                if(i == args.length - 1) {
+            } else if (args[i].equals("-xsl")) {
+                if (i == args.length - 1) {
                     usage();
                 }
                 stylesheet = args[++i];
-            } else if(args[i].equals("-usage")) {
+            } else if (args[i].equals("-usage")) {
                 usage();
-            } else if(args[i].equals("-help")) {
+            } else if (args[i].equals("-help")) {
                 usage();
             } else {
                 input = args[i];
 
                 // Must be last arg
-                if(i != args.length - 1) {
+                if (i != args.length - 1) {
                     usage();
                 }
             }
         }
-        if(input == null) {
+        if (input == null) {
             usage();
         }
 
@@ -181,23 +183,23 @@ public class XmlMarcWriter
             // new FileOutputStream(output), "UTF8"));
             // }
 
-            if(output == null && outputEncoding != null)
+            if (output == null && outputEncoding != null)
                 writer = new BufferedWriter(new OutputStreamWriter(System.out, outputEncoding));
-            else if(output != null && outputEncoding == null)
+            else if (output != null && outputEncoding == null)
                 writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(output)));
-            else if(output != null && outputEncoding != null)
+            else if (output != null && outputEncoding != null)
                 writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(output), outputEncoding));
             else
                 writer = new BufferedWriter(new OutputStreamWriter(System.out));
 
             MarcWriter handler = new MarcWriter(writer);
-            if(convert != null) {
+            if (convert != null) {
                 CharacterConverter charconv = null;
-                if("ANSEL".equals(convert))
+                if ("ANSEL".equals(convert))
                     charconv = new UnicodeToAnsel();
-                else if("ISO5426".equals(convert))
+                else if ("ISO5426".equals(convert))
                     charconv = new UnicodeToIso5426();
-                else if("ISO6937".equals(convert))
+                else if ("ISO6937".equals(convert))
                     charconv = new UnicodeToIso6937();
                 else {
                     System.err.println("Unknown character set");
@@ -210,8 +212,8 @@ public class XmlMarcWriter
             factory.setNamespaceAware(true);
             factory.setValidating(dtdValidate || xsdValidate);
             SAXParser saxParser = factory.newSAXParser();
-            if(xsdValidate) saxParser.setProperty(JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA);
-            if(schemaSource != null) saxParser.setProperty(JAXP_SCHEMA_SOURCE, new File(schemaSource));
+            if (xsdValidate) saxParser.setProperty(JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA);
+            if (schemaSource != null) saxParser.setProperty(JAXP_SCHEMA_SOURCE, new File(schemaSource));
             XMLReader xmlReader = saxParser.getXMLReader();
             xmlReader.setErrorHandler(new SaxErrorHandler());
             InputSource in = new InputSource(new File(input).toURL().toString());
@@ -219,22 +221,22 @@ public class XmlMarcWriter
             Source source = new SAXSource(xmlReader, in);
             Result result = new MarcResult(handler);
             Converter converter = new Converter();
-            if(stylesheet != null) {
+            if (stylesheet != null) {
                 Source style = new StreamSource(new File(stylesheet).toURL().toString());
                 converter.convert(style, source, result);
             } else {
                 converter.convert(source, result);
             }
 
-        } catch(ParserConfigurationException e) {
+        } catch (ParserConfigurationException e) {
             log.error("La configuración no es correcta", e);
-        } catch(SAXNotSupportedException e) {
+        } catch (SAXNotSupportedException e) {
             log.error("No se soporta la operación indicada", e);
-        } catch(SAXNotRecognizedException e) {
+        } catch (SAXNotRecognizedException e) {
             log.error("Identificador no reconocido", e);
-        } catch(SAXException e) {
+        } catch (SAXException e) {
             log.error("Se ha producido un error al convertir el documento MARCXML", e);
-        } catch(Exception e) {
+        } catch (Exception e) {
             log.error("Se ha producido un error al convertir el documento MARCXML", e);
         }
         System.err.println("Total time: " + (System.currentTimeMillis() - start) + " miliseconds");

@@ -20,11 +20,12 @@
  */
 package org.marc4j.marcxml;
 
-import java.io.Reader;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.File;
+import java.io.InputStream;
+import java.io.Reader;
+
 import javax.xml.transform.Source;
+
 import org.marc4j.MarcReader;
 
 /**

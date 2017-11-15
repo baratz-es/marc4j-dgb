@@ -64,7 +64,7 @@ public class ErrorHandlerImpl
         buf.append(": ");
         buf.append(e.getMessage());
         buf.append('\n');
-        if(e.getControlNumber() != null) {
+        if (e.getControlNumber() != null) {
             buf.append("   Record Number: ");
             buf.append(e.getControlNumber());
             buf.append('\n');
