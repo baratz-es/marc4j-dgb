@@ -145,7 +145,7 @@ public class DataField
     @Override
     public void setTag(String tag)
     {
-        if(Tag.isDataField(tag)) {
+        if (Tag.isDataField(tag)) {
             super.setTag(tag);
         } else {
             throw new IllegalTagException(tag, "not a data field identifier");
@@ -255,9 +255,9 @@ public class DataField
      */
     public Subfield getSubfield(char code)
     {
-        for(Iterator<Subfield> i = list.iterator(); i.hasNext();) {
+        for (Iterator<Subfield> i = list.iterator(); i.hasNext();) {
             Subfield sf = i.next();
-            if(sf.getCode() == code) return sf;
+            if (sf.getCode() == code) return sf;
         }
         return null;
     }
@@ -272,9 +272,9 @@ public class DataField
      */
     public boolean hasSubfield(char code)
     {
-        for(Iterator<Subfield> i = list.iterator(); i.hasNext();) {
+        for (Iterator<Subfield> i = list.iterator(); i.hasNext();) {
             Subfield sf = i.next();
-            if(sf.getCode() == code) return true;
+            if (sf.getCode() == code) return true;
         }
         return false;
     }
@@ -298,14 +298,14 @@ public class DataField
      */
     public void setSubfieldList(List<Subfield> newList)
     {
-        if(newList == null) {
+        if (newList == null) {
             list = new ArrayList<Subfield>();
             return;
         }
         list = new ArrayList<Subfield>();
-        for(Iterator<Subfield> i = newList.iterator(); i.hasNext();) {
+        for (Iterator<Subfield> i = newList.iterator(); i.hasNext();) {
             Object obj = i.next();
-            if(obj instanceof Subfield) {
+            if (obj instanceof Subfield) {
                 add((Subfield)obj);
             } else {
                 throw new IllegalAddException(obj.getClass().getName(),
@@ -326,7 +326,7 @@ public class DataField
     {
         StringBuffer dataField = new StringBuffer().append(ind1).append(ind2);
         Iterator<Subfield> iterator = list.iterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             Subfield subfield = (Subfield)iterator.next();
             dataField.append(subfield.marshal());
         }
@@ -356,9 +356,9 @@ public class DataField
         DataField instance = new DataField(this.getTag(), this.ind1, this.ind2, DataField.EMPTY_ID);
 
         // Recorremos la lista de subcampos y clonamos cada uno de ellos
-        if(this.list != null) {
+        if (this.list != null) {
             ArrayList<Subfield> newList = new ArrayList<>();
-            for(Iterator<Subfield> it = this.list.iterator(); it.hasNext();)
+            for (Iterator<Subfield> it = this.list.iterator(); it.hasNext();)
                 newList.add((Subfield)it.next().clone());
             instance.setSubfieldList(newList);
         }
@@ -370,9 +370,9 @@ public class DataField
     @Override
     public boolean equals(Object obj)
     {
-        if(obj == null) return false;
-        if(obj == this) return true;
-        if(obj.getClass() != getClass()) return false;
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (obj.getClass() != getClass()) return false;
 
         DataField that = (DataField)obj;
         return new EqualsBuilder()

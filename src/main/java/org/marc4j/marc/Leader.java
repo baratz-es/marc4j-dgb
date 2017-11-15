@@ -382,7 +382,7 @@ public class Leader
         try {
             String s;
             s = ldr.substring(0, 5);
-            if(isInteger(s))
+            if (isInteger(s))
                 setRecordLength(Integer.parseInt(s));
             else
                 setRecordLength(0);
@@ -391,23 +391,23 @@ public class Leader
             setImplDefined1(ldr.substring(7, 9).toCharArray());
             setCharCodingScheme(ldr.charAt(9));
             s = String.valueOf(ldr.charAt(10));
-            if(isInteger(s))
+            if (isInteger(s))
                 setIndicatorCount(Integer.parseInt(s));
             else
                 setIndicatorCount(2);
             s = String.valueOf(ldr.charAt(10));
-            if(isInteger(s))
+            if (isInteger(s))
                 setSubfieldCodeLength(Integer.parseInt(s));
             else
                 setSubfieldCodeLength(2);
             s = ldr.substring(12, 17);
-            if(isInteger(s))
+            if (isInteger(s))
                 setBaseAddressOfData(Integer.parseInt(s));
             else
                 setBaseAddressOfData(0);
             setImplDefined2(ldr.substring(17, 20).toCharArray());
             setEntryMap(ldr.substring(20, 24).toCharArray());
-        } catch(NumberFormatException e) {
+        } catch (NumberFormatException e) {
             throw new MarcException("Unable to parse leader", e);
         }
     }
@@ -439,10 +439,10 @@ public class Leader
     private boolean isInteger(String value)
     {
         int len = value.length();
-        if(len == 0) return false;
+        if (len == 0) return false;
         int i = 0;
         do {
-            switch(value.charAt(i)) {
+            switch (value.charAt(i)) {
                 case '0':
                 case '1':
                 case '2':
@@ -457,7 +457,7 @@ public class Leader
                 default:
                     return false;
             }
-        } while(++i < len);
+        } while (++i < len);
         return true;
     }
 
@@ -483,7 +483,7 @@ public class Leader
             instance.entryMap = (char[])this.entryMap.clone();
 
             return instance;
-        } catch(CloneNotSupportedException e) {
+        } catch (CloneNotSupportedException e) {
             throw new ConfigException(e);
         }
     }

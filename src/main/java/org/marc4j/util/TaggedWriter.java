@@ -20,10 +20,10 @@
  */
 package org.marc4j.util;
 
-import java.io.Writer;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.IOException;
+import java.io.Writer;
 
 import org.apache.log4j.Category;
 import org.marc4j.MarcHandler;
@@ -121,7 +121,7 @@ public class TaggedWriter
      */
     public void startCollection()
     {
-        if(out == null) System.exit(0);
+        if (out == null) System.exit(0);
     }
 
     public void startRecord(Leader leader)
@@ -172,7 +172,7 @@ public class TaggedWriter
         try {
             out.flush();
             out.close();
-        } catch(IOException e) {
+        } catch (IOException e) {
             log.error("Error al finalizar la colección", e);
         }
     }
@@ -181,7 +181,7 @@ public class TaggedWriter
     {
         try {
             out.write(c);
-        } catch(IOException e) {
+        } catch (IOException e) {
             log.error("Se ha producido un error al escribir en la salida", e);
         }
     }
@@ -190,7 +190,7 @@ public class TaggedWriter
     {
         try {
             out.write(s);
-        } catch(IOException e) {
+        } catch (IOException e) {
             log.error("Se ha producido un error al escribir en la salida", e);
         }
     }

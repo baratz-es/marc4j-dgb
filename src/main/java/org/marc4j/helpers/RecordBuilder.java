@@ -21,7 +21,11 @@
 package org.marc4j.helpers;
 
 import org.marc4j.MarcHandler;
-import org.marc4j.marc.*;
+import org.marc4j.marc.ControlField;
+import org.marc4j.marc.DataField;
+import org.marc4j.marc.Leader;
+import org.marc4j.marc.Record;
+import org.marc4j.marc.Subfield;
 
 /**
  * <p>
@@ -66,7 +70,7 @@ public class RecordBuilder
      */
     public void startCollection()
     {
-        if(recordHandler != null) recordHandler.startCollection();
+        if (recordHandler != null) recordHandler.startCollection();
     }
 
     /**
@@ -130,7 +134,7 @@ public class RecordBuilder
      */
     public void endRecord()
     {
-        if(recordHandler != null) recordHandler.record(record);
+        if (recordHandler != null) recordHandler.record(record);
     }
 
     /**
@@ -140,7 +144,7 @@ public class RecordBuilder
      */
     public void endCollection()
     {
-        if(recordHandler != null) recordHandler.endCollection();
+        if (recordHandler != null) recordHandler.endCollection();
     }
 
 }

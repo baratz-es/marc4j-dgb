@@ -16,30 +16,20 @@
  */
 package org.marc4j.util;
 
-import org.apache.log4j.Category;
-import org.xml.sax.Attributes;
-import org.xml.sax.Locator;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
-import java.net.URI;
-import java.net.URL;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Vector;
-import javax.xml.parsers.SAXParserFactory;
+
 import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Source;
-import javax.xml.transform.Result;
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.stream.StreamSource;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.apache.log4j.Category;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * <p>
@@ -66,7 +56,7 @@ public class ReverseCodeTable
     public static Hashtable codeTableHash(Character c)
     {
         Hashtable chars = (Hashtable)charset.get(c);
-        if(chars == null) {
+        if (chars == null) {
             log.error("Not Found: " + c);
             return chars;
         } else
@@ -76,12 +66,12 @@ public class ReverseCodeTable
     public static boolean inPreviousCharCodeTable(Character c, CodeTableTracker ctt)
     {
         Hashtable chars = (Hashtable)charset.get(c);
-        if(chars == null) {
+        if (chars == null) {
             log.error("Not Found: " + c);
             return false;
         } else {
 
-            if((chars.get(ctt.getPrevious(CodeTableTracker.G0)) != null)
+            if ((chars.get(ctt.getPrevious(CodeTableTracker.G0)) != null)
                 || (chars.get(ctt.getPrevious(CodeTableTracker.G1)) != null)) {
                 ctt.makePreviousCurrent();
                 return true;
@@ -97,11 +87,11 @@ public class ReverseCodeTable
 
         Integer marc = (Integer)chars.get(ctt.getCurrent(CodeTableTracker.G0));
 
-        if(marc != null) {
+        if (marc != null) {
             return (char)marc.intValue();
         }
         marc = (Integer)chars.get(ctt.getCurrent(CodeTableTracker.G1));
-        if(marc != null) {
+        if (marc != null) {
             return (char)marc.intValue();
         }
         return 0x20;
@@ -126,7 +116,7 @@ public class ReverseCodeTable
             charset = saxUms.getCharSets();
             combining = saxUms.getCombiningChars();
 
-        } catch(Exception exc) {
+        } catch (Exception exc) {
             log.error("Exception: " + exc, exc);
         }
     }
@@ -151,7 +141,7 @@ public class ReverseCodeTable
             charset = saxUms.getCharSets();
             combining = saxUms.getCombiningChars();
 
-        } catch(Exception exc) {
+        } catch (Exception exc) {
             log.error("Exception: " + exc, exc);
         }
     }
@@ -175,7 +165,7 @@ public class ReverseCodeTable
             charset = saxUms.getCharSets();
             combining = saxUms.getCombiningChars();
 
-        } catch(Exception exc) {
+        } catch (Exception exc) {
             log.error("Exception: " + exc, exc);
         }
     }

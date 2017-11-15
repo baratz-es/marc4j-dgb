@@ -20,24 +20,25 @@
  */
 package org.marc4j.marcxml;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.URL;
 
-import org.xml.sax.ContentHandler;
-import org.xml.sax.InputSource;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXNotRecognizedException;
-import org.xml.sax.SAXNotSupportedException;
-import org.xml.sax.helpers.AttributesImpl;
 import org.apache.log4j.Category;
-import org.marc4j.MarcHandler;
 import org.marc4j.ErrorHandler;
+import org.marc4j.MarcHandler;
 import org.marc4j.MarcReader;
 import org.marc4j.marc.Leader;
 import org.marc4j.util.CharacterConverter;
 import org.marc4j.util.CharacterConverterLoader;
 import org.marc4j.util.CharacterConverterLoaderException;
+import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
+import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * <p>
@@ -118,13 +119,13 @@ public class MarcXmlFilter
     public void setProperty(String name, Object obj)
         throws SAXNotRecognizedException, SAXNotSupportedException
     {
-        if(DOC_TYPE_DECL.equals(name))
+        if (DOC_TYPE_DECL.equals(name))
             this.doctype = (DoctypeDecl)obj;
-        else if(ERROR_HANDLER.equals(name))
+        else if (ERROR_HANDLER.equals(name))
             this.eh = (ErrorHandler)obj;
-        else if(SCHEMA_LOC.equals(name))
+        else if (SCHEMA_LOC.equals(name))
             this.schemaLocation = (String)obj;
-        else if(CHARACTER_CONVERTER.equals(name))
+        else if (CHARACTER_CONVERTER.equals(name))
             this.charconv = (CharacterConverter)obj;
         else
             super.setProperty(name, obj);
@@ -141,9 +142,9 @@ public class MarcXmlFilter
     public void setFeature(String name, boolean value)
         throws SAXNotRecognizedException, SAXNotSupportedException
     {
-        if(ANSEL_TO_UNICODE.equals(name))
+        if (ANSEL_TO_UNICODE.equals(name))
             setCharacterConverter(true);
-        else if(PRETTY_PRINTING.equals(name))
+        else if (PRETTY_PRINTING.equals(name))
             this.prettyPrinting = value;
         else
             super.setFeature(name, value);
@@ -159,7 +160,7 @@ public class MarcXmlFilter
     public void parse(InputSource input)
     {
         ch = getContentHandler();
-        if(ch == null) {
+        if (ch == null) {
             return;
         }
 
@@ -167,11 +168,11 @@ public class MarcXmlFilter
             // Convert the InputSource into a BufferedReader.
             BufferedReader br = null;
 
-            if(input.getCharacterStream() != null) {
+            if (input.getCharacterStream() != null) {
                 br = new BufferedReader(input.getCharacterStream());
-            } else if(input.getByteStream() != null) {
+            } else if (input.getByteStream() != null) {
                 br = new BufferedReader(new InputStreamReader(input.getByteStream(), "ISO8859_1"));
-            } else if(input.getSystemId() != null) {
+            } else if (input.getSystemId() != null) {
                 java.net.URL url = new URL(input.getSystemId());
                 br = new BufferedReader(new InputStreamReader(url.openStream(), "ISO8859_1"));
             } else {
@@ -185,12 +186,12 @@ public class MarcXmlFilter
             marcReader.setMarcHandler(this);
 
             // Register the ErrorHandler implementation.
-            if(eh != null) marcReader.setErrorHandler(eh);
+            if (eh != null) marcReader.setErrorHandler(eh);
 
             // Send the file to the parse method.
             marcReader.parse(br);
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             log.error("Se ha producido un error al realizar la conversión", e);
         }
 
@@ -212,21 +213,21 @@ public class MarcXmlFilter
             ch.startDocument();
 
             // Report document type declaration
-            if(lh != null && doctype != null && schemaLocation == null) {
+            if (lh != null && doctype != null && schemaLocation == null) {
                 lh.startDTD(doctype.getName(), doctype.getPublicId(), doctype.getSystemId());
                 lh.endDTD();
             }
 
             // Outputting namespace declarations through the attribute object,
             // since the startPrefixMapping refuses to output namespace declarations.
-            if(schemaLocation != null) {
+            if (schemaLocation != null) {
                 atts.addAttribute("", "xsi", "xmlns:xsi", "CDATA", NS_XSI);
                 atts.addAttribute(NS_XSI, "schemaLocation", "xsi:schemaLocation", "CDATA", schemaLocation);
             }
 
             // Do not output the namespace declaration for MARCXML
             // together with a document type declaration
-            if(doctype == null) atts.addAttribute("", "", "xmlns", "CDATA", NS_URI);
+            if (doctype == null) atts.addAttribute("", "", "xmlns", "CDATA", NS_URI);
 
             // Report start of prefix mapping for MARCXML
             // OK together with Document Type Delcaration?
@@ -235,7 +236,7 @@ public class MarcXmlFilter
             // Report root element
             ch.startElement(NS_URI, "collection", "collection", atts);
 
-        } catch(SAXException se) {
+        } catch (SAXException se) {
             log.error("Se ha producido un error al crear los elementos de inicio del documento", se);
         }
     }
@@ -250,11 +251,11 @@ public class MarcXmlFilter
     public void startRecord(Leader leader)
     {
         try {
-            if(prettyPrinting) ch.ignorableWhitespace("\n  ".toCharArray(), 0, 3);
+            if (prettyPrinting) ch.ignorableWhitespace("\n  ".toCharArray(), 0, 3);
             ch.startElement(NS_URI, "record", "record", EMPTY_ATTS);
-            if(prettyPrinting) ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
+            if (prettyPrinting) ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
             writeElement(NS_URI, "leader", "leader", EMPTY_ATTS, leader.marshal());
-        } catch(SAXException se) {
+        } catch (SAXException se) {
             log.error("Se ha producido un error al añadir los elementos de inicio de registro", se);
         }
     }
@@ -274,9 +275,9 @@ public class MarcXmlFilter
         try {
             AttributesImpl atts = new AttributesImpl();
             atts.addAttribute("", "tag", "tag", "CDATA", tag);
-            if(prettyPrinting) ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
+            if (prettyPrinting) ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
             writeElement(NS_URI, "controlfield", "controlfield", atts, data);
-        } catch(SAXException se) {
+        } catch (SAXException se) {
             log.error("Se ha producido un error al crear el campo de control", se);
         }
     }
@@ -299,9 +300,9 @@ public class MarcXmlFilter
             atts.addAttribute("", "tag", "tag", "CDATA", tag);
             atts.addAttribute("", "ind1", "ind1", "CDATA", String.valueOf(ind1));
             atts.addAttribute("", "ind2", "ind2", "CDATA", String.valueOf(ind2));
-            if(prettyPrinting) ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
+            if (prettyPrinting) ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
             ch.startElement(NS_URI, "datafield", "datafield", atts);
-        } catch(SAXException se) {
+        } catch (SAXException se) {
             log.error("Se ha producido un error al añadir los elementos de inicio de campo", se);
         }
     }
@@ -321,16 +322,16 @@ public class MarcXmlFilter
         try {
             AttributesImpl atts = new AttributesImpl();
             atts.addAttribute("", "code", "code", "CDATA", String.valueOf(code));
-            if(prettyPrinting) ch.ignorableWhitespace("\n      ".toCharArray(), 0, 7);
+            if (prettyPrinting) ch.ignorableWhitespace("\n      ".toCharArray(), 0, 7);
             ch.startElement(NS_URI, "subfield", "subfield", atts);
-            if(charconv != null) {
+            if (charconv != null) {
                 char[] unicodeData = charconv.convert(data);
                 ch.characters(unicodeData, 0, unicodeData.length);
             } else {
                 ch.characters(data, 0, data.length);
             }
             ch.endElement(NS_URI, "subfield", "subfield");
-        } catch(SAXException se) {
+        } catch (SAXException se) {
             log.error("Error al añadir la información de subcampo", se);
         }
     }
@@ -347,7 +348,7 @@ public class MarcXmlFilter
         try {
             ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
             ch.endElement(NS_URI, "datafield", "datafield");
-        } catch(SAXException se) {
+        } catch (SAXException se) {
             log.error("Se ha producido un error al añadir los elementos de fin de campo", se);
         }
     }
@@ -361,9 +362,9 @@ public class MarcXmlFilter
     public void endRecord()
     {
         try {
-            if(prettyPrinting) ch.ignorableWhitespace("\n  ".toCharArray(), 0, 3);
+            if (prettyPrinting) ch.ignorableWhitespace("\n  ".toCharArray(), 0, 3);
             ch.endElement(NS_URI, "record", "record");
-        } catch(SAXException se) {
+        } catch (SAXException se) {
             log.error("Se ha producido un error al añadir los elementos de fin de registro", se);
         }
     }
@@ -378,11 +379,11 @@ public class MarcXmlFilter
     public void endCollection()
     {
         try {
-            if(prettyPrinting) ch.ignorableWhitespace("\n".toCharArray(), 0, 1);
+            if (prettyPrinting) ch.ignorableWhitespace("\n".toCharArray(), 0, 1);
             ch.endElement(NS_URI, "collection", "collection");
             ch.endPrefixMapping("");
             ch.endDocument();
-        } catch(SAXException e) {
+        } catch (SAXException e) {
             log.error("Se ha producido un error al añadir los elementos de fin de documento", e);
         }
     }
@@ -403,11 +404,11 @@ public class MarcXmlFilter
 
     private void setCharacterConverter(boolean convert)
     {
-        if(convert) {
+        if (convert) {
             try {
                 charconv = (CharacterConverter)CharacterConverterLoader.createCharacterConverter("org.marc4j.charconv",
                     "org.marc4j.util.AnselToUnicode");
-            } catch(CharacterConverterLoaderException e) {
+            } catch (CharacterConverterLoaderException e) {
                 log.error("Se ha producido un error al realizar la conversión", e);
             }
         }

@@ -20,28 +20,31 @@
  */
 package org.marc4j.util;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+
+import org.apache.log4j.Category;
+import org.marc4j.helpers.ErrorHandlerImpl;
+import org.marc4j.marcxml.Converter;
+import org.marc4j.marcxml.MarcXmlReader;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
-import org.xml.sax.InputSource;
-import org.apache.log4j.Category;
-import org.marc4j.helpers.ErrorHandlerImpl;
-import org.marc4j.marcxml.DoctypeDecl;
-import org.marc4j.marcxml.MarcXmlReader;
-import javax.xml.parsers.SAXParserFactory;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.Source;
-import javax.xml.transform.Result;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.sax.SAXResult;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.transform.stream.StreamResult;
-import org.marc4j.marcxml.Converter;
 
 /**
  * <p>
@@ -110,65 +113,65 @@ public class MarcXmlWriter
         String convert = null;
         long start = System.currentTimeMillis();
 
-        for(int i = 0; i < args.length; i++) {
-            if(args[i].equals("-xsl")) {
-                if(i == args.length - 1) {
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("-xsl")) {
+                if (i == args.length - 1) {
                     usage();
                 }
                 stylesheet = args[++i].trim();
-            } else if(args[i].equals("-out")) {
-                if(i == args.length - 1) {
+            } else if (args[i].equals("-out")) {
+                if (i == args.length - 1) {
                     usage();
                 }
                 output = args[++i].trim();
-            } else if(args[i].equals("-ie")) {
-                if(i == args.length - 1) {
+            } else if (args[i].equals("-ie")) {
+                if (i == args.length - 1) {
                     usage();
                 }
                 inputEncoding = args[++i].trim();
-            } else if(args[i].equals("-oe")) {
-                if(i == args.length - 1) {
+            } else if (args[i].equals("-oe")) {
+                if (i == args.length - 1) {
                     usage();
                 }
                 outputEncoding = args[++i].trim();
-            } else if(args[i].equals("-dtd")) {
+            } else if (args[i].equals("-dtd")) {
                 dtd = true;
-            } else if(args[i].equals("-xsd")) {
+            } else if (args[i].equals("-xsd")) {
                 xsd = true;
-            } else if(args[i].equals("-convert")) {
-                if(i == args.length - 1) {
+            } else if (args[i].equals("-convert")) {
+                if (i == args.length - 1) {
                     usage();
                 }
                 convert = args[++i].trim();
-            } else if(args[i].equals("-usage")) {
+            } else if (args[i].equals("-usage")) {
                 usage();
-            } else if(args[i].equals("-help")) {
+            } else if (args[i].equals("-help")) {
                 usage();
             } else {
                 input = args[i].trim();
 
                 // Must be last arg
-                if(i != args.length - 1) {
+                if (i != args.length - 1) {
                     usage();
                 }
             }
         }
-        if(input == null) {
+        if (input == null) {
             usage();
         }
 
         try {
             MarcXmlReader producer = new MarcXmlReader();
             producer.setProperty("http://marc4j.org/properties/error-handler", new ErrorHandlerImpl());
-            if(xsd) producer.setProperty("http://marc4j.org/properties/schema-location",
+            if (xsd) producer.setProperty("http://marc4j.org/properties/schema-location",
                 "http://www.loc.gov/MARC21/slim " + "http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd");
-            if(convert != null) {
+            if (convert != null) {
                 CharacterConverter charconv = null;
-                if("ANSEL".equals(convert))
+                if ("ANSEL".equals(convert))
                     charconv = new AnselToUnicode();
-                else if("ISO5426".equals(convert))
+                else if ("ISO5426".equals(convert))
                     charconv = new Iso5426ToUnicode();
-                else if("ISO6937".equals(convert))
+                else if ("ISO6937".equals(convert))
                     charconv = new Iso6937ToUnicode();
                 else {
                     System.err.println("Unknown character set");
@@ -186,7 +189,7 @@ public class MarcXmlWriter
             // reader = new BufferedReader(new InputStreamReader(
             // new FileInputStream(input), "UTF8"));
 
-            if(inputEncoding != null)
+            if (inputEncoding != null)
                 reader = new BufferedReader(new InputStreamReader(new FileInputStream(input), inputEncoding));
             else
                 reader = new BufferedReader(new InputStreamReader(new FileInputStream(input)));
@@ -201,11 +204,11 @@ public class MarcXmlWriter
             // writer = new BufferedWriter(new OutputStreamWriter(
             // new FileOutputStream(output), "UTF8"));
 
-            if(output == null && outputEncoding != null)
+            if (output == null && outputEncoding != null)
                 writer = new BufferedWriter(new OutputStreamWriter(System.out, outputEncoding));
-            else if(output != null && outputEncoding == null)
+            else if (output != null && outputEncoding == null)
                 writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(output)));
-            else if(output != null && outputEncoding != null)
+            else if (output != null && outputEncoding != null)
                 writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(output), outputEncoding));
             else
                 writer = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -213,22 +216,22 @@ public class MarcXmlWriter
             Result result = new StreamResult(writer);
 
             Converter converter = new Converter();
-            if(stylesheet != null) {
+            if (stylesheet != null) {
                 Source style = new StreamSource(new File(stylesheet).toURL().toString());
                 converter.convert(style, source, result);
             } else {
                 converter.convert(source, result);
             }
 
-        } catch(SAXNotSupportedException e) {
+        } catch (SAXNotSupportedException e) {
             log.error("No se soporta la operación indicada", e);
-        } catch(SAXNotRecognizedException e) {
+        } catch (SAXNotRecognizedException e) {
             log.error("Identificador no reconocido", e);
-        } catch(SAXException e) {
+        } catch (SAXException e) {
             log.error("Se ha producido un error al convertir los registros MARC", e);
-        } catch(TransformerException e) {
+        } catch (TransformerException e) {
             log.error("Se ha producido un error durante la transformación de los registros", e);
-        } catch(IOException e) {
+        } catch (IOException e) {
             log.error("Se ha producido un error al escribir los registros en MARCXML", e);
         }
         System.err.println("Total time: " + (System.currentTimeMillis() - start) + " miliseconds");

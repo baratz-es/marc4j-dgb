@@ -22,21 +22,19 @@ package org.marc4j.marcxml;
 
 import java.io.IOException;
 import java.util.Hashtable;
-import org.xml.sax.XMLReader;
-import org.xml.sax.SAXException;
+
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.Source;
-import javax.xml.transform.Result;
-import javax.xml.transform.Templates;
-import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.sax.SAXResult;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.transform.stream.StreamResult;
-import org.marc4j.marcxml.MarcXmlHandler;
-import org.marc4j.marcxml.MarcResult;
+import javax.xml.transform.sax.SAXSource;
+
 import org.marc4j.MarcReader;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 
 /**
  * <p>
@@ -77,7 +75,7 @@ public class Converter
     public void convert(Source source, Result result)
         throws TransformerException, SAXException, IOException
     {
-        if(source instanceof MarcSource && result instanceof MarcResult) {
+        if (source instanceof MarcSource && result instanceof MarcResult) {
             convert((MarcSource)source, (MarcResult)result);
         } else {
             Source stylesheet = null;
@@ -98,10 +96,10 @@ public class Converter
     public void convert(Source stylesheet, Source source, Result result)
         throws TransformerException, SAXException, IOException
     {
-        if(result instanceof MarcResult) {
+        if (result instanceof MarcResult) {
             convert(stylesheet, (SAXSource)source, (MarcResult)result);
         } else {
-            if(stylesheet != null) {
+            if (stylesheet != null) {
                 Templates templates = tryCache(stylesheet);
                 transformer = templates.newTransformer();
             } else {
@@ -117,7 +115,7 @@ public class Converter
     {
         MarcXmlHandler handler = new MarcXmlHandler();
         handler.setMarcHandler(result.getHandler());
-        if(stylesheet != null) {
+        if (stylesheet != null) {
             SAXResult out = new SAXResult(handler);
             Templates templates = tryCache(stylesheet);
             transformer = templates.newTransformer();
@@ -133,16 +131,16 @@ public class Converter
         throws IOException
     {
         MarcReader reader;
-        if(source.getMarcReader() != null)
+        if (source.getMarcReader() != null)
             reader = source.getMarcReader();
         else
             reader = new MarcReader();
         reader.setMarcHandler(result.getHandler());
-        if(source.getReader() != null)
+        if (source.getReader() != null)
             reader.parse(source.getReader());
-        else if(source.getInputStream() != null)
+        else if (source.getInputStream() != null)
             reader.parse(source.getInputStream());
-        else if(source.getSystemId() != null)
+        else if (source.getSystemId() != null)
             reader.parse(source.getSystemId());
         else
             throw new IOException("Invalid MarcSource object");
@@ -153,7 +151,7 @@ public class Converter
     {
         String uri = stylesheet.getSystemId();
         Templates templates = (Templates)cache.get(uri);
-        if(templates == null) {
+        if (templates == null) {
             factory = TransformerFactory.newInstance();
             templates = factory.newTemplates(stylesheet);
             cache.put(uri, templates);

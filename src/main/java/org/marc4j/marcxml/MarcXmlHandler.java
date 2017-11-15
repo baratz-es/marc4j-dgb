@@ -22,20 +22,16 @@ package org.marc4j.marcxml;
 
 import java.util.HashMap;
 
-import org.xml.sax.Attributes;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
 import org.marc4j.MarcHandler;
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Leader;
 import org.marc4j.marc.MarcException;
 import org.marc4j.marc.Subfield;
-import org.marc4j.util.UnicodeToAnsel;
+import org.xml.sax.Attributes;
+import org.xml.sax.Locator;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * <p>
@@ -145,11 +141,11 @@ public class MarcXmlHandler
 
         // If the element isn't in the map, ignore it. Might be part of a
         // different namespace.
-        if(el_type == null) return;
+        if (el_type == null) return;
 
-        switch(el_type.intValue()) {
+        switch (el_type.intValue()) {
             case COLLECTION_ID:
-                if(mh != null) mh.startCollection();
+                if (mh != null) mh.startCollection();
                 break;
 
             case LEADER_ID:
@@ -157,18 +153,18 @@ public class MarcXmlHandler
                 break;
 
             case CONTROLFIELD_ID:
-                if(atts.getLength() < 1) throw new SAXParseException("Invalid controlfield", locator);
+                if (atts.getLength() < 1) throw new SAXParseException("Invalid controlfield", locator);
                 tag = atts.getValue(TAG_ATTR);
 
                 data.delete(0, data.length());
                 break;
 
             case DATAFIELD_ID:
-                if(atts.getLength() < 3) throw new SAXParseException("Invalid datafield", locator);
+                if (atts.getLength() < 3) throw new SAXParseException("Invalid datafield", locator);
                 tag = atts.getValue(TAG_ATTR);
                 String ind1 = atts.getValue(IND_1_ATTR);
                 String ind2 = atts.getValue(IND_2_ATTR);
-                if(mh != null) mh.startDataField(tag, ind1.charAt(0), ind2.charAt(0), DataField.EMPTY_ID);
+                if (mh != null) mh.startDataField(tag, ind1.charAt(0), ind2.charAt(0), DataField.EMPTY_ID);
 
                 data.delete(0, data.length());
                 break;
@@ -182,7 +178,7 @@ public class MarcXmlHandler
 
     public void characters(char[] ch, int start, int length)
     {
-        if(data != null) {
+        if (data != null) {
             data.append(ch, start, length);
         }
     }
@@ -196,38 +192,38 @@ public class MarcXmlHandler
 
         // If the element isn't in the map, ignore it. Might be part of a
         // different namespace.
-        if(el_type == null) return;
+        if (el_type == null) return;
 
-        switch(el_type.intValue()) {
+        switch (el_type.intValue()) {
             case COLLECTION_ID:
-                if(mh != null) mh.endCollection();
+                if (mh != null) mh.endCollection();
 
                 break;
 
             case RECORD_ID:
-                if(mh != null) mh.endRecord();
+                if (mh != null) mh.endRecord();
                 break;
 
             case LEADER_ID:
                 try {
-                    if(mh != null) mh.startRecord(new Leader(data.toString()));
-                } catch(MarcException e) {
+                    if (mh != null) mh.startRecord(new Leader(data.toString()));
+                } catch (MarcException e) {
                     throw new SAXParseException("Unable to unmarshal leader", locator);
                 }
                 break;
 
             case CONTROLFIELD_ID:
-                if(mh != null) mh.controlField(tag, data.toString().toCharArray(), ControlField.EMPTY_ID);
+                if (mh != null) mh.controlField(tag, data.toString().toCharArray(), ControlField.EMPTY_ID);
                 break;
 
             case DATAFIELD_ID:
-                if(mh != null) mh.endDataField(tag);
+                if (mh != null) mh.endDataField(tag);
                 tag = null;
                 break;
 
             case SUBFIELD_ID:
                 char[] ch = data.toString().toCharArray();
-                if(mh != null) mh.subfield(code.charAt(0), ch, Subfield.EMPTY_LINK_CODE);
+                if (mh != null) mh.subfield(code.charAt(0), ch, Subfield.EMPTY_LINK_CODE);
                 code = null;
                 break;
         }

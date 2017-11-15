@@ -20,14 +20,19 @@
  */
 package org.marc4j.util;
 
-import java.io.Writer;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.IOException;
+import java.io.Writer;
 
 import org.apache.log4j.Category;
-import org.marc4j.marc.*;
 import org.marc4j.MarcHandler;
+import org.marc4j.marc.ControlField;
+import org.marc4j.marc.DataField;
+import org.marc4j.marc.Leader;
+import org.marc4j.marc.MarcException;
+import org.marc4j.marc.Record;
+import org.marc4j.marc.Subfield;
 
 /**
  * <p>
@@ -127,7 +132,7 @@ public class MarcWriter
      */
     public void setUnicodeToAnsel(boolean convert)
     {
-        if(convert) charconv = new UnicodeToAnsel();
+        if (convert) charconv = new UnicodeToAnsel();
     }
 
     /**
@@ -173,7 +178,7 @@ public class MarcWriter
      */
     public void startCollection()
     {
-        if(out == null) System.exit(0);
+        if (out == null) System.exit(0);
     }
 
     public void startRecord(Leader leader)
@@ -197,7 +202,7 @@ public class MarcWriter
     @Override
     public void subfield(char code, char[] data, String linkCode)
     {
-        if(charconv != null)
+        if (charconv != null)
             datafield.add(new Subfield(code, charconv.convert(data), linkCode));
         else
             datafield.add(new Subfield(code, data, linkCode));
@@ -212,9 +217,9 @@ public class MarcWriter
     {
         try {
             rawWrite(record.marshal());
-        } catch(IOException e) {
+        } catch (IOException e) {
             log.error("Se ha producido un error al escribir en la salida", e);
-        } catch(MarcException e) {
+        } catch (MarcException e) {
             log.error("Se ha producido un error al procesar el registro", e);
         }
     }
@@ -224,7 +229,7 @@ public class MarcWriter
         try {
             out.flush();
             out.close();
-        } catch(IOException e) {
+        } catch (IOException e) {
             log.error("Se ha producido un error al finalizar la colección", e);
         }
     }

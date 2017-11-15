@@ -19,25 +19,20 @@
  */
 package org.marc4j.util;
 
-import org.xml.sax.Attributes;
-import org.xml.sax.Locator;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Hashtable;
 import java.util.Vector;
-import javax.xml.parsers.SAXParserFactory;
+
 import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Source;
-import javax.xml.transform.Result;
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.stream.StreamSource;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.Locator;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * <p>
@@ -98,25 +93,25 @@ public class CodeTableHandler
     public void startElement(String uri, String name, String qName, Attributes atts)
         throws SAXParseException
     {
-        if(name.equals("characterSet")) {
+        if (name.equals("characterSet")) {
             charset = new Hashtable();
             isocode = Integer.valueOf(atts.getValue("ISOcode"), 16);
             combining = new Vector();
-        } else if(name.equals("marc"))
+        } else if (name.equals("marc"))
             data = new StringBuffer();
-        else if(name.equals("codeTables")) {
+        else if (name.equals("codeTables")) {
             sets = new Hashtable();
             combiningchars = new Hashtable();
-        } else if(name.equals("ucs"))
+        } else if (name.equals("ucs"))
             data = new StringBuffer();
-        else if(name.equals("isCombining"))
+        else if (name.equals("isCombining"))
             data = new StringBuffer();
-        else if(name.equals("code")) iscombining = false;
+        else if (name.equals("code")) iscombining = false;
     }
 
     public void characters(char[] ch, int start, int length)
     {
-        if(data != null) {
+        if (data != null) {
             data.append(ch, start, length);
         }
     }
@@ -124,22 +119,22 @@ public class CodeTableHandler
     public void endElement(String uri, String name, String qName)
         throws SAXParseException
     {
-        if(name.equals("characterSet")) {
+        if (name.equals("characterSet")) {
             sets.put(isocode, charset);
             combiningchars.put(isocode, combining);
             combining = null;
             charset = null;
-        } else if(name.equals("marc")) {
+        } else if (name.equals("marc")) {
             marc = Integer.valueOf(data.toString(), 16);
-        } else if(name.equals("ucs")) {
+        } else if (name.equals("ucs")) {
             ucs = new Character((char)Integer.parseInt(data.toString(), 16));
-        } else if(name.equals("code")) {
-            if(iscombining) {
+        } else if (name.equals("code")) {
+            if (iscombining) {
                 combining.add(marc);
             }
             charset.put(marc, ucs);
-        } else if(name.equals("isCombining")) {
-            if(data.toString().equals("true")) iscombining = true;
+        } else if (name.equals("isCombining")) {
+            if (data.toString().equals("true")) iscombining = true;
         }
 
         data = null;
@@ -170,7 +165,7 @@ public class CodeTableHandler
             // System.out.println( charsets.toString() );
             System.out.println(saxUms.getCombiningChars());
 
-        } catch(Exception exc) {
+        } catch (Exception exc) {
             exc.printStackTrace(System.out);
             // System.err.println( "Exception: " + exc );
         }

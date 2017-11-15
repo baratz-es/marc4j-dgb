@@ -20,7 +20,6 @@
  */
 package org.marc4j.util;
 
-import java.io.CharArrayReader;
 import java.io.IOException;
 import java.util.Hashtable;
 
@@ -56,7 +55,7 @@ public class UnicodeToAnsel
         // }
         try {
             rct = new ReverseCodeTable(ResourcesUtil.getStream("/org/marc4j/util/resources/codetables.xml"));
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new ConfigException(e);
         }
     }
@@ -97,29 +96,29 @@ public class UnicodeToAnsel
 
         boolean technique1 = false;
 
-        for(int i = 0; i < data.length; i++) {
+        for (int i = 0; i < data.length; i++) {
             Character c = new Character(data[i]);
             Integer table;
             StringBuffer marc = new StringBuffer();
             Hashtable h = rct.codeTableHash(c);
 
-            if(h.keySet().contains(ctt.getPrevious(CodeTableTracker.G0))) {
+            if (h.keySet().contains(ctt.getPrevious(CodeTableTracker.G0))) {
                 ctt.makePreviousCurrent();
                 marc.append((char[])h.get(ctt.getPrevious(CodeTableTracker.G0)));
-            } else if(h.keySet().contains(ctt.getPrevious(CodeTableTracker.G1))) {
+            } else if (h.keySet().contains(ctt.getPrevious(CodeTableTracker.G1))) {
                 ctt.makePreviousCurrent();
                 marc.append((char[])h.get(ctt.getPrevious(CodeTableTracker.G1)));
             } else {
                 table = (Integer)h.keySet().iterator().next();
                 char[] marc8 = (char[])h.get(table);
 
-                if(marc8.length == 3) {
+                if (marc8.length == 3) {
                     marc.append(ESC);
                     marc.append(G0multibyte);
                     ctt.setPrevious(CodeTableTracker.G0, table);
-                } else if(marc8[0] < 0x80) {
+                } else if (marc8[0] < 0x80) {
                     marc.append(ESC);
-                    if((table.intValue() == 0x62) || (table.intValue() == 0x70)) {
+                    if ((table.intValue() == 0x62) || (table.intValue() == 0x70)) {
                         technique1 = true;
                     } else {
                         marc.append(G0);
@@ -134,13 +133,13 @@ public class UnicodeToAnsel
                 marc.append(marc8);
             }
 
-            if(rct.isCombining(c))
+            if (rct.isCombining(c))
                 sb.insert(sb.length() - 1, marc.toString());
             else
                 sb.append(marc);
         }
 
-        if(ctt.getPrevious(CodeTableTracker.G0).intValue() != ASCII) {
+        if (ctt.getPrevious(CodeTableTracker.G0).intValue() != ASCII) {
             sb.append(ESC);
             sb.append(G0);
             sb.append((char)ASCII);

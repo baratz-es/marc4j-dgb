@@ -20,9 +20,6 @@
  */
 package org.marc4j.util;
 
-import java.io.CharArrayReader;
-import java.io.IOException;
-
 /**
  * <p>
  * A utility to convert UCS/Unicode data to ISO 6937.
@@ -68,13 +65,13 @@ public class UnicodeToIso6937
     public char[] convert(char[] data)
     {
         StringBuffer sb = new StringBuffer();
-        for(int i = 0; i < data.length; i++) {
+        for (int i = 0; i < data.length; i++) {
             char c = data[i];
-            if(c < 128)
+            if (c < 128)
                 sb.append(c);
             else {
                 int d = convert(c);
-                if(d < 256) {
+                if (d < 256) {
                     sb.append((char)d);
                 } else {
                     sb.append((char)(d / 256));
@@ -87,7 +84,7 @@ public class UnicodeToIso6937
 
     private int convert(int i)
     {
-        switch(i) {
+        switch (i) {
             case 0x00A0:
                 return 0xA0; // 10/00 NO-BREAK SPACE
             case 0x00A1:

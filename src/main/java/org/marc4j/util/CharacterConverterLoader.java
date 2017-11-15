@@ -66,10 +66,10 @@ public final class CharacterConverterLoader
             name = System.getProperty(label);
 
             // Properties file
-            if(name == null) {
+            if (name == null) {
                 String javaHome = System.getProperty("java.home");
                 File file = new File(new File(javaHome, "lib"), "marc4j.properties");
-                if(file.exists() == true) {
+                if (file.exists() == true) {
                     FileInputStream in = new FileInputStream(file);
                     Properties props = new Properties();
 
@@ -80,16 +80,16 @@ public final class CharacterConverterLoader
             }
 
             // Use default class
-            if(name == null) name = defaultClass;
+            if (name == null) name = defaultClass;
 
-            if(name != null) {
+            if (name != null) {
                 // Create an instance of the converter class
                 Class c = loader.loadClass(name);
                 return c.newInstance();
             } else
                 return null;
 
-        } catch(Throwable e) {
+        } catch (Throwable e) {
             throw new CharacterConverterLoaderException("Unable to load converter class", e);
         }
     }

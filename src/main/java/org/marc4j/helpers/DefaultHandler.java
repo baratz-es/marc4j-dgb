@@ -20,8 +20,8 @@
  */
 package org.marc4j.helpers;
 
-import org.marc4j.MarcHandler;
 import org.marc4j.ErrorHandler;
+import org.marc4j.MarcHandler;
 import org.marc4j.MarcReaderException;
 import org.marc4j.marc.Leader;
 

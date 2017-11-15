@@ -20,22 +20,11 @@
  */
 package org.marc4j.marcxml;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 
-import org.xml.sax.ContentHandler;
-import org.xml.sax.InputSource;
-import org.xml.sax.Attributes;
-import org.xml.sax.DTDHandler;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXNotRecognizedException;
-import org.xml.sax.SAXNotSupportedException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.helpers.AttributesImpl;
-import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.ext.LexicalHandler;
 import org.apache.log4j.Category;
 import org.marc4j.MarcHandler;
 // import org.marc4j.ErrorHandler;
@@ -44,6 +33,19 @@ import org.marc4j.marc.Leader;
 import org.marc4j.util.CharacterConverter;
 import org.marc4j.util.CharacterConverterLoader;
 import org.marc4j.util.CharacterConverterLoaderException;
+import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.DTDHandler;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.ext.LexicalHandler;
+import org.xml.sax.helpers.AttributesImpl;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * <p>
@@ -200,15 +202,15 @@ public class MarcXmlReader
     public void setProperty(String name, Object obj)
         throws SAXNotRecognizedException, SAXNotSupportedException
     {
-        if(DOC_TYPE_DECL.equals(name))
+        if (DOC_TYPE_DECL.equals(name))
             this.doctype = (DoctypeDecl)obj;
-        else if(ERROR_HANDLER.equals(name))
+        else if (ERROR_HANDLER.equals(name))
             this.eh = (org.marc4j.ErrorHandler)obj;
-        else if(SCHEMA_LOC.equals(name))
+        else if (SCHEMA_LOC.equals(name))
             this.schemaLocation = (String)obj;
-        else if(CHARACTER_CONVERTER.equals(name))
+        else if (CHARACTER_CONVERTER.equals(name))
             this.charconv = (CharacterConverter)obj;
-        else if(LEXICAL_HANDLER.equals(name))
+        else if (LEXICAL_HANDLER.equals(name))
             lh = (LexicalHandler)obj;
         else
             throw new SAXNotRecognizedException("Unrecongnized property: " + name);
@@ -224,10 +226,10 @@ public class MarcXmlReader
     public Object getProperty(String name)
         throws SAXNotRecognizedException, SAXNotSupportedException
     {
-        if(DOC_TYPE_DECL.equals(name)) return doctype;
-        if(ERROR_HANDLER.equals(name)) return eh;
-        if(SCHEMA_LOC.equals(name)) return schemaLocation;
-        if(CHARACTER_CONVERTER.equals(name)) return charconv;
+        if (DOC_TYPE_DECL.equals(name)) return doctype;
+        if (ERROR_HANDLER.equals(name)) return eh;
+        if (SCHEMA_LOC.equals(name)) return schemaLocation;
+        if (CHARACTER_CONVERTER.equals(name)) return charconv;
         throw new SAXNotRecognizedException("Unrecongnized property: " + name);
     }
 
@@ -242,13 +244,13 @@ public class MarcXmlReader
     public void setFeature(String name, boolean value)
         throws SAXNotRecognizedException, SAXNotSupportedException
     {
-        if("http://xml.org/sax/features/namespaces".equals(name) && value)
+        if ("http://xml.org/sax/features/namespaces".equals(name) && value)
             return;
-        else if("http://xml.org/sax/features/namespace-prefixes".equals(name) && !value)
+        else if ("http://xml.org/sax/features/namespace-prefixes".equals(name) && !value)
             return;
-        else if(ANSEL_TO_UNICODE.equals(name))
+        else if (ANSEL_TO_UNICODE.equals(name))
             setCharacterConverter(true);
-        else if(PRETTY_PRINTING.equals(name))
+        else if (PRETTY_PRINTING.equals(name))
             this.prettyPrinting = value;
         else
             throw new SAXNotRecognizedException("Unrecongnized feature: " + name);
@@ -264,12 +266,12 @@ public class MarcXmlReader
     public boolean getFeature(String name)
         throws SAXNotRecognizedException
     {
-        if("http://xml.org/sax/features/namespaces".equals(name)) return true;
-        if("http://xml.org/sax/features/namespace-prefixes".equals(name)) return false;
-        if(ANSEL_TO_UNICODE.equals(name)) {
-            if(charconv != null) return true;
+        if ("http://xml.org/sax/features/namespaces".equals(name)) return true;
+        if ("http://xml.org/sax/features/namespace-prefixes".equals(name)) return false;
+        if (ANSEL_TO_UNICODE.equals(name)) {
+            if (charconv != null) return true;
         }
-        if(PRETTY_PRINTING.equals(name)) return prettyPrinting;
+        if (PRETTY_PRINTING.equals(name)) return prettyPrinting;
         throw new SAXNotRecognizedException("Unrecongnized feature: " + name);
     }
 
@@ -296,7 +298,7 @@ public class MarcXmlReader
      */
     public void parse(InputSource input)
     {
-        if(ch != null)
+        if (ch != null)
             ch = getContentHandler();
         else
             ch = new DefaultHandler();
@@ -305,11 +307,11 @@ public class MarcXmlReader
             // Convert the InputSource into a BufferedReader.
             BufferedReader br = null;
 
-            if(input.getCharacterStream() != null) {
+            if (input.getCharacterStream() != null) {
                 br = new BufferedReader(input.getCharacterStream());
-            } else if(input.getByteStream() != null) {
+            } else if (input.getByteStream() != null) {
                 br = new BufferedReader(new InputStreamReader(input.getByteStream(), "ISO8859_1"));
-            } else if(input.getSystemId() != null) {
+            } else if (input.getSystemId() != null) {
                 java.net.URL url = new URL(input.getSystemId());
                 br = new BufferedReader(new InputStreamReader(url.openStream(), "ISO8859_1"));
             } else {
@@ -323,12 +325,12 @@ public class MarcXmlReader
             marcReader.setMarcHandler(this);
 
             // Register the ErrorHandler implementation.
-            if(eh != null) marcReader.setErrorHandler(eh);
+            if (eh != null) marcReader.setErrorHandler(eh);
 
             // Send the file to the parse method.
             marcReader.parse(br);
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             log.error("Se ha producido un error al realizar la conversión", e);
         }
 
@@ -350,21 +352,21 @@ public class MarcXmlReader
             ch.startDocument();
 
             // Report document type declaration
-            if(lh != null && doctype != null && schemaLocation == null) {
+            if (lh != null && doctype != null && schemaLocation == null) {
                 lh.startDTD(doctype.getName(), doctype.getPublicId(), doctype.getSystemId());
                 lh.endDTD();
             }
 
             // Outputting namespace declarations through the attribute object,
             // since the startPrefixMapping refuses to output namespace declarations.
-            if(schemaLocation != null) {
+            if (schemaLocation != null) {
                 atts.addAttribute("", "xsi", "xmlns:xsi", "CDATA", NS_XSI);
                 atts.addAttribute(NS_XSI, "schemaLocation", "xsi:schemaLocation", "CDATA", schemaLocation);
             }
 
             // Do not output the namespace declaration for MARCXML
             // together with a document type declaration
-            if(doctype == null) atts.addAttribute("", "", "xmlns", "CDATA", NS_URI);
+            if (doctype == null) atts.addAttribute("", "", "xmlns", "CDATA", NS_URI);
 
             // Report start of prefix mapping for MARCXML
             // OK together with Document Type Delcaration?
@@ -373,7 +375,7 @@ public class MarcXmlReader
             // Report root element
             ch.startElement(NS_URI, "collection", "collection", atts);
 
-        } catch(SAXException se) {
+        } catch (SAXException se) {
             log.error("Se ha producido un error al añadir los elementos de inicio de documento", se);
         }
     }
@@ -388,15 +390,15 @@ public class MarcXmlReader
     public void startRecord(Leader leader)
     {
         try {
-            if(prettyPrinting) ch.ignorableWhitespace("\n  ".toCharArray(), 0, 3);
+            if (prettyPrinting) ch.ignorableWhitespace("\n  ".toCharArray(), 0, 3);
             ch.startElement(NS_URI, "record", "record", EMPTY_ATTS);
-            if(prettyPrinting) ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
+            if (prettyPrinting) ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
 
             // Se mira si el tipo y el nivel de la cabecera son correctos.
             // Si no es así se modifican para que sean monografía
             Leader leaderCorrecto = null;
-            if(this.isCorrectoTipoActual(leader)) {
-                if(this.isCorrectoNivelBibliografico(leader)) {
+            if (this.isCorrectoTipoActual(leader)) {
+                if (this.isCorrectoNivelBibliografico(leader)) {
                     leaderCorrecto = leader;
                 } else {
                     leaderCorrecto = new Leader(leader.marshal());
@@ -405,13 +407,13 @@ public class MarcXmlReader
             } else {
                 leaderCorrecto = new Leader(leader.marshal());
                 setTipoMonografia(leaderCorrecto);
-                if(!this.isCorrectoNivelBibliografico(leaderCorrecto)) {
+                if (!this.isCorrectoNivelBibliografico(leaderCorrecto)) {
                     setNivelBibliograficoMonografia(leaderCorrecto);
                 }
             }
 
             writeElement(NS_URI, "leader", "leader", EMPTY_ATTS, leaderCorrecto.marshal());
-        } catch(SAXException se) {
+        } catch (SAXException se) {
             log.error("Se ha producido un error al añadir los elementos de inicio de registro", se);
         }
     }
@@ -431,9 +433,9 @@ public class MarcXmlReader
         try {
             AttributesImpl atts = new AttributesImpl();
             atts.addAttribute("", "tag", "tag", "CDATA", tag);
-            if(prettyPrinting) ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
+            if (prettyPrinting) ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
             writeElement(NS_URI, "controlfield", "controlfield", atts, data);
-        } catch(SAXException se) {
+        } catch (SAXException se) {
             log.error("Se ha producido un error al añadir el nodo control", se);
         }
     }
@@ -460,9 +462,9 @@ public class MarcXmlReader
             atts.addAttribute("", "tag", "tag", "CDATA", tag);
             atts.addAttribute("", "ind1", "ind1", "CDATA", String.valueOf(ind1));
             atts.addAttribute("", "ind2", "ind2", "CDATA", String.valueOf(ind2));
-            if(prettyPrinting) ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
+            if (prettyPrinting) ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
             ch.startElement(NS_URI, "datafield", "datafield", atts);
-        } catch(SAXException se) {
+        } catch (SAXException se) {
             log.error("Se ha producido un error al añadir los elementos de inicio de campo", se);
         }
     }
@@ -482,16 +484,16 @@ public class MarcXmlReader
         try {
             AttributesImpl atts = new AttributesImpl();
             atts.addAttribute("", "code", "code", "CDATA", String.valueOf(code));
-            if(prettyPrinting) ch.ignorableWhitespace("\n      ".toCharArray(), 0, 7);
+            if (prettyPrinting) ch.ignorableWhitespace("\n      ".toCharArray(), 0, 7);
             ch.startElement(NS_URI, "subfield", "subfield", atts);
-            if(charconv != null) {
+            if (charconv != null) {
                 char[] unicodeData = charconv.convert(data);
                 ch.characters(unicodeData, 0, unicodeData.length);
             } else {
                 ch.characters(data, 0, data.length);
             }
             ch.endElement(NS_URI, "subfield", "subfield");
-        } catch(SAXException se) {
+        } catch (SAXException se) {
             log.error("Se ha producido un error al crear el subcampo", se);
         }
     }
@@ -508,7 +510,7 @@ public class MarcXmlReader
         try {
             ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
             ch.endElement(NS_URI, "datafield", "datafield");
-        } catch(SAXException se) {
+        } catch (SAXException se) {
             log.error("Se ha producido un error al añadir los elementos de fin de campo", se);
         }
     }
@@ -522,9 +524,9 @@ public class MarcXmlReader
     public void endRecord()
     {
         try {
-            if(prettyPrinting) ch.ignorableWhitespace("\n  ".toCharArray(), 0, 3);
+            if (prettyPrinting) ch.ignorableWhitespace("\n  ".toCharArray(), 0, 3);
             ch.endElement(NS_URI, "record", "record");
-        } catch(SAXException se) {
+        } catch (SAXException se) {
             log.error("Se ha producido un error al añadir el elemento de fin de registro", se);
         }
     }
@@ -539,11 +541,11 @@ public class MarcXmlReader
     public void endCollection()
     {
         try {
-            if(prettyPrinting) ch.ignorableWhitespace("\n".toCharArray(), 0, 1);
+            if (prettyPrinting) ch.ignorableWhitespace("\n".toCharArray(), 0, 1);
             ch.endElement(NS_URI, "collection", "collection");
             ch.endPrefixMapping("");
             ch.endDocument();
-        } catch(SAXException e) {
+        } catch (SAXException e) {
             log.error("Se ha producido un error al añadir los elementos de fin de colección", e);
         }
     }
@@ -564,11 +566,11 @@ public class MarcXmlReader
 
     private void setCharacterConverter(boolean convert)
     {
-        if(convert) {
+        if (convert) {
             try {
                 charconv = (CharacterConverter)CharacterConverterLoader.createCharacterConverter("org.marc4j.charconv",
                     "org.marc4j.util.AnselToUnicode");
-            } catch(CharacterConverterLoaderException e) {
+            } catch (CharacterConverterLoaderException e) {
                 log.error("Se ha producido un error al obtener el carácter de conversión", e);
             }
         }
@@ -584,7 +586,7 @@ public class MarcXmlReader
     private boolean isCorrectoTipoActual(Leader leader)
     {
         char tipo = leader.getTypeOfRecord();
-        switch(tipo) {
+        switch (tipo) {
             case 'a':
             case 'c':
             case 'd':
@@ -634,7 +636,7 @@ public class MarcXmlReader
     private boolean isCorrectoNivelBibliografico(Leader leader)
     {
         char tipo = leader.getImplDefined1()[0];
-        switch(tipo) {
+        switch (tipo) {
             case 'a':
             case 'b':
             case 'c':
@@ -663,7 +665,7 @@ public class MarcXmlReader
     {
         char implDefined[] = leader.getImplDefined1();
         // Si la posición 7 es #, se cambia a ' '
-        if(implDefined[0] == '#') {
+        if (implDefined[0] == '#') {
             implDefined[0] = ' ';
         } else {
             implDefined[0] = 'm';
@@ -682,7 +684,7 @@ public class MarcXmlReader
     private char getIndicadorValido(char indicador)
     {
         indicador = Character.toLowerCase(indicador);
-        if(!Character.isLetterOrDigit(indicador)) {
+        if (!Character.isLetterOrDigit(indicador)) {
             indicador = ' ';
         }
         return indicador;
