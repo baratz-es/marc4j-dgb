@@ -99,9 +99,17 @@ public class Leader
     }
 
     public Leader(String ldr)
-        throws MarcException
     {
-        unmarshal(ldr);
+        this.unmarshal(ldr);
+    }
+
+    public static Leader newEmptyLeader()
+    {
+        Leader leader = new Leader();
+        leader.setImplDefined1(new char[2]);
+        leader.setImplDefined2(new char[3]);
+        leader.setEntryMap(new char[4]);
+        return leader;
     }
 
     /**
@@ -251,7 +259,7 @@ public class Leader
      */
     public int getRecordLength()
     {
-        return recordLength;
+        return this.recordLength;
     }
 
     /**
@@ -263,7 +271,7 @@ public class Leader
      */
     public char getRecordStatus()
     {
-        return recordStatus;
+        return this.recordStatus;
     }
 
     /**
@@ -275,7 +283,7 @@ public class Leader
      */
     public char getTypeOfRecord()
     {
-        return typeOfRecord;
+        return this.typeOfRecord;
     }
 
     /**
@@ -288,7 +296,7 @@ public class Leader
      */
     public char[] getImplDefined1()
     {
-        return implDefined1;
+        return this.implDefined1;
     }
 
     /**
@@ -300,7 +308,7 @@ public class Leader
      */
     public char getCharCodingScheme()
     {
-        return charCodingScheme;
+        return this.charCodingScheme;
     }
 
     /**
@@ -312,7 +320,7 @@ public class Leader
      */
     public int getIndicatorCount()
     {
-        return indicatorCount;
+        return this.indicatorCount;
     }
 
     /**
@@ -324,7 +332,7 @@ public class Leader
      */
     public int getSubfieldCodeLength()
     {
-        return subfieldCodeLength;
+        return this.subfieldCodeLength;
     }
 
     /**
@@ -336,7 +344,7 @@ public class Leader
      */
     public int getBaseAddressOfData()
     {
-        return baseAddressOfData;
+        return this.baseAddressOfData;
     }
 
     /**
@@ -349,7 +357,7 @@ public class Leader
      */
     public char[] getImplDefined2()
     {
-        return implDefined2;
+        return this.implDefined2;
     }
 
     /**
@@ -361,7 +369,7 @@ public class Leader
      */
     public char[] getEntryMap()
     {
-        return entryMap;
+        return this.entryMap;
     }
 
     /**
@@ -382,31 +390,35 @@ public class Leader
         try {
             String s;
             s = ldr.substring(0, 5);
-            if (isInteger(s))
-                setRecordLength(Integer.parseInt(s));
-            else
-                setRecordLength(0);
-            setRecordStatus(ldr.charAt(5));
-            setTypeOfRecord(ldr.charAt(6));
-            setImplDefined1(ldr.substring(7, 9).toCharArray());
-            setCharCodingScheme(ldr.charAt(9));
+            if (this.isInteger(s)) {
+                this.setRecordLength(Integer.parseInt(s));
+            } else {
+                this.setRecordLength(0);
+            }
+            this.setRecordStatus(ldr.charAt(5));
+            this.setTypeOfRecord(ldr.charAt(6));
+            this.setImplDefined1(ldr.substring(7, 9).toCharArray());
+            this.setCharCodingScheme(ldr.charAt(9));
             s = String.valueOf(ldr.charAt(10));
-            if (isInteger(s))
-                setIndicatorCount(Integer.parseInt(s));
-            else
-                setIndicatorCount(2);
+            if (this.isInteger(s)) {
+                this.setIndicatorCount(Integer.parseInt(s));
+            } else {
+                this.setIndicatorCount(2);
+            }
             s = String.valueOf(ldr.charAt(10));
-            if (isInteger(s))
-                setSubfieldCodeLength(Integer.parseInt(s));
-            else
-                setSubfieldCodeLength(2);
+            if (this.isInteger(s)) {
+                this.setSubfieldCodeLength(Integer.parseInt(s));
+            } else {
+                this.setSubfieldCodeLength(2);
+            }
             s = ldr.substring(12, 17);
-            if (isInteger(s))
-                setBaseAddressOfData(Integer.parseInt(s));
-            else
-                setBaseAddressOfData(0);
-            setImplDefined2(ldr.substring(17, 20).toCharArray());
-            setEntryMap(ldr.substring(20, 24).toCharArray());
+            if (this.isInteger(s)) {
+                this.setBaseAddressOfData(Integer.parseInt(s));
+            } else {
+                this.setBaseAddressOfData(0);
+            }
+            this.setImplDefined2(ldr.substring(17, 20).toCharArray());
+            this.setEntryMap(ldr.substring(20, 24).toCharArray());
         } catch (NumberFormatException e) {
             throw new MarcException("Unable to parse leader", e);
         }
@@ -423,23 +435,25 @@ public class Leader
     public String marshal()
     {
         return new StringBuffer()
-            .append(df.format(recordLength).toString())
-            .append(recordStatus)
-            .append(typeOfRecord)
-            .append(implDefined1)
-            .append(charCodingScheme)
-            .append(indicatorCount)
-            .append(subfieldCodeLength)
-            .append(df.format(baseAddressOfData).toString())
-            .append(implDefined2)
-            .append(entryMap)
+            .append(this.df.format(this.recordLength).toString())
+            .append(this.recordStatus)
+            .append(this.typeOfRecord)
+            .append(this.implDefined1)
+            .append(this.charCodingScheme)
+            .append(this.indicatorCount)
+            .append(this.subfieldCodeLength)
+            .append(this.df.format(this.baseAddressOfData).toString())
+            .append(this.implDefined2)
+            .append(this.entryMap)
             .toString();
     }
 
     private boolean isInteger(String value)
     {
         int len = value.length();
-        if (len == 0) return false;
+        if (len == 0) {
+            return false;
+        }
         int i = 0;
         do {
             switch (value.charAt(i)) {
@@ -464,6 +478,7 @@ public class Leader
     /*
      * @see java.lang.Object#clone()
      */
+    @Override
     public Object clone()
     {
         try {
@@ -492,17 +507,17 @@ public class Leader
     public String toString()
     {
         StringBuilder builder = new StringBuilder();
-        builder.append("Leader [recordLength=").append(recordLength);
-        builder.append(",  recordStatus=").append(recordStatus);
-        builder.append(",  typeOfRecord=").append(typeOfRecord);
-        builder.append(",  implDefined1=").append(Arrays.toString(implDefined1));
-        builder.append(",  charCodingScheme=").append(charCodingScheme);
-        builder.append(",  indicatorCount=").append(indicatorCount);
-        builder.append(",  subfieldCodeLength=").append(subfieldCodeLength);
-        builder.append(",  baseAddressOfData=").append(baseAddressOfData);
-        builder.append(",  implDefined2=").append(Arrays.toString(implDefined2));
-        builder.append(",  entryMap=").append(Arrays.toString(entryMap));
-        builder.append(",  df=").append(df);
+        builder.append("Leader [recordLength=").append(this.recordLength);
+        builder.append(",  recordStatus=").append(this.recordStatus);
+        builder.append(",  typeOfRecord=").append(this.typeOfRecord);
+        builder.append(",  implDefined1=").append(Arrays.toString(this.implDefined1));
+        builder.append(",  charCodingScheme=").append(this.charCodingScheme);
+        builder.append(",  indicatorCount=").append(this.indicatorCount);
+        builder.append(",  subfieldCodeLength=").append(this.subfieldCodeLength);
+        builder.append(",  baseAddressOfData=").append(this.baseAddressOfData);
+        builder.append(",  implDefined2=").append(Arrays.toString(this.implDefined2));
+        builder.append(",  entryMap=").append(Arrays.toString(this.entryMap));
+        builder.append(",  df=").append(this.df);
         builder.append("]");
         return builder.toString();
     }
