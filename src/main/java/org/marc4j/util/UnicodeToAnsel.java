@@ -23,8 +23,7 @@ package org.marc4j.util;
 import java.io.IOException;
 import java.util.Hashtable;
 
-import com.digibis.commons.exceptions.ConfigException;
-import com.digibis.commons.util.ResourcesUtil;
+import org.marc4j.marc.MarcException;
 
 /**
  * <p>
@@ -56,7 +55,7 @@ public class UnicodeToAnsel
         try {
             rct = new ReverseCodeTable(ResourcesUtil.getStream("/org/marc4j/util/resources/codetables.xml"));
         } catch (IOException e) {
-            throw new ConfigException(e);
+            throw new MarcException(e.getMessage(), e);
         }
     }
 
@@ -72,6 +71,7 @@ public class UnicodeToAnsel
      * @param data the UCS/Unicode data
      * @return {@link String} - the MARC-8 data
      */
+    @Override
     public String convert(String data)
     {
         return new String(convert(data.toCharArray()));
@@ -89,6 +89,7 @@ public class UnicodeToAnsel
      * @param data the UCS/Unicode data
      * @return char[] - the MARC-8 data
      */
+    @Override
     public char[] convert(char[] data)
     {
         StringBuffer sb = new StringBuffer();

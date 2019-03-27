@@ -26,9 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
-import com.digibis.commons.exceptions.ConfigException;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * <p>
@@ -534,9 +532,9 @@ public class Record
      *         control number field
      */
     /*
-     * NOTA IMPORTANTE: Se sobrecarga el método original marshal haciendo
-     * una copia del original. En el método original se podría utilizar
-     * este pasándole un encoding null, pero no se hace para evitar que
+     * NOTA IMPORTANTE: Se sobrecarga el mï¿½todo original marshal haciendo
+     * una copia del original. En el mï¿½todo original se podrï¿½a utilizar
+     * este pasï¿½ndole un encoding null, pero no se hace para evitar que
      * pudiese haber posibles errores con una clase que se utiliza en
      * bastantes sitios.
      */
@@ -593,7 +591,7 @@ public class Record
             this.leader.setBaseAddressOfData(baseAddress);
 
         } catch (UnsupportedEncodingException ex) {
-            throw new ConfigException(ex, "Error getting the bytes of a string with encoding %s", encoding);
+            throw new MarcException("Error getting the bytes of a string with encoding " + encoding, ex);
         }
 
         // return record in tape format
@@ -605,13 +603,9 @@ public class Record
      */
     @Override
     public Object clone()
+        throws CloneNotSupportedException
     {
-        Record instance = null;
-        try {
-            instance = (Record)super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new ConfigException(e, "Can't clone the record");
-        }
+        Record instance = (Record)super.clone();
 
         instance.leader = (Leader)this.leader.clone();
         if (this.controlFieldList != null) {

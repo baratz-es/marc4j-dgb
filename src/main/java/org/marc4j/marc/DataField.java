@@ -26,8 +26,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * <p>
@@ -350,6 +350,7 @@ public class DataField
     /*
      * @see java.lang.Object#clone()
      */
+    @Override
     public Object clone()
     {
         // Creamos una nueva instancia

@@ -28,7 +28,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Leader;
@@ -149,7 +149,7 @@ public class MarcReader
         final int LDRLENGTH = 24;
         final int DIRENTRYLENGTH = 12;
 
-        // Comienza colección de registros
+        // Comienza colecciï¿½n de registros
         if (mh != null) mh.startCollection();
 
         // Recorre registros
@@ -200,7 +200,7 @@ public class MarcReader
             // Recorre el directorio
             for (int i = 0; i < dirEntries; i++) {
 
-                // Lee código de campo
+                // Lee cï¿½digo de campo
                 char[] d = new char[3];
                 charsRead = input.read(d);
                 while (charsRead != -1 && charsRead != d.length)
@@ -227,7 +227,7 @@ public class MarcReader
                 }
             }
 
-            // Comprueba que tras el directorio está el carácter FT
+            // Comprueba que tras el directorio estï¿½ el carï¿½cter FT
             if (input.read() != FT && eh != null) reportError("Directory not terminated");
             recordCounter++;
 
@@ -240,7 +240,7 @@ public class MarcReader
                 while (charsRead != -1 && charsRead != field.length)
                     charsRead += input.read(field, charsRead, field.length - charsRead);
 
-                // Busca un FT por el final (al combinar caracteres por el encoding, puede devolver caracteres de más)
+                // Busca un FT por el final (al combinar caracteres por el encoding, puede devolver caracteres de mï¿½s)
                 if (eh != null) {
                     String sField = new String(field);
                     int posFT = sField.lastIndexOf(FT);
@@ -264,11 +264,11 @@ public class MarcReader
                 }
             }
 
-            // Comprueba que el carácter de fin de registro es RT
+            // Comprueba que el carï¿½cter de fin de registro es RT
             if (input.read() != RT && eh != null) reportError("Record not terminated");
             recordCounter++;
 
-            // Verifica que el tamaño del registro coincide con el reportado en la cabecera
+            // Verifica que el tamaï¿½o del registro coincide con el reportado en la cabecera
             if (recordCounter != leader.getRecordLength() && eh != null)
                 reportError("Record length not equal to characters read");
 
@@ -281,19 +281,19 @@ public class MarcReader
         }
         input.close();
 
-        // Fin de colección
+        // Fin de colecciï¿½n
         if (mh != null) mh.endCollection();
     }
 
     private void parseControlField(String tag, char[] field)
     {
-        // Si el tamaño del campo no es el correcto, reporta un mensaje de advertencia
+        // Si el tamaï¿½o del campo no es el correcto, reporta un mensaje de advertencia
         if (field.length < 2) {
             if (eh != null) reportWarning("Control Field contains no data elements for tag " + tag);
             return;
         }
 
-        // Si el código es de control, lo anota
+        // Si el cï¿½digo es de control, lo anota
         if (Tag.isControlNumberField(tag)) setControlNumber(trimFT(field));
 
         // Parsea el campo de control
@@ -314,7 +314,7 @@ public class MarcReader
 
         StringBuffer data = null;
 
-        // Si el tamaño del campo es demasiado pequeño, reporta advertencia y sale
+        // Si el tamaï¿½o del campo es demasiado pequeï¿½o, reporta advertencia y sale
         if (field.length < 4) {
             if (eh != null) reportWarning("Data field contains no data elements for tag " + tag);
             return;
@@ -325,7 +325,7 @@ public class MarcReader
             ind2 = field[1];
             if (mh != null) mh.startDataField(tag, ind1, ind2, DataField.EMPTY_ID);
 
-            // Si la longitud del campo es correcta pero tras los indicadores no está US, advertencia
+            // Si la longitud del campo es correcta pero tras los indicadores no estï¿½ US, advertencia
             if (field.length > 3 && field[2] != US) {
                 if (eh != null) reportWarning("Expected a data element identifier");
             }

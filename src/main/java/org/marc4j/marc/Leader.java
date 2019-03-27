@@ -24,8 +24,6 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
-import com.digibis.commons.exceptions.ConfigException;
-
 /**
  * <p>
  * <code>Leader</code> defines behaviour for the record label
@@ -485,7 +483,7 @@ public class Leader
             // Creamos nueva instancia
             Leader instance = (Leader)super.clone();
 
-            // Rellenamos la información
+            // Rellenamos la informaciï¿½n
             instance.recordLength = this.recordLength;
             instance.recordStatus = this.recordStatus;
             instance.typeOfRecord = this.typeOfRecord;
@@ -499,7 +497,7 @@ public class Leader
 
             return instance;
         } catch (CloneNotSupportedException e) {
-            throw new ConfigException(e);
+            throw new MarcException(e.getMessage(), e);
         }
     }
 
