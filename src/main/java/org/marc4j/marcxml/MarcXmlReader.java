@@ -126,6 +126,7 @@ public class MarcXmlReader
      *
      * @param ch
      */
+    @Override
     public void setContentHandler(ContentHandler ch)
     {
         this.ch = ch;
@@ -138,6 +139,7 @@ public class MarcXmlReader
      *
      * @return ch
      */
+    @Override
     public ContentHandler getContentHandler()
     {
         return ch;
@@ -150,10 +152,12 @@ public class MarcXmlReader
      *
      * @param er
      */
+    @Override
     public void setEntityResolver(EntityResolver er)
     {
     }
 
+    @Override
     public EntityResolver getEntityResolver()
     {
         return null;
@@ -166,10 +170,12 @@ public class MarcXmlReader
      *
      * @param dh
      */
+    @Override
     public void setDTDHandler(DTDHandler dh)
     {
     }
 
+    @Override
     public DTDHandler getDTDHandler()
     {
         return null;
@@ -182,10 +188,12 @@ public class MarcXmlReader
      *
      * @param seh
      */
+    @Override
     public void setErrorHandler(org.xml.sax.ErrorHandler seh)
     {
     }
 
+    @Override
     public org.xml.sax.ErrorHandler getErrorHandler()
     {
         return null;
@@ -199,6 +207,7 @@ public class MarcXmlReader
      * @param name the property name
      * @param obj the property object
      */
+    @Override
     public void setProperty(String name, Object obj)
         throws SAXNotRecognizedException, SAXNotSupportedException
     {
@@ -223,6 +232,7 @@ public class MarcXmlReader
      *
      * @param name the property name
      */
+    @Override
     public Object getProperty(String name)
         throws SAXNotRecognizedException, SAXNotSupportedException
     {
@@ -241,6 +251,7 @@ public class MarcXmlReader
      * @param name the name of the feature
      * @param value the boolean value
      */
+    @Override
     public void setFeature(String name, boolean value)
         throws SAXNotRecognizedException, SAXNotSupportedException
     {
@@ -263,6 +274,7 @@ public class MarcXmlReader
      *
      * @param name the name of the feature
      */
+    @Override
     public boolean getFeature(String name)
         throws SAXNotRecognizedException
     {
@@ -282,6 +294,7 @@ public class MarcXmlReader
      *
      * @param systemId the system identifier (URI)
      */
+    @Override
     public void parse(String systemId)
         throws SAXException, IOException
     {
@@ -296,6 +309,7 @@ public class MarcXmlReader
      *
      * @param input the {@link InputSource}
      */
+    @Override
     public void parse(InputSource input)
     {
         if (ch != null)
@@ -331,7 +345,7 @@ public class MarcXmlReader
             marcReader.parse(br);
 
         } catch (Exception e) {
-            log.error("Se ha producido un error al realizar la conversión", e);
+            log.error("Se ha producido un error al realizar la conversiï¿½n", e);
         }
 
     }
@@ -343,6 +357,7 @@ public class MarcXmlReader
      * </p>
      *
      */
+    @Override
     public void startCollection()
     {
         try {
@@ -376,7 +391,7 @@ public class MarcXmlReader
             ch.startElement(NS_URI, "collection", "collection", atts);
 
         } catch (SAXException se) {
-            log.error("Se ha producido un error al añadir los elementos de inicio de documento", se);
+            log.error("Se ha producido un error al aÃ±adir los elementos de inicio de documento", se);
         }
     }
 
@@ -387,6 +402,7 @@ public class MarcXmlReader
      *
      * @param leader the leader
      */
+    @Override
     public void startRecord(Leader leader)
     {
         try {
@@ -395,7 +411,7 @@ public class MarcXmlReader
             if (prettyPrinting) ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
 
             // Se mira si el tipo y el nivel de la cabecera son correctos.
-            // Si no es así se modifican para que sean monografía
+            // Si no es asï¿½ se modifican para que sean monografï¿½a
             Leader leaderCorrecto = null;
             if (this.isCorrectoTipoActual(leader)) {
                 if (this.isCorrectoNivelBibliografico(leader)) {
@@ -414,7 +430,7 @@ public class MarcXmlReader
 
             writeElement(NS_URI, "leader", "leader", EMPTY_ATTS, leaderCorrecto.marshal());
         } catch (SAXException se) {
-            log.error("Se ha producido un error al añadir los elementos de inicio de registro", se);
+            log.error("Se ha producido un error al aÃ±adir los elementos de inicio de registro", se);
         }
     }
 
@@ -436,7 +452,7 @@ public class MarcXmlReader
             if (prettyPrinting) ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
             writeElement(NS_URI, "controlfield", "controlfield", atts, data);
         } catch (SAXException se) {
-            log.error("Se ha producido un error al añadir el nodo control", se);
+            log.error("Se ha producido un error al aÃ±adir el nodo control", se);
         }
     }
 
@@ -454,7 +470,7 @@ public class MarcXmlReader
     public void startDataField(String tag, char ind1, char ind2, Long id)
     {
         try {
-            // Se modifican los indicadores si no son válidos
+            // Se modifican los indicadores si no son vï¿½lidos
             ind1 = this.getIndicadorValido(ind1);
             ind2 = this.getIndicadorValido(ind2);
 
@@ -465,7 +481,7 @@ public class MarcXmlReader
             if (prettyPrinting) ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
             ch.startElement(NS_URI, "datafield", "datafield", atts);
         } catch (SAXException se) {
-            log.error("Se ha producido un error al añadir los elementos de inicio de campo", se);
+            log.error("Se ha producido un error al aÃ±adir los elementos de inicio de campo", se);
         }
     }
 
@@ -505,13 +521,14 @@ public class MarcXmlReader
      *
      * @param tag the tag name
      */
+    @Override
     public void endDataField(String tag)
     {
         try {
             ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
             ch.endElement(NS_URI, "datafield", "datafield");
         } catch (SAXException se) {
-            log.error("Se ha producido un error al añadir los elementos de fin de campo", se);
+            log.error("Se ha producido un error al aÃ±adir los elementos de fin de campo", se);
         }
     }
 
@@ -521,13 +538,14 @@ public class MarcXmlReader
      * </p>
      *
      */
+    @Override
     public void endRecord()
     {
         try {
             if (prettyPrinting) ch.ignorableWhitespace("\n  ".toCharArray(), 0, 3);
             ch.endElement(NS_URI, "record", "record");
         } catch (SAXException se) {
-            log.error("Se ha producido un error al añadir el elemento de fin de registro", se);
+            log.error("Se ha producido un error al aÃ±adir el elemento de fin de registro", se);
         }
     }
 
@@ -538,6 +556,7 @@ public class MarcXmlReader
      * </p>
      *
      */
+    @Override
     public void endCollection()
     {
         try {
@@ -546,7 +565,7 @@ public class MarcXmlReader
             ch.endPrefixMapping("");
             ch.endDocument();
         } catch (SAXException e) {
-            log.error("Se ha producido un error al añadir los elementos de fin de colección", e);
+            log.error("Se ha producido un error al aÃ±adir los elementos de fin de colecciï¿½n", e);
         }
     }
 
@@ -571,7 +590,7 @@ public class MarcXmlReader
                 charconv = (CharacterConverter)CharacterConverterLoader.createCharacterConverter("org.marc4j.charconv",
                     "org.marc4j.util.AnselToUnicode");
             } catch (CharacterConverterLoaderException e) {
-                log.error("Se ha producido un error al obtener el carácter de conversión", e);
+                log.error("Se ha producido un error al obtener el carï¿½cter de conversiï¿½n", e);
             }
         }
     }
@@ -615,7 +634,7 @@ public class MarcXmlReader
     }
 
     /**
-     * Modifica el tipo de la cabecera para que sea una monografía
+     * Modifica el tipo de la cabecera para que sea una monografï¿½a
      * 
      * @param leader
      * @return
@@ -627,7 +646,7 @@ public class MarcXmlReader
     }
 
     /**
-     * Devuelve si el nivel bibliográfico de la cabecera es de un tipo correcto
+     * Devuelve si el nivel bibliogrï¿½fico de la cabecera es de un tipo correcto
      * es la posicion 7
      * 
      * @param leader
@@ -656,7 +675,7 @@ public class MarcXmlReader
     }
 
     /**
-     * Modifica el nivel bibliográfico de la cabecera para que sea una monografía
+     * Modifica el nivel bibliogrï¿½fico de la cabecera para que sea una monografï¿½a
      * 
      * @param leader
      * @return
@@ -664,7 +683,7 @@ public class MarcXmlReader
     private Leader setNivelBibliograficoMonografia(Leader leader)
     {
         char implDefined[] = leader.getImplDefined1();
-        // Si la posición 7 es #, se cambia a ' '
+        // Si la posiciï¿½n 7 es #, se cambia a ' '
         if (implDefined[0] == '#') {
             implDefined[0] = ' ';
         } else {
@@ -675,8 +694,8 @@ public class MarcXmlReader
     }
 
     /**
-     * Modifica el indicador pasado para que sea válido. Sólo son válidos un número, una letra
-     * de la a a la z o un espacio en blanco. Si no es válido, devuelve un espacio en blanco
+     * Modifica el indicador pasado para que sea vï¿½lido. Sï¿½lo son vï¿½lidos un nï¿½mero, una letra
+     * de la a a la z o un espacio en blanco. Si no es vï¿½lido, devuelve un espacio en blanco
      * 
      * @param indicador
      * @return

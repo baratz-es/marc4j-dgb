@@ -130,6 +130,7 @@ public class MarcWriter
     /**
      * @deprecated As of MARC4J beta 7 replaced by {@link #setCharacterConverter(CharacterConverter charconv)}
      */
+    @Deprecated
     public void setUnicodeToAnsel(boolean convert)
     {
         if (convert) charconv = new UnicodeToAnsel();
@@ -176,11 +177,13 @@ public class MarcWriter
      * </p>
      *
      */
+    @Override
     public void startCollection()
     {
         if (out == null) System.exit(0);
     }
 
+    @Override
     public void startRecord(Leader leader)
     {
         this.record = new Record();
@@ -208,11 +211,13 @@ public class MarcWriter
             datafield.add(new Subfield(code, data, linkCode));
     }
 
+    @Override
     public void endDataField(String tag)
     {
         record.add(datafield);
     }
 
+    @Override
     public void endRecord()
     {
         try {
@@ -224,13 +229,14 @@ public class MarcWriter
         }
     }
 
+    @Override
     public void endCollection()
     {
         try {
             out.flush();
             out.close();
         } catch (IOException e) {
-            log.error("Se ha producido un error al finalizar la colección", e);
+            log.error("Se ha producido un error al finalizar la colecciÃ³n", e);
         }
     }
 

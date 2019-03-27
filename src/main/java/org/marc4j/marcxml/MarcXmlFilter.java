@@ -57,6 +57,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * @see MarcHandler
  * @see ContentHandler
  */
+@Deprecated
 public class MarcXmlFilter
     extends ExtendedFilter
     implements MarcHandler
@@ -116,6 +117,7 @@ public class MarcXmlFilter
      * @param name the property name
      * @param obj the property object
      */
+    @Override
     public void setProperty(String name, Object obj)
         throws SAXNotRecognizedException, SAXNotSupportedException
     {
@@ -139,6 +141,7 @@ public class MarcXmlFilter
      * @param name the name of the feature
      * @param value the boolean value
      */
+    @Override
     public void setFeature(String name, boolean value)
         throws SAXNotRecognizedException, SAXNotSupportedException
     {
@@ -157,6 +160,7 @@ public class MarcXmlFilter
      *
      * @param input the {@link InputSource}
      */
+    @Override
     public void parse(InputSource input)
     {
         ch = getContentHandler();
@@ -192,7 +196,7 @@ public class MarcXmlFilter
             marcReader.parse(br);
 
         } catch (Exception e) {
-            log.error("Se ha producido un error al realizar la conversión", e);
+            log.error("Se ha producido un error al realizar la conversiÃ³n", e);
         }
 
     }
@@ -204,6 +208,7 @@ public class MarcXmlFilter
      * </p>
      *
      */
+    @Override
     public void startCollection()
     {
         try {
@@ -248,6 +253,7 @@ public class MarcXmlFilter
      *
      * @param leader the leader
      */
+    @Override
     public void startRecord(Leader leader)
     {
         try {
@@ -256,7 +262,7 @@ public class MarcXmlFilter
             if (prettyPrinting) ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
             writeElement(NS_URI, "leader", "leader", EMPTY_ATTS, leader.marshal());
         } catch (SAXException se) {
-            log.error("Se ha producido un error al añadir los elementos de inicio de registro", se);
+            log.error("Se ha producido un error al aÃ±adir los elementos de inicio de registro", se);
         }
     }
 
@@ -303,7 +309,7 @@ public class MarcXmlFilter
             if (prettyPrinting) ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
             ch.startElement(NS_URI, "datafield", "datafield", atts);
         } catch (SAXException se) {
-            log.error("Se ha producido un error al añadir los elementos de inicio de campo", se);
+            log.error("Se ha producido un error al aÃ±adir los elementos de inicio de campo", se);
         }
     }
 
@@ -332,7 +338,7 @@ public class MarcXmlFilter
             }
             ch.endElement(NS_URI, "subfield", "subfield");
         } catch (SAXException se) {
-            log.error("Error al añadir la información de subcampo", se);
+            log.error("Error al aÃ±adir la informaciÃ³n de subcampo", se);
         }
     }
 
@@ -343,13 +349,14 @@ public class MarcXmlFilter
      *
      * @param tag the tag name
      */
+    @Override
     public void endDataField(String tag)
     {
         try {
             ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
             ch.endElement(NS_URI, "datafield", "datafield");
         } catch (SAXException se) {
-            log.error("Se ha producido un error al añadir los elementos de fin de campo", se);
+            log.error("Se ha producido un error al aÃ±adir los elementos de fin de campo", se);
         }
     }
 
@@ -359,13 +366,14 @@ public class MarcXmlFilter
      * </p>
      *
      */
+    @Override
     public void endRecord()
     {
         try {
             if (prettyPrinting) ch.ignorableWhitespace("\n  ".toCharArray(), 0, 3);
             ch.endElement(NS_URI, "record", "record");
         } catch (SAXException se) {
-            log.error("Se ha producido un error al añadir los elementos de fin de registro", se);
+            log.error("Se ha producido un error al aÃ±adir los elementos de fin de registro", se);
         }
     }
 
@@ -376,6 +384,7 @@ public class MarcXmlFilter
      * </p>
      *
      */
+    @Override
     public void endCollection()
     {
         try {
@@ -384,7 +393,7 @@ public class MarcXmlFilter
             ch.endPrefixMapping("");
             ch.endDocument();
         } catch (SAXException e) {
-            log.error("Se ha producido un error al añadir los elementos de fin de documento", e);
+            log.error("Se ha producido un error al aÃ±adir los elementos de fin de documento", e);
         }
     }
 
@@ -409,7 +418,7 @@ public class MarcXmlFilter
                 charconv = (CharacterConverter)CharacterConverterLoader.createCharacterConverter("org.marc4j.charconv",
                     "org.marc4j.util.AnselToUnicode");
             } catch (CharacterConverterLoaderException e) {
-                log.error("Se ha producido un error al realizar la conversión", e);
+                log.error("Se ha producido un error al realizar la conversiï¿½n", e);
             }
         }
     }

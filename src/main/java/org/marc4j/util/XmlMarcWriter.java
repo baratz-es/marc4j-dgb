@@ -229,9 +229,9 @@ public class XmlMarcWriter
             }
 
         } catch (ParserConfigurationException e) {
-            log.error("La configuración no es correcta", e);
+            log.error("La configuraciï¿½n no es correcta", e);
         } catch (SAXNotSupportedException e) {
-            log.error("No se soporta la operación indicada", e);
+            log.error("No se soporta la operaciÃ³n indicada", e);
         } catch (SAXNotRecognizedException e) {
             log.error("Identificador no reconocido", e);
         } catch (SAXException e) {

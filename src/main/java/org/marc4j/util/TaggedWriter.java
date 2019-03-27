@@ -119,11 +119,13 @@ public class TaggedWriter
      * </p>
      *
      */
+    @Override
     public void startCollection()
     {
         if (out == null) System.exit(0);
     }
 
+    @Override
     public void startRecord(Leader leader)
     {
         rawWrite("Leader ");
@@ -157,23 +159,26 @@ public class TaggedWriter
         rawWrite(new String(data));
     }
 
+    @Override
     public void endDataField(String tag)
     {
         rawWrite('\n');
     }
 
+    @Override
     public void endRecord()
     {
         rawWrite('\n');
     }
 
+    @Override
     public void endCollection()
     {
         try {
             out.flush();
             out.close();
         } catch (IOException e) {
-            log.error("Error al finalizar la colección", e);
+            log.error("Error al finalizar la colecciÃ³n", e);
         }
     }
 
