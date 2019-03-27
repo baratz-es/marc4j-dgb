@@ -23,7 +23,8 @@ package org.marc4j.marc;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import com.digibis.commons.exceptions.ConfigException;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * <p><code>ControlField</code> defines behaviour for a control

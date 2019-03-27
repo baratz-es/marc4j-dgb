@@ -27,9 +27,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
-import com.digibis.commons.exceptions.ConfigException;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * <p><code>Record</code> defines behaviour for a record.  </p>
@@ -444,9 +442,9 @@ public class Record implements Serializable, Cloneable {
      *                       control number field
      */
     /*
-     * NOTA IMPORTANTE: Se sobrecarga el mÈtodo original marshal haciendo
-     * una copia del original. En el mÈtodo original se podrÌa utilizar
-     * Èste pas·ndole un encoding null, pero no se hace para evitar que
+     * NOTA IMPORTANTE: Se sobrecarga el m√©todo original marshal haciendo
+     * una copia del original. En el m√©todo original se podr√≠a utilizar
+     * √©ste pas√°ndole un encoding null, pero no se hace para evitar que
      * pudiese haber posibles errores con una clase que se utiliza en
      * bastantes sitios. 
      */
@@ -501,7 +499,7 @@ public class Record implements Serializable, Cloneable {
             leader.setBaseAddressOfData(baseAddress);
             
         } catch (UnsupportedEncodingException ex) {
-            throw new ConfigException (ex);
+            throw new MarcException("Error getting the bytes of a string with encoding " + encoding, ex);
         }
         
         // return record in tape format
@@ -515,11 +513,9 @@ public class Record implements Serializable, Cloneable {
      * @see java.lang.Object#clone()
      */
     public Object clone ()
+        throws CloneNotSupportedException
     {
-        try
-        {
-            // Creamos una nueva instancia
-            Record instance = (Record)super.clone ();
+        Record instance = (Record)super.clone();
             
             // Clonamos la cabecera
             instance.leader = (Leader)this.leader.clone ();
@@ -544,10 +540,6 @@ public class Record implements Serializable, Cloneable {
             
             // Devolvemos la nueva instancia
             return instance;
-        } 
-        catch (CloneNotSupportedException e) {
-            throw new ConfigException (e);
-        }
     }
 
     @Override

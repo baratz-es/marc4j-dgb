@@ -26,7 +26,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.digibis.commons.exceptions.ConfigException;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * <p><code>DataField</code> defines behaviour for a data field
@@ -274,6 +275,7 @@ public class DataField extends VariableField implements Serializable, Cloneable 
     /*
      * @see java.lang.Object#clone()
      */
+    @Override
     public Object clone ()
     {
         try

@@ -23,8 +23,7 @@ package org.marc4j.util;
 import java.io.IOException;
 import java.util.*;
 
-import com.digibis.commons.exceptions.ConfigException;
-import com.digibis.commons.util.ResourcesUtil;
+import org.marc4j.marc.MarcException;
 
 /**
  * <p>A utility to convert MARC-8 data to non-precomposed UCS/Unicode.</p>
@@ -79,16 +78,19 @@ public class AnselToUnicode
 	}
     }
 
-    class CodeTracker {
-	int offset;
-	int g0;
-	int g1;
-	boolean multibyte;
+    class CodeTracker
+    {
+        int offset;
+        int g0;
+        int g1;
+        boolean multibyte;
 
-	public String toString() {
-	    return "Offset: " + offset + " G0: " + Integer.toHexString(g0) + " G1: " +
-		Integer.toHexString(g1) + " Multibyte: " + multibyte;
-	}
+        @Override
+        public String toString()
+        {
+            return "Offset: " + offset + " G0: " + Integer.toHexString(g0) + " G1: " + Integer.toHexString(g1)
+                + " Multibyte: " + multibyte;
+        }
     }
 
     protected CodeTable ct;
@@ -106,7 +108,7 @@ public class AnselToUnicode
     	try {
             ct = new CodeTable(ResourcesUtil.getStream("/org/marc4j/util/resources/codetablesnocjk.xml"));
         } catch (IOException e) {
-            throw new ConfigException(e);
+            throw new MarcException(e.getMessage(), e);
         }
     }
 
@@ -125,7 +127,7 @@ public class AnselToUnicode
         try {
             ct = new CodeTable(ResourcesUtil.getStream("/org/marc4j/util/resources/codetables.xml"));
         } catch (IOException e) {
-            throw new ConfigException(e);
+            throw new MarcException(e.getMessage(), e);
         }
     }
 
@@ -135,6 +137,7 @@ public class AnselToUnicode
      * @param data the MARC-8 data
      * @return {@link String} - the UCS/Unicode data
      */
+    @Override
     public String convert(String data) {
 	return new String(convert(data.toCharArray()));
     }
@@ -198,6 +201,7 @@ public class AnselToUnicode
      * @param data the MARC-8 data
      * @return char[] - the UCS/Unicode data
      */
+    @Override
     public char[] convert(char[] data) {
 	StringBuffer sb = new StringBuffer();
 	int len = data.length;
