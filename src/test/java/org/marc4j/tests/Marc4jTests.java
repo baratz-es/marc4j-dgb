@@ -1,22 +1,15 @@
 package org.marc4j.tests;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
-public class Marc4jTests extends TestCase {
-
-    public Marc4jTests() {
-        super("All Tests for MARC4J");   
-    }
-
-    public static Test suite() {
-        TestSuite result = new TestSuite();
-        result.addTest(new TestSuite(TagTest.class));
-        result.addTest(new TestSuite(SubfieldTest.class));
-        result.addTest(new TestSuite(ControlFieldTest.class));
-        result.addTest(new TestSuite(DataFieldTest.class));
-        return result;
-    }
-
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+    TagTest.class,
+    SubfieldTest.class,
+    ControlFieldTest.class,
+    DataFieldTest.class
+})
+public class Marc4jTests
+{
 }
