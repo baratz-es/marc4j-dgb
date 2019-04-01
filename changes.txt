@@ -1,0 +1,41 @@
+Changes to Marc4j 2.0 beta 7
+
+Author: Andres Botero <andres.botero@digibis.com>
+* Wed May 9 19:22:03 2018 +0200 Improved constructor methods
+
+Author: jdominguez <jesus.dominguez@digibis.com>
+* Wed Apr 12 18:42:20 2017 +0200 Improved logs
+
+Author: Fernando <Fernando.roman@digibis.com>
+* Tue May 31 21:43:28 2016 +0000 Fix duplication of fields. Append attribute id to VariableField and link code to Subfield to preserve not MARC data when cloking/manipulating MARC4J records.
+
+Author: Alvaro Cuesta <acuesta@digibis.com>
+* Mon Nov 16 16:26:05 2015 +0000 Improved debugging of Record (better toString() methods). Added some generics to collections.
+
+Author: Fernando <Fernando.roman@digibis.com>
+* Fri Oct 10 07:26:28 2014 +0000 Fixing unicode support. Fixed export to ISO2709. Fixed wrong field lenght based on bytes intead of characters.
+
+Author: mmarcos <mmarcos>
+* Wed Jun 2 09:26:55 2010 +0000 Fix logging directly to System.out
+
+Author: Fernando <Fernando.roman@digibis.com>
+* Wed Aug 19 12:04:03 2009 +0000 Added clone methods.
+
+Author: Dionisio <Dionisio>
+* Fri Jul 24 10:05:01 2009 +0000 Sanitize datafields indicadotor. Only accepts valid indicator values. In case of a invalid indicator, returns a space.
+
+Author: Dionisio <Dionisio>
+* Wed May 20 06:37:45 2009 +0000 Added all posible types related to LDR#6 and LDR#7
+
+Author: Dionisio <Dionisio>
+* Thu May 14 12:56:29 2009 +0000 Fix Leader type and level. If is wrong, enforces monograph
+
+Author: Andres Viedma <andres.viedma@digibis.com>
+* Thu May 22 11:32:13 2008 +0000 Fix error. Using absolute path to XML resources.
+
+Author: Fernando <Fernando.roman@digibis.com>
+* Wed Jan 30 11:03:37 2008 +0000 Utility class to search resources. Using local thread classloader to search resources.
+
+Author: Andres Viedma <andres.viedma@digibis.com>
+* Wed Oct 17 18:06:10 2007 +0000 Fix error "Field not terminated" on MARC-8 Absys imporatition with accents
+
