@@ -21,13 +21,10 @@
 package org.marc4j.marc;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
-
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import java.util.List;
 
 /**
  * <p><code>DataField</code> defines behaviour for a data field
@@ -104,6 +101,7 @@ public class DataField extends VariableField implements Serializable, Cloneable 
      * @throws IllegalTagException when the tag is not a valid
      *                                     data field identifier
      */
+    @Override
     public void setTag(String tag) {
         if (Tag.isDataField(tag)) {
             super.setTag(tag);
@@ -118,6 +116,7 @@ public class DataField extends VariableField implements Serializable, Cloneable 
      *
      * @return {@link String} - the tag name
      */
+    @Override
     public String getTag() {
 	    return super.getTag();
     }
@@ -255,7 +254,7 @@ public class DataField extends VariableField implements Serializable, Cloneable 
 	    .append(ind1).append(ind2);
         Iterator<Subfield> iterator = list.iterator();
         while (iterator.hasNext()) {
-            Subfield subfield = (Subfield)iterator.next();
+            Subfield subfield = iterator.next();
             dataField.append(subfield.marshal());
         }
         dataField.append(FT);
@@ -299,8 +298,8 @@ public class DataField extends VariableField implements Serializable, Cloneable 
             // Devolvemos la nueva instancia
             return instance;
         } 
-        catch (CloneNotSupportedException e) {
-            throw new ConfigException (e);
+        catch (CloneNotSupportedException ex) {
+            throw new MarcException(ex.getMessage(), ex);
         }
     }
     

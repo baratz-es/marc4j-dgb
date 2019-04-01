@@ -23,9 +23,6 @@ package org.marc4j.marc;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 /**
  * <p><code>ControlField</code> defines behaviour for a control
  * field (tag 001-009).  </p>
@@ -89,6 +86,7 @@ public class ControlField extends VariableField implements Serializable, Cloneab
      * @throws IllegalTagException when the tag is not a valid
      *                                     control field identifier
      */
+    @Override
     public void setTag(String tag) {
         if (Tag.isControlField(tag)) {
             super.setTag(tag);
@@ -103,6 +101,7 @@ public class ControlField extends VariableField implements Serializable, Cloneab
      *
      * @return {@link String} - the tag name
      */
+    @Override
     public String getTag() {
 	    return super.getTag();
     }
@@ -158,6 +157,7 @@ public class ControlField extends VariableField implements Serializable, Cloneab
     /*
      * @see java.lang.Object#clone()
      */
+    @Override
     public Object clone ()
     {
         try
@@ -165,14 +165,14 @@ public class ControlField extends VariableField implements Serializable, Cloneab
             // Creamos nueva instancia
             ControlField instance = (ControlField)super.clone ();
             
-            // Rellenamos la información
+            // Rellenamos la informaciï¿½n
             instance.setTag (this.getTag ());
             instance.setData (String.copyValueOf (this.data));
             
             return instance;
         } 
-        catch (CloneNotSupportedException e) {
-            throw new ConfigException (e);
+        catch (CloneNotSupportedException ex) {
+            throw new MarcException(ex.getMessage(), ex);
         }
     }
     
