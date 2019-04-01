@@ -20,14 +20,19 @@
  */
 package org.marc4j.util;
 
-import java.io.Writer;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.IOException;
+import java.io.Writer;
 
 import org.apache.log4j.Category;
-import org.marc4j.marc.*;
 import org.marc4j.MarcHandler;
+import org.marc4j.marc.ControlField;
+import org.marc4j.marc.DataField;
+import org.marc4j.marc.Leader;
+import org.marc4j.marc.MarcException;
+import org.marc4j.marc.Record;
+import org.marc4j.marc.Subfield;
 
 /**
  * <p>Implements the <code>MarcHandler</code> interface
@@ -105,6 +110,7 @@ public class MarcWriter
     /**
      * @deprecated As of MARC4J beta 7 replaced by {@link #setCharacterConverter(CharacterConverter charconv)}
      */
+    @Deprecated
     public void setUnicodeToAnsel(boolean convert) {
 	if (convert)
 	    charconv = new UnicodeToAnsel();
@@ -139,24 +145,29 @@ public class MarcWriter
      * <p>System exits when the Writer object is null.</p>
      *
      */
+    @Override
     public void startCollection() {
 	if (out == null)
 	    System.exit(0);
     }
 
+    @Override
     public void startRecord(Leader leader) {
 	this.record = new Record();
 	record.add(leader);
     }
 
+    @Override
     public void controlField(String tag, char[] data) {
 	record.add(new ControlField(tag, data));
     }
 
+    @Override
     public void startDataField(String tag, char ind1, char ind2) {
 	datafield = new DataField(tag, ind1, ind2);
     }
 
+    @Override
     public void subfield(char code, char[] data) {
 	if (charconv != null)
 	    datafield.add(new Subfield(code, charconv.convert(data)));
@@ -164,10 +175,12 @@ public class MarcWriter
 	    datafield.add(new Subfield(code, data));
     }
 
+    @Override
     public void endDataField(String tag) {
 	record.add(datafield);
     }
 
+    @Override
     public void endRecord() {
 	try {
 	    rawWrite(record.marshal());
@@ -178,12 +191,13 @@ public class MarcWriter
 	}
     }
 
+    @Override
     public void endCollection() {
 	try {
 	    out.flush();
 	    out.close();
 	} catch (IOException e) {
-	    log.error ("Se ha producido un error al finalizar la colección", e);
+            log.error("Se ha producido un error al finalizar la colecciÃ³n", e);
 	}
     }
 

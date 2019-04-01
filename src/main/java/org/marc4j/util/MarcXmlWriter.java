@@ -20,28 +20,31 @@
  */
 package org.marc4j.util;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+
+import org.apache.log4j.Category;
+import org.marc4j.helpers.ErrorHandlerImpl;
+import org.marc4j.marcxml.Converter;
+import org.marc4j.marcxml.MarcXmlReader;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
-import org.xml.sax.InputSource;
-import org.apache.log4j.Category;
-import org.marc4j.helpers.ErrorHandlerImpl;
-import org.marc4j.marcxml.DoctypeDecl;
-import org.marc4j.marcxml.MarcXmlReader;
-import javax.xml.parsers.SAXParserFactory;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.Source;
-import javax.xml.transform.Result;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.sax.SAXResult;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.transform.stream.StreamResult;
-import org.marc4j.marcxml.Converter;
 
 /**
  * <p>Provides a driver for <code>MarcXmlReader</code> 
@@ -204,13 +207,13 @@ public class MarcXmlWriter {
 	    }
 
 	} catch (SAXNotSupportedException e) {
-	    log.error ("No se soporta la operación indicada", e);
+	    log.error ("No se soporta la operaciï¿½n indicada", e);
 	} catch (SAXNotRecognizedException e) {
 	    log.error ("Identificador no reconocido", e);
 	} catch (SAXException e) {
 	    log.error ("Se ha producido un error al convertir los registros MARC", e);
 	} catch (TransformerException e) {
-        log.error ("Se ha producido un error durante la transformación de los registros", e);
+            log.error("Se ha producido un error durante la transformaciÃ³n de los registros", e);
 	} catch (IOException e) {
 	    log.error ("Se ha producido un error al escribir los registros en MARCXML", e);
 	}

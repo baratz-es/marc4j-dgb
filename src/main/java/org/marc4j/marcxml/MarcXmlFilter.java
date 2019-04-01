@@ -20,23 +20,25 @@
  */
 package org.marc4j.marcxml;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.URL;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.InputSource;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXNotRecognizedException;
-import org.xml.sax.SAXNotSupportedException;
-import org.xml.sax.helpers.AttributesImpl;
+
 import org.apache.log4j.Category;
-import org.marc4j.MarcHandler;
 import org.marc4j.ErrorHandler;
+import org.marc4j.MarcHandler;
 import org.marc4j.MarcReader;
 import org.marc4j.marc.Leader;
 import org.marc4j.util.CharacterConverter;
 import org.marc4j.util.CharacterConverterLoader;
 import org.marc4j.util.CharacterConverterLoaderException;
+import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
+import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * <p><code>MarcXmlFilter</code> is an <code>XMLFilter</code> that 
@@ -53,6 +55,7 @@ import org.marc4j.util.CharacterConverterLoaderException;
  * @see MarcHandler
  * @see ContentHandler
  */
+@Deprecated
 public class MarcXmlFilter extends ExtendedFilter 
     implements MarcHandler {
 
@@ -117,6 +120,7 @@ public class MarcXmlFilter extends ExtendedFilter
      * @param name the property name
      * @param obj the property object
      */
+    @Override
     public void setProperty(String name, Object obj) 
 	throws SAXNotRecognizedException, SAXNotSupportedException {
 	if (DOC_TYPE_DECL.equals(name))
@@ -137,6 +141,7 @@ public class MarcXmlFilter extends ExtendedFilter
      * @param name the name of the feature
      * @param value the boolean value
      */
+    @Override
     public void setFeature(String name, boolean value)
 	throws SAXNotRecognizedException, SAXNotSupportedException {
 	if (ANSEL_TO_UNICODE.equals(name))
@@ -152,6 +157,7 @@ public class MarcXmlFilter extends ExtendedFilter
      *
      * @param input the {@link InputSource}
      */
+    @Override
     public void parse(InputSource input) {
 	ch = getContentHandler();
 	if (ch == null) {
@@ -187,7 +193,7 @@ public class MarcXmlFilter extends ExtendedFilter
 	    marcReader.parse(br);
 
 	} catch (Exception e) {
-	    log.error ("Se ha producido un error al realizar la conversión", e);
+            log.error("Se ha producido un error al realizar la conversiÃ³n", e);
 	}
 
     }
@@ -197,6 +203,7 @@ public class MarcXmlFilter extends ExtendedFilter
      * and reports the root element.  </p>
      *
      */
+    @Override
     public void startCollection() {
     	try {
 	    AttributesImpl atts = new AttributesImpl();
@@ -242,6 +249,7 @@ public class MarcXmlFilter extends ExtendedFilter
      *
      * @param leader the leader
      */
+    @Override
     public void startRecord(Leader leader) {
 	try {
 	    if (prettyPrinting)
@@ -251,7 +259,7 @@ public class MarcXmlFilter extends ExtendedFilter
 		ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
 	    writeElement(NS_URI,"leader","leader", EMPTY_ATTS, leader.marshal());
 	} catch (SAXException se) {
-	    log.error ("Se ha producido un error al añadir los elementos de inicio de registro", se);
+            log.error("Se ha producido un error al aÃ±adir los elementos de inicio de registro", se);
 	}
     }
 
@@ -261,6 +269,7 @@ public class MarcXmlFilter extends ExtendedFilter
      * @param tag the tag name
      * @param data the data element
      */
+    @Override
     public void controlField(String tag, char[] data) {
 	try {
 	    AttributesImpl atts = new AttributesImpl();
@@ -280,6 +289,7 @@ public class MarcXmlFilter extends ExtendedFilter
      * @param ind1 the first indicator value
      * @param ind2 the second indicator value
      */
+    @Override
     public void startDataField(String tag, char ind1, char ind2) {
 	try {
 	    AttributesImpl atts = new AttributesImpl();
@@ -290,7 +300,7 @@ public class MarcXmlFilter extends ExtendedFilter
 		ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
 	    ch.startElement(NS_URI,"datafield","datafield", atts);
 	} catch (SAXException se) {
-	    log.error ("Se ha producido un error al añadir los elementos de inicio de campo", se);
+            log.error("Se ha producido un error al aÃ±adir los elementos de inicio de campo", se);
 	}
     }
 
@@ -300,6 +310,7 @@ public class MarcXmlFilter extends ExtendedFilter
      * @param code the data element identifier
      * @param data the data element
      */
+    @Override
     public void subfield(char code, char[] data) {
 	try {
 	    AttributesImpl atts = new AttributesImpl();
@@ -315,7 +326,7 @@ public class MarcXmlFilter extends ExtendedFilter
             }
 	    ch.endElement(NS_URI,"subfield","subfield");
 	} catch (SAXException se) {
-	    log.error ("Error al añadir la información de subcampo", se);
+            log.error("Error al aÃ±adir la informaciÃ³n de subcampo", se);
     	}
     }
     
@@ -324,12 +335,13 @@ public class MarcXmlFilter extends ExtendedFilter
      *
      * @param tag the tag name
      */
+    @Override
     public void endDataField(String tag) {
 	try {
             ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
 	    ch.endElement(NS_URI,"datafield","datafield");
 	} catch (SAXException se) {
-	    log.error ("Se ha producido un error al añadir los elementos de fin de campo", se);
+            log.error("Se ha producido un error al aÃ±adir los elementos de fin de campo", se);
 	}
     }
 
@@ -337,13 +349,14 @@ public class MarcXmlFilter extends ExtendedFilter
      * <p>Reports the closing element for a record.</p>
      *
      */
+    @Override
     public void endRecord() {
 	try {
 	    if (prettyPrinting) 
 		ch.ignorableWhitespace("\n  ".toCharArray(), 0, 3);
 	    ch.endElement(NS_URI,"record","record");
 	} catch (SAXException se) {
-	    log.error ("Se ha producido un error al añadir los elementos de fin de registro", se);
+            log.error("Se ha producido un error al aÃ±adir los elementos de fin de registro", se);
 	}
     }
     
@@ -352,6 +365,7 @@ public class MarcXmlFilter extends ExtendedFilter
      * of the prefix mapping and the end a document.  </p>
      *
      */
+    @Override
     public void endCollection() {
 	try {
 	    if (prettyPrinting) 
@@ -360,7 +374,7 @@ public class MarcXmlFilter extends ExtendedFilter
 	    ch.endPrefixMapping("");
 	    ch.endDocument();
 	} catch (SAXException e) {
-	    log.error ("Se ha producido un error al añadir los elementos de fin de documento", e);
+            log.error("Se ha producido un error al aÃ±adir los elementos de fin de documento", e);
 	}
     }
 
@@ -391,7 +405,7 @@ public class MarcXmlFilter extends ExtendedFilter
 		    .createCharacterConverter("org.marc4j.charconv", 
 					      "org.marc4j.util.AnselToUnicode");
 	    } catch (CharacterConverterLoaderException e) {
-		log.error ("Se ha producido un error al realizar la conversión", e);
+                log.error("Se ha producido un error al realizar la conversiÃ³n", e);
 	    }
 	}
     }

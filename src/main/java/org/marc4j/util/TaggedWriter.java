@@ -20,10 +20,10 @@
  */
 package org.marc4j.util;
 
-import java.io.Writer;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.IOException;
+import java.io.Writer;
 
 import org.apache.log4j.Category;
 import org.marc4j.MarcHandler;
@@ -96,17 +96,20 @@ public class TaggedWriter implements MarcHandler {
      * <p>System exits when the Writer object is null.</p>
      *
      */
+    @Override
     public void startCollection() {
 	if (out == null)
 	    System.exit(0);
     }
 
+    @Override
     public void startRecord(Leader leader) {
 	rawWrite("Leader ");
 	rawWrite(leader.marshal());
 	rawWrite('\n');
     }
 
+    @Override
     public void controlField(String tag, char[] data) {
 	rawWrite(tag);
 	rawWrite(' ');
@@ -114,6 +117,7 @@ public class TaggedWriter implements MarcHandler {
 	rawWrite('\n');
     }
 
+    @Override
     public void startDataField(String tag, char ind1, char ind2) {
 	rawWrite(tag);
 	rawWrite(' ');
@@ -121,26 +125,30 @@ public class TaggedWriter implements MarcHandler {
 	rawWrite(ind2);
     }
 
+    @Override
     public void subfield(char code, char[] data) {
 	rawWrite('$');
 	rawWrite(code);
 	rawWrite(new String(data));
     }
 
+    @Override
     public void endDataField(String tag) {
 	rawWrite('\n');
     }
 
+    @Override
     public void endRecord() {
 	rawWrite('\n');
     }
 
+    @Override
     public void endCollection() {
 	try {
 	    out.flush();
 	    out.close();
 	} catch (IOException e) {
-	    log.error ("Error al finalizar la colección", e);
+            log.error("Error al finalizar la colecciÃ³n", e);
 	}
     }
 

@@ -20,28 +20,30 @@
  */
 package org.marc4j.util;
 
-import java.io.*;
-import org.xml.sax.XMLReader;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.XMLReaderFactory;
-import org.xml.sax.SAXNotSupportedException;
-import org.xml.sax.SAXNotRecognizedException;
-import javax.xml.parsers.SAXParserFactory;
-import javax.xml.parsers.SAXParser;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Source;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Result;
+import javax.xml.transform.Source;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Category;
-import org.marc4j.marcxml.SaxErrorHandler;
-import org.marc4j.marcxml.MarcXmlHandler;
-import org.marc4j.helpers.RecordBuilder;
-import org.marc4j.MarcHandler;
-import org.marc4j.marcxml.MarcResult;
 import org.marc4j.marcxml.Converter;
+import org.marc4j.marcxml.MarcResult;
+import org.marc4j.marcxml.MarcXmlHandler;
+import org.marc4j.marcxml.SaxErrorHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
+import org.xml.sax.XMLReader;
 
 /**
  * <p>Provides a driver for <code>MarcXmlHandler</code> 
@@ -215,9 +217,9 @@ public class XmlMarcWriter {
 	    }
 
 	} catch (ParserConfigurationException e) {	    
-	    log.error ("La configuración no es correcta", e);
+	    log.error ("La configuraciï¿½n no es correcta", e);
 	} catch (SAXNotSupportedException e) {
-	    log.error ("No se soporta la operación indicada", e);
+            log.error("No se soporta la operaciÃ³n indicada", e);
 	} catch (SAXNotRecognizedException e) {
 	    log.error ("Identificador no reconocido", e);
 	} catch (SAXException e) {
