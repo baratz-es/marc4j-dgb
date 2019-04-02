@@ -603,9 +603,13 @@ public class Record
      */
     @Override
     public Object clone()
-        throws CloneNotSupportedException
     {
-        Record instance = (Record)super.clone();
+        Record instance;
+        try {
+            instance = (Record)super.clone();
+        } catch (CloneNotSupportedException ex) {
+            throw new MarcException("Unssoported clone method.", ex);
+        }
 
         instance.leader = (Leader)this.leader.clone();
         if (this.controlFieldList != null) {
