@@ -1,0 +1,14 @@
+# Files that must be always on Unix EOL
+*.sh text eol=lf
+ 
+# Enforce CRLF as EOL
+*.java text diff=java eol=lf
+*.groovy text diff=java eol=lf
+*.xml text diff=xml eol=lf
+*.xsl text diff=xml eol=lf
+*.xsd text diff=xml eol=lf
+*.dtd text diff=xml eol=lf
+*.properties text diff=xml eol=lf
+*.html text diff=xml eol=lf
+*.md text diff=xml eol=lf
+ 
