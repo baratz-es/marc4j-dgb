@@ -1,4 +1,4 @@
-Changes to Marc4j 2.0 beta 7
+Version v2.0.1-b7b-dgb
 
 Author: Andres Botero <andres.botero@digibis.com>
 * Wed May 9 19:22:03 2018 +0200 Improved constructor methods
@@ -8,6 +8,10 @@ Author: jdominguez <jesus.dominguez@digibis.com>
 
 Author: Fernando <Fernando.roman@digibis.com>
 * Tue May 31 21:43:28 2016 +0000 Fix duplication of fields. Append attribute id to VariableField and link code to Subfield to preserve not MARC data when cloking/manipulating MARC4J records.
+
+* Using Java 7
+
+Changes from Marc4j 2.0 beta 7 to Version v2.0.0-b7b-dgb 
 
 Author: Alvaro Cuesta <acuesta@digibis.com>
 * Mon Nov 16 16:26:05 2015 +0000 Improved debugging of Record (better toString() methods). Added some generics to collections.
