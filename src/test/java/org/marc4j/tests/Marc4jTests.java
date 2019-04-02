@@ -7,8 +7,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
     TagTest.class,
     SubfieldTest.class,
-    ControlFieldTest.class,
-    DataFieldTest.class
+    ControlFieldTest.class
 })
 public class Marc4jTests
 {

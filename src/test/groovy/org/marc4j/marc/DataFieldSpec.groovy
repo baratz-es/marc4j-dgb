@@ -52,6 +52,23 @@ class DataFieldSpec extends Specification {
         f.ind2 == 'b'
         f.list == []
     }
+    def "Datafield constructor with tag and invalid indicators raises exception" () {
+        when:
+        def f = new DataField("100", indicator1 as char, indicator2 as char)
+
+        then:
+        thrown (IllegalDataElementException)
+
+        where:
+        indicator1          | indicator2
+        'a'                 | MarcConstants.US
+        'b'                 | MarcConstants.FT
+        'c'                 | MarcConstants.RT
+        MarcConstants.US    | 'a'
+        MarcConstants.FT    | 'b'
+        MarcConstants.US    | MarcConstants.RT
+    }
+
     def "Datafield constructor with tag, indicators and id" () {
         when:
         def f = new DataField("100", 'a' as char, 'b' as char, 1)
@@ -71,6 +88,7 @@ class DataFieldSpec extends Specification {
 
         then:
         thrown (IllegalTagException)
+
         where:
         a << ["000", "001", "008", "", "00", "11", "0000", "1111"]
     }
@@ -98,6 +116,30 @@ class DataFieldSpec extends Specification {
         f.setIndicator2 ("#" as char)
         then:
         f.getIndicator2() == "#"
+    }
+
+    def "setIndicator1 raises an exception when passed an invalid indicator" () {
+        when:
+        def f = new DataField("100")
+        f.setIndicator1 (indicator as char)
+
+        then:
+        thrown (IllegalDataElementException)
+
+        where:
+        indicator << [MarcConstants.US, MarcConstants.FT, MarcConstants.RT]
+    }
+
+    def "setIndicator2 raises an exception when passed an invalid indicator" () {
+        when:
+        def f = new DataField("100")
+        f.setIndicator2 (indicator as char)
+
+        then:
+        thrown (IllegalDataElementException)
+
+        where:
+        indicator << [MarcConstants.US, MarcConstants.FT, MarcConstants.RT]
     }
 
     def "adding a subfield and calling getSubfield, getSubfieldList returns the same subfield" () {
@@ -237,5 +279,25 @@ class DataFieldSpec extends Specification {
         then:
         f2.getSubfield("a" as char).getData().toString()=="xaluea"
         f1.equals(f2) == false
+    }
+
+    def "test HasSubfield"() {
+        when:
+        def df = new DataField("245", "1" as char, "2" as char)
+        df.add(new Subfield('a' as char, "test"))
+
+        then:
+        df.hasSubfield('a' as char) == true
+        df.hasSubfield('x' as char) == false
+    }
+
+    def "Verify correct marshal output"() {
+        when:
+        def df = new DataField("245", "1" as char, "2" as char)
+        df.add(new Subfield('a' as char, "test"))
+
+        then:
+        df.marshal() == "12\u001Fatest\u001E"
+        df.getLength() == 9
     }
 }
