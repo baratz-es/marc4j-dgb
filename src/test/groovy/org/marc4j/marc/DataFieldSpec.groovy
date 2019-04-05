@@ -1,3 +1,22 @@
+/*
+ * Copyright (C) 2019 DIGIBÍS S.L.
+ *
+ * This file is part of MARC4J
+ *
+ * MARC4J is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * MARC4J is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with MARC4J; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
 package org.marc4j.marc
 
 import spock.lang.Specification
@@ -5,7 +24,6 @@ import spock.lang.Specification
 /**
  * Unit test for DataField
  */
-
 class DataFieldSpec extends Specification {
     final UNDEF_CHAR = '\u0000'
 
@@ -39,7 +57,16 @@ class DataFieldSpec extends Specification {
         thrown (IllegalTagException)
 
         where:
-        a << ["000", "001", "008", "", "00", "11", "0000", "1111"]
+        a << [
+            "000",
+            "001",
+            "008",
+            "",
+            "00",
+            "11",
+            "0000",
+            "1111"
+        ]
     }
     def "Datafield constructor with tag and indicators" () {
         when:
@@ -90,7 +117,16 @@ class DataFieldSpec extends Specification {
         thrown (IllegalTagException)
 
         where:
-        a << ["000", "001", "008", "", "00", "11", "0000", "1111"]
+        a << [
+            "000",
+            "001",
+            "008",
+            "",
+            "00",
+            "11",
+            "0000",
+            "1111"
+        ]
     }
 
     def "setTag modifies an existing tag" () {
@@ -127,7 +163,11 @@ class DataFieldSpec extends Specification {
         thrown (IllegalDataElementException)
 
         where:
-        indicator << [MarcConstants.US, MarcConstants.FT, MarcConstants.RT]
+        indicator << [
+            MarcConstants.US,
+            MarcConstants.FT,
+            MarcConstants.RT
+        ]
     }
 
     def "setIndicator2 raises an exception when passed an invalid indicator" () {
@@ -139,7 +179,11 @@ class DataFieldSpec extends Specification {
         thrown (IllegalDataElementException)
 
         where:
-        indicator << [MarcConstants.US, MarcConstants.FT, MarcConstants.RT]
+        indicator << [
+            MarcConstants.US,
+            MarcConstants.FT,
+            MarcConstants.RT
+        ]
     }
 
     def "adding a subfield and calling getSubfield, getSubfieldList returns the same subfield" () {
@@ -162,7 +206,10 @@ class DataFieldSpec extends Specification {
         f.add (new Subfield("a" as char, "value2"))
 
         then:
-        f.getSubfieldList() == [new Subfield("a" as char, "value1"), new Subfield("a" as char, "value2")]
+        f.getSubfieldList() == [
+            new Subfield("a" as char, "value1"),
+            new Subfield("a" as char, "value2")
+        ]
     }
 
     def "getSubfield returns only the first matching subfield" () {
@@ -172,7 +219,10 @@ class DataFieldSpec extends Specification {
         f.add (new Subfield("a" as char, "value2"))
 
         then:
-        f.getSubfieldList() == [new Subfield("a" as char, "value1"), new Subfield("a" as char, "value2")]
+        f.getSubfieldList() == [
+            new Subfield("a" as char, "value1"),
+            new Subfield("a" as char, "value2")
+        ]
         f.getSubfield("a" as char) == new Subfield("a" as char, "value1")
     }
 
@@ -183,7 +233,10 @@ class DataFieldSpec extends Specification {
         f.add (new Subfield("a" as char, "valueA"))
 
         then:
-        f.getSubfieldList() == [new Subfield("b" as char, "valueB"), new Subfield("a" as char, "valueA")]
+        f.getSubfieldList() == [
+            new Subfield("b" as char, "valueB"),
+            new Subfield("a" as char, "valueA")
+        ]
     }
 
     def "comparing the same datafield returns true" () {
