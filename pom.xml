@@ -24,10 +24,18 @@
         <tag>HEAD</tag>
     </scm>
 
+    <prerequisites>
+        <maven>3.3.0</maven>
+    </prerequisites>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java-release.version>7</java-release.version>
         <java.version>1.${java-release.version}</java.version>
+        <groovy.version>2.5.14</groovy.version>
+        <groovy-eclipse-compiler>3.4.0-01</groovy-eclipse-compiler>
+        <groovy-eclipse-batch>2.5.9-01</groovy-eclipse-batch>
+        <spock.version>2.0-groovy-2.5</spock.version>
     </properties>
 
     <dependencies>
@@ -67,31 +75,20 @@
         </dependency>
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all</artifactId>
-            <version>2.5.7</version>
-            <type>pom</type>
+            <artifactId>groovy</artifactId>
+            <version>${groovy.version}</version>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.codehaus.groovy</groupId>
-                    <artifactId>groovy-test-junit5</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.codehaus.groovy</groupId>
-                    <artifactId>groovy-testng</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-dateutil</artifactId>
-            <version>2.5.7</version>
+            <version>${groovy.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.spockframework</groupId>
             <artifactId>spock-core</artifactId>
-            <version>1.3-groovy-2.5</version>
+            <version>${spock.version}</version>
             <scope>test</scope>
         </dependency>
         <!-- Spock needs CGLib and Objenesis to make mockups -->
@@ -127,12 +124,12 @@
                     <dependency>
                         <groupId>org.codehaus.groovy</groupId>
                         <artifactId>groovy-eclipse-compiler</artifactId>
-                        <version>3.4.0-01</version>
+                        <version>${groovy-eclipse-compiler}</version>
                     </dependency>
                     <dependency>
                         <groupId>org.codehaus.groovy</groupId>
                         <artifactId>groovy-eclipse-batch</artifactId>
-                        <version>2.5.9-01</version>
+                        <version>${groovy-eclipse-batch}</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -319,6 +316,16 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+        <!-- Tests using Groovy 3 -->
+        <profile>
+            <id>groovy3</id>
+            <properties>
+                <groovy.version>3.0.7</groovy.version>
+                <groovy-eclipse-compiler>3.7.0</groovy-eclipse-compiler>
+                <groovy-eclipse-batch>3.0.7-03</groovy-eclipse-batch>
+                <spock.version>2.0-groovy-3.0</spock.version>
+            </properties>
         </profile>
     </profiles>
 </project>
