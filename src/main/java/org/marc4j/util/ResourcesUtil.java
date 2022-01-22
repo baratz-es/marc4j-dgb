@@ -24,14 +24,15 @@ import java.io.InputStream;
 import java.net.URL;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utility class to access to resouces files on the classpath
  */
 public class ResourcesUtil
 {
-    private static final Logger log = Logger.getLogger(ResourcesUtil.class);
+    private static final Logger log = LoggerFactory.getLogger(ResourcesUtil.class);
 
     private static final String RESOURCE_PATH_SEPARATOR = "/";
 

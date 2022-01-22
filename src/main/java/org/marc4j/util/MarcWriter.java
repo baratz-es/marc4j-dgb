@@ -25,7 +25,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
-import org.apache.log4j.Category;
 import org.marc4j.MarcHandler;
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
@@ -33,6 +32,8 @@ import org.marc4j.marc.Leader;
 import org.marc4j.marc.MarcException;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -49,7 +50,7 @@ public class MarcWriter
     implements MarcHandler
 {
 
-    private static Category log = Category.getInstance(MarcHandler.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(MarcHandler.class);
     /** Record object */
     private Record record;
 
@@ -112,7 +113,7 @@ public class MarcWriter
      */
     public MarcWriter(Writer out)
     {
-        setWriter(out);
+        this.setWriter(out);
     }
 
     /**
@@ -133,7 +134,7 @@ public class MarcWriter
     @Deprecated
     public void setUnicodeToAnsel(boolean convert)
     {
-        if (convert) charconv = new UnicodeToAnsel();
+        if (convert) this.charconv = new UnicodeToAnsel();
     }
 
     /**
@@ -168,7 +169,7 @@ public class MarcWriter
     public void setWriter(Writer out, boolean convert)
     {
         this.out = out;
-        setUnicodeToAnsel(convert);
+        this.setUnicodeToAnsel(convert);
     }
 
     /**
@@ -180,48 +181,48 @@ public class MarcWriter
     @Override
     public void startCollection()
     {
-        if (out == null) System.exit(0);
+        if (this.out == null) System.exit(0);
     }
 
     @Override
     public void startRecord(Leader leader)
     {
         this.record = new Record();
-        record.add(leader);
+        this.record.add(leader);
     }
 
     @Override
     public void controlField(String tag, char[] data, Long id)
     {
-        record.add(new ControlField(tag, data, id));
+        this.record.add(new ControlField(tag, data, id));
     }
 
     @Override
     public void startDataField(String tag, char ind1, char ind2, Long id)
     {
-        datafield = new DataField(tag, ind1, ind2, id);
+        this.datafield = new DataField(tag, ind1, ind2, id);
     }
 
     @Override
     public void subfield(char code, char[] data, String linkCode)
     {
-        if (charconv != null)
-            datafield.add(new Subfield(code, charconv.convert(data), linkCode));
+        if (this.charconv != null)
+            this.datafield.add(new Subfield(code, this.charconv.convert(data), linkCode));
         else
-            datafield.add(new Subfield(code, data, linkCode));
+            this.datafield.add(new Subfield(code, data, linkCode));
     }
 
     @Override
     public void endDataField(String tag)
     {
-        record.add(datafield);
+        this.record.add(this.datafield);
     }
 
     @Override
     public void endRecord()
     {
         try {
-            rawWrite(record.marshal());
+            this.rawWrite(this.record.marshal());
         } catch (IOException e) {
             log.error("Se ha producido un error al escribir en la salida", e);
         } catch (MarcException e) {
@@ -233,8 +234,8 @@ public class MarcWriter
     public void endCollection()
     {
         try {
-            out.flush();
-            out.close();
+            this.out.flush();
+            this.out.close();
         } catch (IOException e) {
             log.error("Se ha producido un error al finalizar la colección", e);
         }
@@ -243,7 +244,7 @@ public class MarcWriter
     private void rawWrite(String s)
         throws IOException
     {
-        out.write(s);
+        this.out.write(s);
     }
 
 }
