@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"org.marc4j"},{"l":"org.marc4j.helpers"},{"l":"org.marc4j.marc"},{"l":"org.marc4j.marcxml"},{"l":"org.marc4j.util"}]
