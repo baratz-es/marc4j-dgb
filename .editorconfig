@@ -1,0 +1,6 @@
+# top-most EditorConfig file
+root = true
+
+[*.java]
+charset = utf-8
+
