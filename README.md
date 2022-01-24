@@ -5,6 +5,8 @@
 
 The goal of MARC4J is to provide an easy to use Application Programming Interface (API) for working with MARC and MARCXML in Java. MARC stands for MAchine Readable Cataloging and is a widely used exchange format for bibliographic data. MARCXML provides a loss-less conversion between MARC (MARC21 but also other formats like UNIMARC) and XML.
 
+[JavaDoc](https://digibis.github.io/marc4j-dgb/javadoc/index.html?overview-summary.html)
+
 ## Background
 
 MARC4J releases beta 6 through beta 8a where based on an event based parser like SAX for XML. The MARC4J project started as James (Java MARC events), but since there is already an open source project called James, the project is renamed to MARC4J to avoid confusion in open source communities.
