@@ -1,0 +1,27 @@
+Version v1.1.1
+
+* Tests uisng Junit5 + Spock 2.0 . Optional usage of Groovy v3
+* Replaced log4j for SLF4J
+* Updated maven plugins versions. Better support of launching the compiling process with Java version 11 or greater.
+
+Version v1.1.0
+
+* Improved tests
+* Improved constructor methods
+* Improved logs
+* Fix duplication of fields. Append attribute id to VariableField and link code to Subfield to preserve not MARC data when cloning/manipulating MARC4J records.
+* Using Java 7
+
+Changes from Marc4j 2.0 beta 7 to Version v1.0.0 
+
+* Improved debugging of Record (better toString() methods). Added some generics to collections.
+* Fixing unicode support. Fixed export to ISO2709. Fixed wrong field lenght based on bytes intead of characters.
+* Fix logging directly to System.out
+* Added clone methods.
+* Sanitize datafields indicator. Only accepts valid indicator values. In case of a invalid indicator, returns a space.
+* Added all posible types related to LDR#6 and LDR#7
+* Fix Leader type and level. If is wrong, enforces monograph (LDR#7 = m)
+* Fix error. Using absolute path to XML resources.
+* Utility class to search resources. Using local thread classloader to search resources.
+* Fix error "Field not terminated" on MARC-8 Absys imporatition with accents
+
