@@ -233,4 +233,17 @@ class RecordSpec extends Specification {
 
         return record
     }
+    
+    def "Trying to add multiple 001 ControlFields"() {
+        given:
+        def leader = new Leader("00714cam a2200205 a 4500")
+        def record = new Record(leader)
+        record.add(new ControlField("001", "12883376"))
+        
+        when:
+        record.add(new ControlField("001", "12883376"))
+        
+        then:
+        thrown(IllegalAddException)
+    }
 }
