@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 DIGIBÍS S.L.
+ * Copyright (C) 2019 DIGIBÍS S.L.U
  *
  * This file is part of MARC4J
  *
