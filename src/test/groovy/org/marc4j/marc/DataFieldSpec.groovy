@@ -25,7 +25,7 @@ import spock.lang.Specification
  * Unit test for DataField
  */
 class DataFieldSpec extends Specification {
-    final UNDEF_CHAR = '\u0000'
+    final static UNDEF_CHAR = '\u0000'
 
     def "Datafield empty constructor" () {
         when:
