@@ -5,7 +5,7 @@
     <groupId>com.digibis</groupId>
     <artifactId>marc4j</artifactId>
     <packaging>jar</packaging>
-    <version>1.1.2-SNAPSHOT</version>
+    <version>1.2.0-SNAPSHOT</version>
     <name>Digibís MARC4J fork</name>
     <description>An easy to use Application Programming Interface (API) for working with MARC and MARCXML in Java.</description>
 
@@ -30,12 +30,12 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java-release.version>7</java-release.version>
+        <java-release.version>8</java-release.version>
         <java.version>1.${java-release.version}</java.version>
         <groovy.version>2.5.14</groovy.version>
         <groovy-eclipse-compiler>3.4.0-01</groovy-eclipse-compiler>
         <groovy-eclipse-batch>2.5.9-01</groovy-eclipse-batch>
-        <spock.version>1.2-groovy-2.5</spock.version>
+        <spock.version>1.3-groovy-2.5</spock.version>
     </properties>
 
     <dependencies>
@@ -222,13 +222,13 @@
                 <configuration>
                     <signature>
                         <groupId>org.codehaus.mojo.signature</groupId>
-                        <artifactId>java17</artifactId>
+                        <artifactId>java18</artifactId>
                         <version>1.0</version>
                     </signature>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>ensure-java-1.7-class-library</id>
+                        <id>ensure-java-1.8-class-library</id>
                         <phase>prepare-package</phase>
                         <goals>
                             <goal>check</goal>
