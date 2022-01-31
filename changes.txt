@@ -1,3 +1,9 @@
+Version v1.1.1
+
+* Tests uisng Junit5 + Spock . Optional usage of Spock v2 + Groovy v3
+* Replaced log4j for SLF4J
+* Updated maven plugins versions. Better support of launching the compiling process with Java version 11 or greater.
+
 Version v1.1.0
 
 * Improved tests

@@ -26,7 +26,8 @@ import java.util.Vector;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.log4j.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
@@ -41,7 +42,7 @@ import org.xml.sax.XMLReader;
  */
 public class CodeTable
 {
-    private static Category log = Category.getInstance(CodeTable.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(CodeTable.class);
     protected static Hashtable charsets = null;
     protected static Hashtable combining = null;
 
@@ -81,9 +82,9 @@ public class CodeTable
                             + Integer.toHexString(mode));
                         return (char)c;
                     } else
-                        return ch.charValue();
+                        return ch;
                 } else
-                    return ch.charValue();
+                    return ch;
             }
         }
     }

@@ -37,10 +37,11 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.log4j.Category;
 import org.marc4j.helpers.ErrorHandlerImpl;
 import org.marc4j.marcxml.Converter;
 import org.marc4j.marcxml.MarcXmlReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
@@ -93,7 +94,7 @@ import org.xml.sax.SAXNotSupportedException;
 public class MarcXmlWriter
 {
 
-    private static Category log = Category.getInstance(MarcXmlWriter.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(MarcXmlWriter.class);
 
     /**
      * <p>

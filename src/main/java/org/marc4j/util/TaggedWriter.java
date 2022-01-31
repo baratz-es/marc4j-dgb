@@ -25,9 +25,10 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
-import org.apache.log4j.Category;
 import org.marc4j.MarcHandler;
 import org.marc4j.marc.Leader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -44,7 +45,7 @@ public class TaggedWriter
     implements MarcHandler
 {
 
-    private static Category log = Category.getInstance(TaggedWriter.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(TaggedWriter.class);
     /** The Writer object */
     private Writer out;
 
@@ -98,7 +99,7 @@ public class TaggedWriter
      */
     public TaggedWriter(Writer out)
     {
-        setWriter(out);
+        this.setWriter(out);
     }
 
     /**
@@ -122,61 +123,61 @@ public class TaggedWriter
     @Override
     public void startCollection()
     {
-        if (out == null) System.exit(0);
+        if (this.out == null) System.exit(0);
     }
 
     @Override
     public void startRecord(Leader leader)
     {
-        rawWrite("Leader ");
-        rawWrite(leader.marshal());
-        rawWrite('\n');
+        this.rawWrite("Leader ");
+        this.rawWrite(leader.marshal());
+        this.rawWrite('\n');
     }
 
     @Override
     public void controlField(String tag, char[] data, Long id)
     {
-        rawWrite(tag);
-        rawWrite(' ');
-        rawWrite(new String(data));
-        rawWrite('\n');
+        this.rawWrite(tag);
+        this.rawWrite(' ');
+        this.rawWrite(new String(data));
+        this.rawWrite('\n');
     }
 
     @Override
     public void startDataField(String tag, char ind1, char ind2, Long id)
     {
-        rawWrite(tag);
-        rawWrite(' ');
-        rawWrite(ind1);
-        rawWrite(ind2);
+        this.rawWrite(tag);
+        this.rawWrite(' ');
+        this.rawWrite(ind1);
+        this.rawWrite(ind2);
     }
 
     @Override
     public void subfield(char code, char[] data, String linkCode)
     {
-        rawWrite('$');
-        rawWrite(code);
-        rawWrite(new String(data));
+        this.rawWrite('$');
+        this.rawWrite(code);
+        this.rawWrite(new String(data));
     }
 
     @Override
     public void endDataField(String tag)
     {
-        rawWrite('\n');
+        this.rawWrite('\n');
     }
 
     @Override
     public void endRecord()
     {
-        rawWrite('\n');
+        this.rawWrite('\n');
     }
 
     @Override
     public void endCollection()
     {
         try {
-            out.flush();
-            out.close();
+            this.out.flush();
+            this.out.close();
         } catch (IOException e) {
             log.error("Error al finalizar la colección", e);
         }
@@ -185,7 +186,7 @@ public class TaggedWriter
     private void rawWrite(char c)
     {
         try {
-            out.write(c);
+            this.out.write(c);
         } catch (IOException e) {
             log.error("Se ha producido un error al escribir en la salida", e);
         }
@@ -194,7 +195,7 @@ public class TaggedWriter
     private void rawWrite(String s)
     {
         try {
-            out.write(s);
+            this.out.write(s);
         } catch (IOException e) {
             log.error("Se ha producido un error al escribir en la salida", e);
         }

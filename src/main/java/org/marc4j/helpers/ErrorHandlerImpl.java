@@ -20,9 +20,10 @@
  */
 package org.marc4j.helpers;
 
-import org.apache.log4j.Category;
 import org.marc4j.ErrorHandler;
 import org.marc4j.MarcReaderException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -39,21 +40,24 @@ public class ErrorHandlerImpl
     implements ErrorHandler
 {
 
-    private static Category log = Category.getInstance(ErrorHandlerImpl.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(ErrorHandlerImpl.class);
 
+    @Override
     public void warning(MarcReaderException exception)
     {
         log.warn(printMarcException("Warning", exception), exception);
     }
 
+    @Override
     public void error(MarcReaderException exception)
     {
         log.error(printMarcException("Error", exception), exception);
     }
 
+    @Override
     public void fatalError(MarcReaderException exception)
     {
-        log.fatal(printMarcException("FATAL", exception), exception);
+        log.error(printMarcException("FATAL", exception), exception);
     }
 
     public static String printMarcException(String label, MarcReaderException e)

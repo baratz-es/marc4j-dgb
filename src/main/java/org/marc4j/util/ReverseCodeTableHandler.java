@@ -27,7 +27,8 @@ import java.util.Vector;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
@@ -49,7 +50,7 @@ public class ReverseCodeTableHandler
     extends DefaultHandler
 {
 
-    private static Logger log = Logger.getLogger(ReverseCodeTableHandler.class);
+    private static Logger log = LoggerFactory.getLogger(ReverseCodeTableHandler.class);
 
     private Hashtable charset;
     private Vector combiningchars;
@@ -71,12 +72,12 @@ public class ReverseCodeTableHandler
 
     public Hashtable getCharSets()
     {
-        return charset;
+        return this.charset;
     }
 
     public Vector getCombiningChars()
     {
-        return combiningchars;
+        return this.combiningchars;
     }
 
     /**
@@ -86,69 +87,73 @@ public class ReverseCodeTableHandler
      *
      * @param locator the {@link Locator} object
      */
+    @Override
     public void setDocumentLocator(Locator locator)
     {
         this.locator = locator;
     }
 
+    @Override
     public void startElement(String uri, String name, String qName, Attributes atts)
         throws SAXParseException
     {
         if (name.equals("characterSet"))
-            isocode = Integer.valueOf(atts.getValue("ISOcode"), 16);
+            this.isocode = Integer.valueOf(atts.getValue("ISOcode"), 16);
         else if (name.equals("marc"))
-            data = new StringBuffer();
+            this.data = new StringBuffer();
         else if (name.equals("codeTables")) {
-            charset = new Hashtable();
-            combiningchars = new Vector();
+            this.charset = new Hashtable();
+            this.combiningchars = new Vector();
         } else if (name.equals("ucs"))
-            data = new StringBuffer();
+            this.data = new StringBuffer();
         else if (name.equals("code"))
-            combining = false;
-        else if (name.equals("isCombining")) data = new StringBuffer();
+            this.combining = false;
+        else if (name.equals("isCombining")) this.data = new StringBuffer();
 
     }
 
+    @Override
     public void characters(char[] ch, int start, int length)
     {
-        if (data != null) {
-            data.append(ch, start, length);
+        if (this.data != null) {
+            this.data.append(ch, start, length);
         }
     }
 
+    @Override
     public void endElement(String uri, String name, String qName)
         throws SAXParseException
     {
         if (name.equals("marc")) {
-            String marcstr = data.toString();
+            String marcstr = this.data.toString();
             if (marcstr.length() == 6) {
-                marc = new char[3];
-                marc[0] = (char)Integer.parseInt(marcstr.substring(0, 2), 16);
-                marc[1] = (char)Integer.parseInt(marcstr.substring(2, 4), 16);
-                marc[2] = (char)Integer.parseInt(marcstr.substring(4, 6), 16);
+                this.marc = new char[3];
+                this.marc[0] = (char)Integer.parseInt(marcstr.substring(0, 2), 16);
+                this.marc[1] = (char)Integer.parseInt(marcstr.substring(2, 4), 16);
+                this.marc[2] = (char)Integer.parseInt(marcstr.substring(4, 6), 16);
             } else {
-                marc = new char[1];
-                marc[0] = (char)Integer.parseInt(marcstr, 16);
+                this.marc = new char[1];
+                this.marc[0] = (char)Integer.parseInt(marcstr, 16);
             }
         } else if (name.equals("ucs")) {
-            ucs = new Character((char)Integer.parseInt(data.toString(), 16));
+            this.ucs = new Character((char)Integer.parseInt(this.data.toString(), 16));
         } else if (name.equals("code")) {
-            if (combining) {
-                combiningchars.add(ucs);
+            if (this.combining) {
+                this.combiningchars.add(this.ucs);
             }
 
-            if (charset.get(ucs) == null) {
+            if (this.charset.get(this.ucs) == null) {
                 Hashtable h = new Hashtable(1);
-                h.put(isocode, marc);
-                charset.put(ucs, h);
+                h.put(this.isocode, this.marc);
+                this.charset.put(this.ucs, h);
             } else {
-                Hashtable h = (Hashtable)charset.get(ucs);
-                h.put(isocode, marc);
+                Hashtable h = (Hashtable)this.charset.get(this.ucs);
+                h.put(this.isocode, this.marc);
             }
         } else if (name.equals("isCombining")) {
-            if (data.toString().equals("true")) combining = true;
+            if (this.data.toString().equals("true")) this.combining = true;
         }
-        data = null;
+        this.data = null;
     }
 
     public static void main(String[] args)

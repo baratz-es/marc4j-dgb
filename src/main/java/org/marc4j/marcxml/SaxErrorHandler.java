@@ -20,7 +20,8 @@
  */
 package org.marc4j.marcxml;
 
-import org.apache.log4j.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXParseException;
 
@@ -42,7 +43,7 @@ public class SaxErrorHandler
     implements ErrorHandler
 {
 
-    private static Category log = Category.getInstance(SaxErrorHandler.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(SaxErrorHandler.class);
     private int flags;
 
     public static final int ERR_PRINT = 1;
@@ -53,7 +54,7 @@ public class SaxErrorHandler
 
     public SaxErrorHandler()
     {
-        flags = ~0;
+        this.flags = ~0;
     }
 
     public SaxErrorHandler(int flags)
@@ -61,24 +62,27 @@ public class SaxErrorHandler
         this.flags = flags;
     }
 
+    @Override
     public void error(SAXParseException e)
         throws SAXParseException
     {
-        if ((flags & ERR_PRINT) != 0) log.error(printParseException("Error", e), e);
-        if ((flags & ERR_IGNORE) == 0) throw e;
+        if ((this.flags & ERR_PRINT) != 0) log.error(printParseException("Error", e), e);
+        if ((this.flags & ERR_IGNORE) == 0) throw e;
     }
 
+    @Override
     public void fatalError(SAXParseException e)
         throws SAXParseException
     {
-        if ((flags & FATAL_PRINT) != 0) log.fatal(printParseException("FATAL", e), e);
-        if ((flags & FATAL_IGNORE) == 0) throw e;
+        if ((this.flags & FATAL_PRINT) != 0) log.error(printParseException("FATAL", e), e);
+        if ((this.flags & FATAL_IGNORE) == 0) throw e;
     }
 
+    @Override
     public void warning(SAXParseException e)
         throws SAXParseException
     {
-        if ((flags & WARN_PRINT) != 0) log.warn(printParseException("Warning", e), e);
+        if ((this.flags & WARN_PRINT) != 0) log.warn(printParseException("Warning", e), e);
     }
 
     public static String printParseException(String label, SAXParseException e)

@@ -34,11 +34,12 @@ import javax.xml.transform.Source;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.log4j.Category;
 import org.marc4j.marcxml.Converter;
 import org.marc4j.marcxml.MarcResult;
 import org.marc4j.marcxml.MarcXmlHandler;
 import org.marc4j.marcxml.SaxErrorHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
@@ -98,7 +99,7 @@ import org.xml.sax.XMLReader;
 public class XmlMarcWriter
 {
 
-    private static Category log = Category.getInstance(XmlMarcWriter.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(XmlMarcWriter.class);
     private static final String JAXP_SCHEMA_LANGUAGE = "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
 
     private static final String W3C_XML_SCHEMA = "http://www.w3.org/2001/XMLSchema";

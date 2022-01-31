@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 DIGIBÍS S.L.
+ * Copyright (C) 2019 DIGIBÍS S.L.U
  *
  * This file is part of MARC4J
  *
@@ -232,5 +232,18 @@ class RecordSpec extends Specification {
         dField.add(subField)
 
         return record
+    }
+    
+    def "Trying to add multiple 001 ControlFields"() {
+        given:
+        def leader = new Leader("00714cam a2200205 a 4500")
+        def record = new Record(leader)
+        record.add(new ControlField("001", "12883376"))
+        
+        when:
+        record.add(new ControlField("001", "12883376"))
+        
+        then:
+        thrown(IllegalAddException)
     }
 }

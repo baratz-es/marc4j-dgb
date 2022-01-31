@@ -26,7 +26,8 @@ import java.util.Vector;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.log4j.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
@@ -44,7 +45,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public class ReverseCodeTable
 {
 
-    private static Category log = Category.getInstance(ReverseCodeTable.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(ReverseCodeTable.class);
     protected static Hashtable charset = null;
     protected static Vector combining = null;
 

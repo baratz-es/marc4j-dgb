@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 DIGIBÍS S.L.
+ * Copyright (C) 2019 DIGIBÍS S.L.U
  *
  * This file is part of MARC4J
  *
@@ -25,7 +25,7 @@ import spock.lang.Specification
  * Unit test for DataField
  */
 class DataFieldSpec extends Specification {
-    final UNDEF_CHAR = '\u0000'
+    final static UNDEF_CHAR = '\u0000'
 
     def "Datafield empty constructor" () {
         when:
