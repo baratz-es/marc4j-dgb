@@ -410,7 +410,7 @@ public class Leader
             } else {
                 this.setIndicatorCount(2);
             }
-            s = String.valueOf(ldr.charAt(10));
+            s = String.valueOf(ldr.charAt(11));
             if (this.isInteger(s)) {
                 this.setSubfieldCodeLength(Integer.parseInt(s));
             } else {
