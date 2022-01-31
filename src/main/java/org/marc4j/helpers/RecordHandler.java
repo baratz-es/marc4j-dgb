@@ -38,7 +38,7 @@ public interface RecordHandler
      * Receives notification at the start of the collection.
      * </p>
      */
-    public void startCollection();
+    void startCollection();
 
     /**
      * <p>
@@ -47,13 +47,13 @@ public interface RecordHandler
      *
      * @param record the {@link Record} object.
      */
-    public void record(Record record);
+    void record(Record record);
 
     /**
      * <p>
      * Receives notification at the end of the collection.
      * </p>
      */
-    public void endCollection();
+    void endCollection();
 
 }

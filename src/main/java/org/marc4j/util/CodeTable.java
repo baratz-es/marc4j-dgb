@@ -56,9 +56,9 @@ public class CodeTable
 
     public static char getChar(int c, int mode)
     {
-        if (c == 0x20)
+        if (c == 0x20) {
             return (char)c;
-        else {
+        } else {
             Hashtable charset = (Hashtable)charsets.get(new Integer(mode));
 
             if (charset == null) {
@@ -69,19 +69,22 @@ public class CodeTable
                 if (ch == null) {
 
                     int newc;
-                    if (c < 0x80)
+                    if (c < 0x80) {
                         newc = c + 0x80;
-                    else
+                    } else {
                         newc = c - 0x80;
+                    }
                     ch = (Character)charset.get(new Integer(newc));
                     if (ch == null) {
                         log.error("Character not found: " + Integer.toHexString(c) + " in Code Table: "
                             + Integer.toHexString(mode));
                         return (char)c;
-                    } else
+                    } else {
                         return ch;
-                } else
+                    }
+                } else {
                     return ch;
+                }
             }
         }
     }

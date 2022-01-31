@@ -63,23 +63,33 @@ public class SaxErrorHandler
     public void error(SAXParseException e)
         throws SAXParseException
     {
-        if ((this.flags & ERR_PRINT) != 0) log.error(printParseException("Error", e), e);
-        if ((this.flags & ERR_IGNORE) == 0) throw e;
+        if ((this.flags & ERR_PRINT) != 0) {
+            log.error(SaxErrorHandler.printParseException("Error", e), e);
+        }
+        if ((this.flags & ERR_IGNORE) == 0) {
+            throw e;
+        }
     }
 
     @Override
     public void fatalError(SAXParseException e)
         throws SAXParseException
     {
-        if ((this.flags & FATAL_PRINT) != 0) log.error(printParseException("FATAL", e), e);
-        if ((this.flags & FATAL_IGNORE) == 0) throw e;
+        if ((this.flags & FATAL_PRINT) != 0) {
+            log.error(SaxErrorHandler.printParseException("FATAL", e), e);
+        }
+        if ((this.flags & FATAL_IGNORE) == 0) {
+            throw e;
+        }
     }
 
     @Override
     public void warning(SAXParseException e)
         throws SAXParseException
     {
-        if ((this.flags & WARN_PRINT) != 0) log.warn(printParseException("Warning", e), e);
+        if ((this.flags & WARN_PRINT) != 0) {
+            log.warn(SaxErrorHandler.printParseException("Warning", e), e);
+        }
     }
 
     public static String printParseException(String label, SAXParseException e)

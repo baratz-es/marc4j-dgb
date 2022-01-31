@@ -51,7 +51,7 @@ public class UnicodeToAnsel
         // System.exit(1);
         // }
         try {
-            rct = new ReverseCodeTable(ResourcesUtil.getStream("/org/marc4j/util/resources/codetables.xml"));
+            this.rct = new ReverseCodeTable(ResourcesUtil.getStream("/org/marc4j/util/resources/codetables.xml"));
         } catch (IOException e) {
             throw new MarcException(e.getMessage(), e);
         }
@@ -72,7 +72,7 @@ public class UnicodeToAnsel
     @Override
     public String convert(String data)
     {
-        return new String(convert(data.toCharArray()));
+        return new String(this.convert(data.toCharArray()));
     }
 
     /**
@@ -95,16 +95,16 @@ public class UnicodeToAnsel
 
         boolean technique1 = false;
 
-        for (int i = 0; i < data.length; i++) {
-            Character c = new Character(data[i]);
+        for (char element : data) {
+            Character c = new Character(element);
             Integer table;
             StringBuffer marc = new StringBuffer();
-            Hashtable h = rct.codeTableHash(c);
+            Hashtable h = ReverseCodeTable.codeTableHash(c);
 
-            if (h.keySet().contains(ctt.getPrevious(CodeTableTracker.G0))) {
+            if (h.containsKey(ctt.getPrevious(CodeTableTracker.G0))) {
                 ctt.makePreviousCurrent();
                 marc.append((char[])h.get(ctt.getPrevious(CodeTableTracker.G0)));
-            } else if (h.keySet().contains(ctt.getPrevious(CodeTableTracker.G1))) {
+            } else if (h.containsKey(ctt.getPrevious(CodeTableTracker.G1))) {
                 ctt.makePreviousCurrent();
                 marc.append((char[])h.get(ctt.getPrevious(CodeTableTracker.G1)));
             } else {
@@ -132,10 +132,11 @@ public class UnicodeToAnsel
                 marc.append(marc8);
             }
 
-            if (rct.isCombining(c))
+            if (ReverseCodeTable.isCombining(c)) {
                 sb.insert(sb.length() - 1, marc.toString());
-            else
+            } else {
                 sb.append(marc);
+            }
         }
 
         if (ctt.getPrevious(CodeTableTracker.G0).intValue() != ASCII) {

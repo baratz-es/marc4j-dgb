@@ -39,7 +39,6 @@ public class IllegalDataElementException
      */
     public IllegalDataElementException()
     {
-        super();
     }
 
     /**

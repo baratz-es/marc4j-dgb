@@ -41,7 +41,6 @@ public class MarcException
      */
     public MarcException()
     {
-        super();
     }
 
     /**
@@ -69,7 +68,7 @@ public class MarcException
     public MarcException(String message, Throwable ex)
     {
         super(message);
-        initCause(ex);
+        this.initCause(ex);
     }
 
     /**
@@ -83,7 +82,7 @@ public class MarcException
     @Override
     public Throwable getCause()
     {
-        return cause;
+        return this.cause;
     }
 
     /**

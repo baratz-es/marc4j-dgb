@@ -93,9 +93,9 @@ public class Directory
      */
     public void add(String tag, int length)
     {
-        start = start + prev;
-        prev = length;
-        directory.append(tag).append(formatLength.format(length)).append(formatStart.format(start));
+        this.start = this.start + this.prev;
+        this.prev = length;
+        this.directory.append(tag).append(this.formatLength.format(length)).append(this.formatStart.format(this.start));
     }
 
     /**
@@ -108,7 +108,7 @@ public class Directory
      */
     public String marshal()
     {
-        return directory.toString() + FT;
+        return this.directory.toString() + FT;
     }
 
     /**

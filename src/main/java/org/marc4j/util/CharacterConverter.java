@@ -30,8 +30,8 @@ package org.marc4j.util;
 public interface CharacterConverter
 {
 
-    public abstract String convert(String data);
+    String convert(String data);
 
-    public abstract char[] convert(char[] data);
+    char[] convert(char[] data);
 
 }

@@ -463,6 +463,7 @@ public class Leader
                 case '8':
                 case '9':
                     break;
+
                 default:
                     return false;
             }
@@ -484,13 +485,13 @@ public class Leader
             instance.recordLength = this.recordLength;
             instance.recordStatus = this.recordStatus;
             instance.typeOfRecord = this.typeOfRecord;
-            instance.implDefined1 = (char[])this.implDefined1.clone();
+            instance.implDefined1 = this.implDefined1.clone();
             instance.charCodingScheme = this.charCodingScheme;
             instance.indicatorCount = this.indicatorCount;
             instance.subfieldCodeLength = this.subfieldCodeLength;
             instance.baseAddressOfData = this.baseAddressOfData;
-            instance.implDefined2 = (char[])this.implDefined2.clone();
-            instance.entryMap = (char[])this.entryMap.clone();
+            instance.implDefined2 = this.implDefined2.clone();
+            instance.entryMap = this.entryMap.clone();
 
             return instance;
         } catch (CloneNotSupportedException e) {

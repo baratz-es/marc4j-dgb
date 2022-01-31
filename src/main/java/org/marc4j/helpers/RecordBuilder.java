@@ -65,9 +65,12 @@ public class RecordBuilder
      * Reports the start of the file.
      * </p>
      */
+    @Override
     public void startCollection()
     {
-        if (recordHandler != null) recordHandler.startCollection();
+        if (this.recordHandler != null) {
+            this.recordHandler.startCollection();
+        }
     }
 
     /**
@@ -75,10 +78,11 @@ public class RecordBuilder
      * Creates a new record object.
      * </p>
      */
+    @Override
     public void startRecord(Leader leader)
     {
         this.record = new Record();
-        record.add(leader);
+        this.record.add(leader);
     }
 
     /**
@@ -89,7 +93,7 @@ public class RecordBuilder
     @Override
     public void controlField(String tag, char[] data, Long id)
     {
-        record.add(new ControlField(tag, data, id));
+        this.record.add(new ControlField(tag, data, id));
     }
 
     /**
@@ -100,7 +104,7 @@ public class RecordBuilder
     @Override
     public void startDataField(String tag, char ind1, char ind2, Long id)
     {
-        datafield = new DataField(tag, ind1, ind2, id);
+        this.datafield = new DataField(tag, ind1, ind2, id);
     }
 
     /**
@@ -111,7 +115,7 @@ public class RecordBuilder
     @Override
     public void subfield(char identifier, char[] data, String linkCode)
     {
-        datafield.add(new Subfield(identifier, data, linkCode));
+        this.datafield.add(new Subfield(identifier, data, linkCode));
     }
 
     /**
@@ -119,9 +123,10 @@ public class RecordBuilder
      * Adds a data field to the record object.
      * </p>
      */
+    @Override
     public void endDataField(String tag)
     {
-        record.add(datafield);
+        this.record.add(this.datafield);
     }
 
     /**
@@ -129,9 +134,12 @@ public class RecordBuilder
      * Reports the end of a record and sets the record object.
      * </p>
      */
+    @Override
     public void endRecord()
     {
-        if (recordHandler != null) recordHandler.record(record);
+        if (this.recordHandler != null) {
+            this.recordHandler.record(this.record);
+        }
     }
 
     /**
@@ -139,9 +147,12 @@ public class RecordBuilder
      * Reports the end of the file.
      * </p>
      */
+    @Override
     public void endCollection()
     {
-        if (recordHandler != null) recordHandler.endCollection();
+        if (this.recordHandler != null) {
+            this.recordHandler.endCollection();
+        }
     }
 
 }

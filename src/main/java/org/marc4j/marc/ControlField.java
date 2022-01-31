@@ -65,7 +65,6 @@ public class ControlField
      */
     public ControlField()
     {
-        super();
     }
 
     /**
@@ -80,7 +79,7 @@ public class ControlField
     public ControlField(String tag, char[] data)
     {
         super(tag);
-        setData(data);
+        this.setData(data);
     }
 
     /**
@@ -95,7 +94,7 @@ public class ControlField
     public ControlField(String tag, String data)
     {
         super(tag);
-        setData(data.toCharArray());
+        this.setData(data.toCharArray());
     }
 
     /**
@@ -183,7 +182,7 @@ public class ControlField
      */
     public void setData(String data)
     {
-        setData(data.toCharArray());
+        this.setData(data.toCharArray());
     }
 
     /**
@@ -192,11 +191,11 @@ public class ControlField
      * </p>
      *
      * @return <code>char[]</code> - control field as a
-     *         character array
+     *             character array
      */
     public char[] getData()
     {
-        return data;
+        return this.data;
     }
 
     /**
@@ -209,7 +208,7 @@ public class ControlField
      */
     public String marshal()
     {
-        return new String(data) + FT;
+        return new String(this.data) + (char)MarcConstants.FT;
     }
 
     /**
@@ -230,7 +229,7 @@ public class ControlField
     @Override
     public Object clone()
     {
-        ControlField instance = new ControlField(this.getTag(), String.copyValueOf(this.data), ControlField.EMPTY_ID);
+        ControlField instance = new ControlField(this.getTag(), String.copyValueOf(this.data), VariableField.EMPTY_ID);
         return instance;
     }
 
@@ -240,9 +239,15 @@ public class ControlField
     @Override
     public boolean equals(Object obj)
     {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        if (obj.getClass() != getClass()) return false;
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != this.getClass()) {
+            return false;
+        }
 
         ControlField that = (ControlField)obj;
         return new EqualsBuilder()
@@ -264,9 +269,9 @@ public class ControlField
         final StringBuilder sb = new StringBuilder();
         sb
             .append("\n    CONTROLFIELD [  tag: ")
-            .append(getTag())
+            .append(this.getTag())
             .append(", Data:")
-            .append(Arrays.toString(data))
+            .append(Arrays.toString(this.data))
             .append(this.getId() != null ? (", id: ") + this.getId() : "")
             .append(" ] ");
         return sb.toString();

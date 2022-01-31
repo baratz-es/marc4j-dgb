@@ -131,7 +131,9 @@ public class MarcWriter
     @Deprecated
     public void setUnicodeToAnsel(boolean convert)
     {
-        if (convert) this.charconv = new UnicodeToAnsel();
+        if (convert) {
+            this.charconv = new UnicodeToAnsel();
+        }
     }
 
     /**
@@ -178,7 +180,9 @@ public class MarcWriter
     @Override
     public void startCollection()
     {
-        if (this.out == null) System.exit(0);
+        if (this.out == null) {
+            System.exit(0);
+        }
     }
 
     @Override
@@ -203,10 +207,11 @@ public class MarcWriter
     @Override
     public void subfield(char code, char[] data, String linkCode)
     {
-        if (this.charconv != null)
+        if (this.charconv != null) {
             this.datafield.add(new Subfield(code, this.charconv.convert(data), linkCode));
-        else
+        } else {
             this.datafield.add(new Subfield(code, data, linkCode));
+        }
     }
 
     @Override

@@ -41,7 +41,6 @@ public class CharacterConverterLoaderException
      */
     public CharacterConverterLoaderException()
     {
-        super();
     }
 
     /**
@@ -69,7 +68,7 @@ public class CharacterConverterLoaderException
     public CharacterConverterLoaderException(String message, Throwable ex)
     {
         super(message);
-        initCause(ex);
+        this.initCause(ex);
     }
 
     /**
@@ -83,7 +82,7 @@ public class CharacterConverterLoaderException
     @Override
     public Throwable getCause()
     {
-        return cause;
+        return this.cause;
     }
 
     /**

@@ -50,9 +50,9 @@ public class DoctypeDecl
      */
     public DoctypeDecl(String name, String publicId, String systemId)
     {
-        setName(name);
-        setPublicId(publicId);
-        setSystemId(systemId);
+        this.setName(name);
+        this.setPublicId(publicId);
+        this.setSystemId(systemId);
     }
 
     /**
@@ -100,7 +100,7 @@ public class DoctypeDecl
      */
     public String getName()
     {
-        return name;
+        return this.name;
     }
 
     /**
@@ -112,7 +112,7 @@ public class DoctypeDecl
      */
     public String getPublicId()
     {
-        return publicId;
+        return this.publicId;
     }
 
     /**
@@ -124,7 +124,7 @@ public class DoctypeDecl
      */
     public String getSystemId()
     {
-        return systemId;
+        return this.systemId;
     }
 
 }

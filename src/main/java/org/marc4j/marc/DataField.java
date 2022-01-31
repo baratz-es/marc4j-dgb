@@ -77,7 +77,6 @@ public class DataField
      */
     public DataField()
     {
-        super();
         this.list = new ArrayList<>();
     }
 
@@ -108,8 +107,8 @@ public class DataField
     public DataField(String tag, char ind1, char ind2)
     {
         super(tag);
-        setIndicator1(ind1);
-        setIndicator2(ind2);
+        this.setIndicator1(ind1);
+        this.setIndicator2(ind2);
         this.list = new ArrayList<>();
     }
 
@@ -201,7 +200,7 @@ public class DataField
      */
     public void add(Subfield subfield)
     {
-        list.add(subfield);
+        this.list.add(subfield);
     }
 
     /**
@@ -213,7 +212,7 @@ public class DataField
      */
     public char getIndicator1()
     {
-        return ind1;
+        return this.ind1;
     }
 
     /**
@@ -225,7 +224,7 @@ public class DataField
      */
     public char getIndicator2()
     {
-        return ind2;
+        return this.ind2;
     }
 
     /**
@@ -238,7 +237,7 @@ public class DataField
      */
     public List<Subfield> getSubfieldList()
     {
-        return list;
+        return this.list;
     }
 
     /**
@@ -252,9 +251,10 @@ public class DataField
      */
     public Subfield getSubfield(char code)
     {
-        for (Iterator<Subfield> i = list.iterator(); i.hasNext();) {
-            Subfield sf = i.next();
-            if (sf.getCode() == code) return sf;
+        for (Subfield sf : this.list) {
+            if (sf.getCode() == code) {
+                return sf;
+            }
         }
         return null;
     }
@@ -269,9 +269,10 @@ public class DataField
      */
     public boolean hasSubfield(char code)
     {
-        for (Iterator<Subfield> i = list.iterator(); i.hasNext();) {
-            Subfield sf = i.next();
-            if (sf.getCode() == code) return true;
+        for (Subfield sf : this.list) {
+            if (sf.getCode() == code) {
+                return true;
+            }
         }
         return false;
     }
@@ -296,14 +297,14 @@ public class DataField
     public void setSubfieldList(List<Subfield> newList)
     {
         if (newList == null) {
-            list = new ArrayList<Subfield>();
+            this.list = new ArrayList<>();
             return;
         }
-        list = new ArrayList<Subfield>();
-        for (Iterator<Subfield> i = newList.iterator(); i.hasNext();) {
-            Object obj = i.next();
+        this.list = new ArrayList<>();
+        for (Subfield subfield : newList) {
+            Object obj = subfield;
             if (obj instanceof Subfield) {
-                add((Subfield)obj);
+                this.add((Subfield)obj);
             } else {
                 throw new IllegalAddException(obj.getClass().getName(),
                     "a collection of subfields can only contain " + "Subfield objects.");
@@ -321,13 +322,13 @@ public class DataField
      */
     public String marshal()
     {
-        StringBuffer dataField = new StringBuffer().append(ind1).append(ind2);
-        Iterator<Subfield> iterator = list.iterator();
+        StringBuffer dataField = new StringBuffer().append(this.ind1).append(this.ind2);
+        Iterator<Subfield> iterator = this.list.iterator();
         while (iterator.hasNext()) {
-            Subfield subfield = (Subfield)iterator.next();
+            Subfield subfield = iterator.next();
             dataField.append(subfield.marshal());
         }
-        dataField.append(FT);
+        dataField.append((char)MarcConstants.FT);
         return dataField.toString();
     }
 
@@ -351,13 +352,14 @@ public class DataField
     public Object clone()
     {
         // Creamos una nueva instancia
-        DataField instance = new DataField(this.getTag(), this.ind1, this.ind2, DataField.EMPTY_ID);
+        DataField instance = new DataField(this.getTag(), this.ind1, this.ind2, VariableField.EMPTY_ID);
 
         // Recorremos la lista de subcampos y clonamos cada uno de ellos
         if (this.list != null) {
             ArrayList<Subfield> newList = new ArrayList<>();
-            for (Iterator<Subfield> it = this.list.iterator(); it.hasNext();)
-                newList.add((Subfield)it.next().clone());
+            for (Subfield subfield : this.list) {
+                newList.add((Subfield)subfield.clone());
+            }
             instance.setSubfieldList(newList);
         }
 
@@ -368,9 +370,15 @@ public class DataField
     @Override
     public boolean equals(Object obj)
     {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        if (obj.getClass() != getClass()) return false;
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != this.getClass()) {
+            return false;
+        }
 
         DataField that = (DataField)obj;
         return new EqualsBuilder()
@@ -400,14 +408,14 @@ public class DataField
         final StringBuilder sb = new StringBuilder();
         sb
             .append("\n    DATAFIELD    [  tag: ")
-            .append(getTag())
+            .append(this.getTag())
             .append(", Ind1:")
-            .append(getIndicator1())
+            .append(this.getIndicator1())
             .append(", Ind2:")
-            .append(getIndicator2())
+            .append(this.getIndicator2())
             .append(this.getId() != null ? (", id: ") + this.getId() : "")
             .append(",\n        Elements: ")
-            .append(Arrays.toString(list.toArray()))
+            .append(Arrays.toString(this.list.toArray()))
             .append(" ] ");
         return sb.toString();
     }

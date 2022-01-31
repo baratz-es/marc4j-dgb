@@ -36,14 +36,14 @@ public interface MarcHandler
      * Receives notification at the start of the collection.
      * </p>
      */
-    public abstract void startCollection();
+    void startCollection();
 
     /**
      * <p>
      * Receives notification at the end of the collection.
      * </p>
      */
-    public abstract void endCollection();
+    void endCollection();
 
     /**
      * <p>
@@ -52,14 +52,14 @@ public interface MarcHandler
      *
      * @param leader the {@link Leader} object containing the record label
      */
-    public abstract void startRecord(Leader leader);
+    void startRecord(Leader leader);
 
     /**
      * <p>
      * Receives notification at the end of each record.
      * </p>
      */
-    public abstract void endRecord();
+    void endRecord();
 
     /**
      * <p>
@@ -70,7 +70,7 @@ public interface MarcHandler
      * @param data the control field data
      * @param id the field id if exists.
      */
-    public abstract void controlField(String tag, char[] data, Long id);
+    void controlField(String tag, char[] data, Long id);
 
     /**
      * <p>
@@ -82,7 +82,7 @@ public interface MarcHandler
      * @param ind2 the second indicator value
      * @param id the field id if exists.
      */
-    public abstract void startDataField(String tag, char ind1, char ind2, Long id);
+    void startDataField(String tag, char ind1, char ind2, Long id);
 
     /**
      * <p>
@@ -91,7 +91,7 @@ public interface MarcHandler
      *
      * @param tag the tag name
      */
-    public abstract void endDataField(String tag);
+    void endDataField(String tag);
 
     /**
      * <p>
@@ -102,6 +102,6 @@ public interface MarcHandler
      * @param data the data element
      * @param linkCode a code if the subfield has a link with another Record
      */
-    public abstract void subfield(char code, char[] data, String linkCode);
+    void subfield(char code, char[] data, String linkCode);
 
 }

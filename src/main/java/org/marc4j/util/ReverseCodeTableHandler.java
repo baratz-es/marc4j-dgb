@@ -95,18 +95,20 @@ public class ReverseCodeTableHandler
     public void startElement(String uri, String name, String qName, Attributes atts)
         throws SAXParseException
     {
-        if (name.equals("characterSet"))
+        if ("characterSet".equals(name)) {
             this.isocode = Integer.valueOf(atts.getValue("ISOcode"), 16);
-        else if (name.equals("marc"))
+        } else if ("marc".equals(name)) {
             this.data = new StringBuffer();
-        else if (name.equals("codeTables")) {
+        } else if ("codeTables".equals(name)) {
             this.charset = new Hashtable();
             this.combiningchars = new Vector();
-        } else if (name.equals("ucs"))
+        } else if ("ucs".equals(name)) {
             this.data = new StringBuffer();
-        else if (name.equals("code"))
+        } else if ("code".equals(name)) {
             this.combining = false;
-        else if (name.equals("isCombining")) this.data = new StringBuffer();
+        } else if ("isCombining".equals(name)) {
+            this.data = new StringBuffer();
+        }
 
     }
 
@@ -122,7 +124,7 @@ public class ReverseCodeTableHandler
     public void endElement(String uri, String name, String qName)
         throws SAXParseException
     {
-        if (name.equals("marc")) {
+        if ("marc".equals(name)) {
             String marcstr = this.data.toString();
             if (marcstr.length() == 6) {
                 this.marc = new char[3];
@@ -133,9 +135,9 @@ public class ReverseCodeTableHandler
                 this.marc = new char[1];
                 this.marc[0] = (char)Integer.parseInt(marcstr, 16);
             }
-        } else if (name.equals("ucs")) {
+        } else if ("ucs".equals(name)) {
             this.ucs = new Character((char)Integer.parseInt(this.data.toString(), 16));
-        } else if (name.equals("code")) {
+        } else if ("code".equals(name)) {
             if (this.combining) {
                 this.combiningchars.add(this.ucs);
             }
@@ -148,8 +150,8 @@ public class ReverseCodeTableHandler
                 Hashtable h = (Hashtable)this.charset.get(this.ucs);
                 h.put(this.isocode, this.marc);
             }
-        } else if (name.equals("isCombining")) {
-            if (this.data.toString().equals("true")) this.combining = true;
+        } else if ("isCombining".equals(name) && "true".equals(this.data.toString())) {
+            this.combining = true;
         }
         this.data = null;
     }

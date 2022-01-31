@@ -57,8 +57,9 @@ public class ReverseCodeTable
         if (chars == null) {
             log.error("Not Found: " + c);
             return chars;
-        } else
+        } else {
             return chars;
+        }
     }
 
     public static boolean inPreviousCharCodeTable(Character c, CodeTableTracker ctt)
@@ -67,15 +68,12 @@ public class ReverseCodeTable
         if (chars == null) {
             log.error("Not Found: " + c);
             return false;
+        } else if ((chars.get(ctt.getPrevious(CodeTableTracker.G0)) != null)
+            || (chars.get(ctt.getPrevious(CodeTableTracker.G1)) != null)) {
+            ctt.makePreviousCurrent();
+            return true;
         } else {
-
-            if ((chars.get(ctt.getPrevious(CodeTableTracker.G0)) != null)
-                || (chars.get(ctt.getPrevious(CodeTableTracker.G1)) != null)) {
-                ctt.makePreviousCurrent();
-                return true;
-            } else
-                return false;
-
+            return false;
         }
     }
 

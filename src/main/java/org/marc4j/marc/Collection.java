@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -42,12 +41,12 @@ public class Collection
 
     public Collection()
     {
-        list = new ArrayList();
+        this.list = new ArrayList();
     }
 
     public void add(Record record)
     {
-        list.add(record);
+        this.list.add(record);
     }
 
     /**
@@ -60,8 +59,10 @@ public class Collection
      */
     public Record getRecord(int index)
     {
-        if (list.size() < index) return null;
-        return (Record)list.get(index);
+        if (this.list.size() < index) {
+            return null;
+        }
+        return (Record)this.list.get(index);
     }
 
     /**
@@ -73,7 +74,7 @@ public class Collection
      */
     public int getSize()
     {
-        return list.size();
+        return this.list.size();
     }
 
     /**
@@ -88,8 +89,8 @@ public class Collection
     public void marshal(Writer out)
         throws IOException, MarcException
     {
-        for (Iterator i = list.iterator(); i.hasNext();) {
-            Record record = (Record)i.next();
+        for (Object element : this.list) {
+            Record record = (Record)element;
             out.write(record.marshal());
         }
     }
@@ -99,7 +100,7 @@ public class Collection
     {
         StringBuilder builder = new StringBuilder();
         builder.append("Collection [list=");
-        builder.append(list);
+        builder.append(this.list);
         builder.append("]");
         return builder.toString();
     }

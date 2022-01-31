@@ -81,8 +81,8 @@ public class Subfield
      */
     public Subfield(char code, char[] data)
     {
-        setCode(code);
-        setData(data);
+        this.setCode(code);
+        this.setData(data);
     }
 
     /**
@@ -96,8 +96,8 @@ public class Subfield
      */
     public Subfield(char code, String data)
     {
-        setCode(code);
-        setData(data.toCharArray());
+        this.setCode(code);
+        this.setData(data.toCharArray());
     }
 
     /**
@@ -112,9 +112,9 @@ public class Subfield
      */
     public Subfield(char code, char[] data, String linkCode)
     {
-        setCode(code);
-        setData(data);
-        setLinkCode(linkCode);
+        this.setCode(code);
+        this.setData(data);
+        this.setLinkCode(linkCode);
     }
 
     /**
@@ -129,9 +129,9 @@ public class Subfield
      */
     public Subfield(char code, String data, String linkCode)
     {
-        setCode(code);
-        setData(data.toCharArray());
-        setLinkCode(linkCode);
+        this.setCode(code);
+        this.setData(data.toCharArray());
+        this.setLinkCode(linkCode);
     }
 
     /**
@@ -171,7 +171,7 @@ public class Subfield
      */
     public void setData(String data)
     {
-        setData(data.toCharArray());
+        this.setData(data.toCharArray());
     }
 
     /**
@@ -183,7 +183,7 @@ public class Subfield
      */
     public char getCode()
     {
-        return code;
+        return this.code;
     }
 
     /**
@@ -195,7 +195,7 @@ public class Subfield
      */
     public char[] getData()
     {
-        return data;
+        return this.data;
     }
 
     /**
@@ -203,7 +203,7 @@ public class Subfield
      */
     public String getLinkCode()
     {
-        return linkCode;
+        return this.linkCode;
     }
 
     /**
@@ -224,7 +224,7 @@ public class Subfield
      */
     public String marshal()
     {
-        return new StringBuffer().append(US).append(code).append(data).toString();
+        return new StringBuffer().append(US).append(this.code).append(this.data).toString();
     }
 
     /*
@@ -240,9 +240,15 @@ public class Subfield
     @Override
     public boolean equals(Object obj)
     {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        if (obj.getClass() != getClass()) return false;
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != this.getClass()) {
+            return false;
+        }
 
         Subfield that = (Subfield)obj;
         return new EqualsBuilder()
@@ -264,9 +270,9 @@ public class Subfield
         final StringBuilder sb = new StringBuilder();
         sb
             .append("\n            SUBFIELD - code:[ ")
-            .append(code)
+            .append(this.code)
             .append(", Data:")
-            .append(Arrays.toString(data))
+            .append(Arrays.toString(this.data))
             .append(this.getLinkCode() != null ? (", linkCode: ") + this.getLinkCode() : "")
             .append(" ] ");
         return sb.toString();

@@ -42,11 +42,7 @@ import java.io.Serializable;
 public abstract class VariableField
     implements Serializable, Cloneable
 {
-
     private static final long serialVersionUID = -5303416788186473947L;
-
-    /** The field terminator */
-    public static final char FT = MarcConstants.FT;
 
     /** Empty value for the field id */
     public static final Long EMPTY_ID = null;
@@ -75,7 +71,7 @@ public abstract class VariableField
      */
     public VariableField(String tag)
     {
-        setTag(tag);
+        this.setTag(tag);
     }
 
     /**
@@ -87,7 +83,9 @@ public abstract class VariableField
      */
     public void setTag(String tag)
     {
-        if (!Tag.isValid(tag)) throw new IllegalTagException(tag);
+        if (!Tag.isValid(tag)) {
+            throw new IllegalTagException(tag);
+        }
         this.tag = tag;
     }
 
@@ -100,7 +98,7 @@ public abstract class VariableField
      */
     public String getTag()
     {
-        return tag;
+        return this.tag;
     }
 
     /**
@@ -108,7 +106,7 @@ public abstract class VariableField
      */
     public Long getId()
     {
-        return id;
+        return this.id;
     }
 
     /**
@@ -119,10 +117,13 @@ public abstract class VariableField
         this.id = id;
     }
 
+    @Override
     public abstract Object clone();
 
+    @Override
     public abstract boolean equals(Object obj);
 
+    @Override
     public abstract int hashCode();
 
 }

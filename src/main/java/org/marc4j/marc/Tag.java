@@ -73,12 +73,14 @@ public class Tag
      *
      * @param tag the tag name
      * @return <code>boolean</code> - tag identifies a control number field
-     *         (true) or not (false)
+     *             (true) or not (false)
      */
     public static boolean isControlNumberField(String tag)
     {
         Verifier.checkTag(tag);
-        if (!tag.equals("001")) return false;
+        if (!"001".equals(tag)) {
+            return false;
+        }
         return true;
     }
 
@@ -94,13 +96,17 @@ public class Tag
      *
      * @param tag the tag name
      * @return <code>boolean</code> - tag identifies a control field (true)
-     *         or a data field (false)
+     *             or a data field (false)
      */
     public static boolean isControlField(String tag)
     {
         Verifier.checkTag(tag);
-        if (tag.charAt(0) != ZERO) return false;
-        if (tag.charAt(1) != ZERO) return false;
+        if (tag.charAt(0) != ZERO) {
+            return false;
+        }
+        if (tag.charAt(1) != ZERO) {
+            return false;
+        }
         return true;
     }
 
@@ -115,12 +121,14 @@ public class Tag
      *
      * @param tag the tag name
      * @return <code>boolean</code> - tag identifies a data field (true)
-     *         or a control field (false)
+     *             or a control field (false)
      */
     public static boolean isDataField(String tag)
     {
         Verifier.checkTag(tag);
-        if (!isControlField(tag)) return true;
+        if (!Tag.isControlField(tag)) {
+            return true;
+        }
         return false;
     }
 

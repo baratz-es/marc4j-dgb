@@ -77,14 +77,17 @@ public final class CharacterConverterLoader
             }
 
             // Use default class
-            if (name == null) name = defaultClass;
+            if (name == null) {
+                name = defaultClass;
+            }
 
             if (name != null) {
                 // Create an instance of the converter class
                 Class c = loader.loadClass(name);
                 return c.newInstance();
-            } else
+            } else {
                 return null;
+            }
 
         } catch (Throwable e) {
             throw new CharacterConverterLoaderException("Unable to load converter class", e);

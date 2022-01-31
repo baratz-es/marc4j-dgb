@@ -52,54 +52,77 @@ public class ExtendedFilter
      * @param uri the property name
      * @param obj the property object
      */
+    @Override
     public void setProperty(String uri, Object obj)
         throws SAXNotRecognizedException, SAXNotSupportedException
     {
-        if (LEXICAL_HANDLER.equals(uri))
-            lh = (LexicalHandler)obj;
-        else
+        if (LEXICAL_HANDLER.equals(uri)) {
+            this.lh = (LexicalHandler)obj;
+        } else {
             super.setProperty(uri, obj);
+        }
     }
 
+    @Override
     public void startEntity(String name)
         throws SAXException
     {
-        if (lh != null) lh.startEntity(name);
+        if (this.lh != null) {
+            this.lh.startEntity(name);
+        }
     }
 
+    @Override
     public void endEntity(String name)
         throws SAXException
     {
-        if (lh != null) lh.endEntity(name);
+        if (this.lh != null) {
+            this.lh.endEntity(name);
+        }
     }
 
+    @Override
     public void startCDATA()
         throws SAXException
     {
-        if (lh != null) lh.startCDATA();
+        if (this.lh != null) {
+            this.lh.startCDATA();
+        }
     }
 
+    @Override
     public void endCDATA()
         throws SAXException
     {
-        if (lh != null) lh.endCDATA();
+        if (this.lh != null) {
+            this.lh.endCDATA();
+        }
     }
 
+    @Override
     public void startDTD(String name, String publicId, String systemId)
         throws SAXException
     {
-        if (lh != null) lh.startDTD(name, publicId, systemId);
+        if (this.lh != null) {
+            this.lh.startDTD(name, publicId, systemId);
+        }
     }
 
+    @Override
     public void endDTD()
         throws SAXException
     {
-        if (lh != null) lh.endDTD();
+        if (this.lh != null) {
+            this.lh.endDTD();
+        }
     }
 
+    @Override
     public void comment(char ch[], int start, int length)
         throws SAXException
     {
-        if (lh != null) lh.comment(ch, start, length);
+        if (this.lh != null) {
+            this.lh.comment(ch, start, length);
+        }
     }
 }

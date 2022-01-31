@@ -120,7 +120,9 @@ public class TaggedWriter
     @Override
     public void startCollection()
     {
-        if (this.out == null) System.exit(0);
+        if (this.out == null) {
+            System.exit(0);
+        }
     }
 
     @Override

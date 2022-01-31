@@ -177,7 +177,7 @@ public class Record
     public ControlField getControlNumberField()
     {
         ControlField cf = this.controlFieldList.get(0);
-        if (cf.getTag().equals("001")) {
+        if ("001".equals(cf.getTag())) {
             return cf;
         }
         return null;
@@ -197,7 +197,7 @@ public class Record
         }
 
         ControlField cf = this.controlFieldList.get(0);
-        if (cf.getTag().equals("001")) {
+        if ("001".equals(cf.getTag())) {
             return new String(cf.getData());
         }
         return null;
@@ -276,8 +276,8 @@ public class Record
      * </p>
      *
      * @return <code>boolean</code> - true if there is a control number
-     *         field, false if there is no control
-     *         number field
+     *             field, false if there is no control
+     *             number field
      */
     public boolean hasControlNumberField()
     {
@@ -285,7 +285,7 @@ public class Record
             return false;
         }
         ControlField cf = this.controlFieldList.get(0);
-        return cf.getTag().equals("001");
+        return "001".equals(cf.getTag());
     }
 
     /**
@@ -409,12 +409,8 @@ public class Record
     public List<VariableField> getVariableFieldList()
     {
         List<VariableField> variableFields = new ArrayList<>();
-        for (ControlField controlField : this.controlFieldList) {
-            variableFields.add(controlField);
-        }
-        for (DataField dataField : this.dataFieldList) {
-            variableFields.add(dataField);
-        }
+        variableFields.addAll(this.controlFieldList);
+        variableFields.addAll(this.dataFieldList);
         return variableFields;
     }
 

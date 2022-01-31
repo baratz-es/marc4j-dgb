@@ -52,7 +52,7 @@ public class MarcResult
      */
     public MarcResult(MarcHandler handler)
     {
-        setHandler(handler);
+        this.setHandler(handler);
     }
 
     /**
@@ -74,6 +74,7 @@ public class MarcResult
      *
      * @param systemID the system identifier
      */
+    @Override
     public void setSystemId(String systemID)
     {
         this.systemId = systemID;
@@ -88,7 +89,7 @@ public class MarcResult
      */
     public MarcHandler getHandler()
     {
-        return handler;
+        return this.handler;
     }
 
     /**
@@ -98,9 +99,10 @@ public class MarcResult
      *
      * @return String - the system identifier
      */
+    @Override
     public String getSystemId()
     {
-        return systemId;
+        return this.systemId;
     }
 
 }

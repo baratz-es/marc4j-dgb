@@ -36,7 +36,7 @@ public interface ErrorHandler
      * </p>
      *
      */
-    public abstract void warning(MarcReaderException exception);
+    void warning(MarcReaderException exception);
 
     /**
      * <p>
@@ -44,7 +44,7 @@ public interface ErrorHandler
      * </p>
      *
      */
-    public abstract void error(MarcReaderException exception);
+    void error(MarcReaderException exception);
 
     /**
      * <p>
@@ -52,6 +52,6 @@ public interface ErrorHandler
      * </p>
      *
      */
-    public abstract void fatalError(MarcReaderException exception);
+    void fatalError(MarcReaderException exception);
 
 }

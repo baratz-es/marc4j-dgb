@@ -49,7 +49,7 @@ public class MarcReaderException
     public MarcReaderException(String message, int pos)
     {
         super(message);
-        setPosition(pos);
+        this.setPosition(pos);
     }
 
     /**
@@ -64,7 +64,7 @@ public class MarcReaderException
     public MarcReaderException(String message, Throwable ex)
     {
         super(message);
-        initCause(ex);
+        this.initCause(ex);
     }
 
     /**
@@ -80,8 +80,8 @@ public class MarcReaderException
     public MarcReaderException(String message, int pos, String controlNumber)
     {
         super(message);
-        setPosition(pos);
-        setControlNumber(controlNumber);
+        this.setPosition(pos);
+        this.setControlNumber(controlNumber);
     }
 
     /**
@@ -98,9 +98,9 @@ public class MarcReaderException
     public MarcReaderException(String message, String fileName, int pos, String controlNumber)
     {
         super(message);
-        setFileName(fileName);
-        setPosition(pos);
-        setControlNumber(controlNumber);
+        this.setFileName(fileName);
+        this.setPosition(pos);
+        this.setControlNumber(controlNumber);
     }
 
     /**
@@ -139,7 +139,7 @@ public class MarcReaderException
      */
     public String getFileName()
     {
-        return fileName;
+        return this.fileName;
     }
 
     private void setPosition(int pos)
@@ -156,7 +156,7 @@ public class MarcReaderException
      */
     public int getPosition()
     {
-        return pos;
+        return this.pos;
     }
 
     private void setControlNumber(String controlNumber)
@@ -173,6 +173,6 @@ public class MarcReaderException
      */
     public String getControlNumber()
     {
-        return controlNumber;
+        return this.controlNumber;
     }
 }

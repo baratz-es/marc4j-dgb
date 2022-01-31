@@ -118,51 +118,51 @@ public class XmlMarcWriter
         long start = System.currentTimeMillis();
 
         for (int i = 0; i < args.length; i++) {
-            if (args[i].equals("-dtd")) {
+            if ("-dtd".equals(args[i])) {
                 dtdValidate = true;
-            } else if (args[i].equals("-xsd")) {
+            } else if ("-xsd".equals(args[i])) {
                 xsdValidate = true;
-            } else if (args[i].equals("-xsdss")) {
+            } else if ("-xsdss".equals(args[i])) {
                 if (i == args.length - 1) {
-                    usage();
+                    XmlMarcWriter.usage();
                 }
                 xsdValidate = true;
                 schemaSource = args[++i];
-            } else if (args[i].equals("-out")) {
+            } else if ("-out".equals(args[i])) {
                 if (i == args.length - 1) {
-                    usage();
+                    XmlMarcWriter.usage();
                 }
                 output = args[++i];
-            } else if (args[i].equals("-oe")) {
+            } else if ("-oe".equals(args[i])) {
                 if (i == args.length - 1) {
-                    usage();
+                    XmlMarcWriter.usage();
                 }
                 outputEncoding = args[++i].trim();
-            } else if (args[i].equals("-convert")) {
+            } else if ("-convert".equals(args[i])) {
                 if (i == args.length - 1) {
-                    usage();
+                    XmlMarcWriter.usage();
                 }
                 convert = args[++i].trim();
-            } else if (args[i].equals("-xsl")) {
+            } else if ("-xsl".equals(args[i])) {
                 if (i == args.length - 1) {
-                    usage();
+                    XmlMarcWriter.usage();
                 }
                 stylesheet = args[++i];
-            } else if (args[i].equals("-usage")) {
-                usage();
-            } else if (args[i].equals("-help")) {
-                usage();
+            } else if ("-usage".equals(args[i])) {
+                XmlMarcWriter.usage();
+            } else if ("-help".equals(args[i])) {
+                XmlMarcWriter.usage();
             } else {
                 input = args[i];
 
                 // Must be last arg
                 if (i != args.length - 1) {
-                    usage();
+                    XmlMarcWriter.usage();
                 }
             }
         }
         if (input == null) {
-            usage();
+            XmlMarcWriter.usage();
         }
 
         try {
@@ -181,25 +181,26 @@ public class XmlMarcWriter
             // new FileOutputStream(output), "UTF8"));
             // }
 
-            if (output == null && outputEncoding != null)
+            if (output == null && outputEncoding != null) {
                 writer = new BufferedWriter(new OutputStreamWriter(System.out, outputEncoding));
-            else if (output != null && outputEncoding == null)
+            } else if (output != null && outputEncoding == null) {
                 writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(output)));
-            else if (output != null && outputEncoding != null)
+            } else if (output != null && outputEncoding != null) {
                 writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(output), outputEncoding));
-            else
+            } else {
                 writer = new BufferedWriter(new OutputStreamWriter(System.out));
+            }
 
             MarcWriter handler = new MarcWriter(writer);
             if (convert != null) {
                 CharacterConverter charconv = null;
-                if ("ANSEL".equals(convert))
+                if ("ANSEL".equals(convert)) {
                     charconv = new UnicodeToAnsel();
-                else if ("ISO5426".equals(convert))
+                } else if ("ISO5426".equals(convert)) {
                     charconv = new UnicodeToIso5426();
-                else if ("ISO6937".equals(convert))
+                } else if ("ISO6937".equals(convert)) {
                     charconv = new UnicodeToIso6937();
-                else {
+                } else {
                     System.err.println("Unknown character set");
                     System.exit(1);
                 }
@@ -210,8 +211,12 @@ public class XmlMarcWriter
             factory.setNamespaceAware(true);
             factory.setValidating(dtdValidate || xsdValidate);
             SAXParser saxParser = factory.newSAXParser();
-            if (xsdValidate) saxParser.setProperty(JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA);
-            if (schemaSource != null) saxParser.setProperty(JAXP_SCHEMA_SOURCE, new File(schemaSource));
+            if (xsdValidate) {
+                saxParser.setProperty(JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA);
+            }
+            if (schemaSource != null) {
+                saxParser.setProperty(JAXP_SCHEMA_SOURCE, new File(schemaSource));
+            }
             XMLReader xmlReader = saxParser.getXMLReader();
             xmlReader.setErrorHandler(new SaxErrorHandler());
             InputSource in = new InputSource(new File(input).toURL().toString());
@@ -232,8 +237,6 @@ public class XmlMarcWriter
             log.error("No se soporta la operación indicada", e);
         } catch (SAXNotRecognizedException e) {
             log.error("Identificador no reconocido", e);
-        } catch (SAXException e) {
-            log.error("Se ha producido un error al convertir el documento MARCXML", e);
         } catch (Exception e) {
             log.error("Se ha producido un error al convertir el documento MARCXML", e);
         }

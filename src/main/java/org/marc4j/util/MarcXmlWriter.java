@@ -112,66 +112,68 @@ public class MarcXmlWriter
         long start = System.currentTimeMillis();
 
         for (int i = 0; i < args.length; i++) {
-            if (args[i].equals("-xsl")) {
+            if ("-xsl".equals(args[i])) {
                 if (i == args.length - 1) {
-                    usage();
+                    MarcXmlWriter.usage();
                 }
                 stylesheet = args[++i].trim();
-            } else if (args[i].equals("-out")) {
+            } else if ("-out".equals(args[i])) {
                 if (i == args.length - 1) {
-                    usage();
+                    MarcXmlWriter.usage();
                 }
                 output = args[++i].trim();
-            } else if (args[i].equals("-ie")) {
+            } else if ("-ie".equals(args[i])) {
                 if (i == args.length - 1) {
-                    usage();
+                    MarcXmlWriter.usage();
                 }
                 inputEncoding = args[++i].trim();
-            } else if (args[i].equals("-oe")) {
+            } else if ("-oe".equals(args[i])) {
                 if (i == args.length - 1) {
-                    usage();
+                    MarcXmlWriter.usage();
                 }
                 outputEncoding = args[++i].trim();
-            } else if (args[i].equals("-dtd")) {
+            } else if ("-dtd".equals(args[i])) {
                 dtd = true;
-            } else if (args[i].equals("-xsd")) {
+            } else if ("-xsd".equals(args[i])) {
                 xsd = true;
-            } else if (args[i].equals("-convert")) {
+            } else if ("-convert".equals(args[i])) {
                 if (i == args.length - 1) {
-                    usage();
+                    MarcXmlWriter.usage();
                 }
                 convert = args[++i].trim();
-            } else if (args[i].equals("-usage")) {
-                usage();
-            } else if (args[i].equals("-help")) {
-                usage();
+            } else if ("-usage".equals(args[i])) {
+                MarcXmlWriter.usage();
+            } else if ("-help".equals(args[i])) {
+                MarcXmlWriter.usage();
             } else {
                 input = args[i].trim();
 
                 // Must be last arg
                 if (i != args.length - 1) {
-                    usage();
+                    MarcXmlWriter.usage();
                 }
             }
         }
         if (input == null) {
-            usage();
+            MarcXmlWriter.usage();
         }
 
         try {
             MarcXmlReader producer = new MarcXmlReader();
             producer.setProperty("http://marc4j.org/properties/error-handler", new ErrorHandlerImpl());
-            if (xsd) producer.setProperty("http://marc4j.org/properties/schema-location",
-                "http://www.loc.gov/MARC21/slim " + "http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd");
+            if (xsd) {
+                producer.setProperty("http://marc4j.org/properties/schema-location",
+                    "http://www.loc.gov/MARC21/slim " + "http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd");
+            }
             if (convert != null) {
                 CharacterConverter charconv = null;
-                if ("ANSEL".equals(convert))
+                if ("ANSEL".equals(convert)) {
                     charconv = new AnselToUnicode();
-                else if ("ISO5426".equals(convert))
+                } else if ("ISO5426".equals(convert)) {
                     charconv = new Iso5426ToUnicode();
-                else if ("ISO6937".equals(convert))
+                } else if ("ISO6937".equals(convert)) {
                     charconv = new Iso6937ToUnicode();
-                else {
+                } else {
                     System.err.println("Unknown character set");
                     System.exit(1);
                 }
@@ -187,10 +189,11 @@ public class MarcXmlWriter
             // reader = new BufferedReader(new InputStreamReader(
             // new FileInputStream(input), "UTF8"));
 
-            if (inputEncoding != null)
+            if (inputEncoding != null) {
                 reader = new BufferedReader(new InputStreamReader(new FileInputStream(input), inputEncoding));
-            else
+            } else {
                 reader = new BufferedReader(new InputStreamReader(new FileInputStream(input)));
+            }
 
             InputSource in = new InputSource(reader);
             Source source = new SAXSource(producer, in);
@@ -202,14 +205,15 @@ public class MarcXmlWriter
             // writer = new BufferedWriter(new OutputStreamWriter(
             // new FileOutputStream(output), "UTF8"));
 
-            if (output == null && outputEncoding != null)
+            if (output == null && outputEncoding != null) {
                 writer = new BufferedWriter(new OutputStreamWriter(System.out, outputEncoding));
-            else if (output != null && outputEncoding == null)
+            } else if (output != null && outputEncoding == null) {
                 writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(output)));
-            else if (output != null && outputEncoding != null)
+            } else if (output != null && outputEncoding != null) {
                 writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(output), outputEncoding));
-            else
+            } else {
                 writer = new BufferedWriter(new OutputStreamWriter(System.out));
+            }
 
             Result result = new StreamResult(writer);
 
