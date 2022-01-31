@@ -31,7 +31,7 @@ public class CharacterConverterLoaderException
     extends RuntimeException
 {
 
-    private Throwable cause = null;
+    private static final long serialVersionUID = 4771889265835047836L;
 
     /**
      * <p>
@@ -67,44 +67,6 @@ public class CharacterConverterLoaderException
      */
     public CharacterConverterLoaderException(String message, Throwable ex)
     {
-        super(message);
-        this.initCause(ex);
+        super(message, ex);
     }
-
-    /**
-     * <p>
-     * Return the root cause or null if there was no
-     * original exception.
-     * </p>
-     *
-     * @return the root cause of this exception
-     */
-    @Override
-    public Throwable getCause()
-    {
-        return this.cause;
-    }
-
-    /**
-     * <p>
-     * Sets the root cause of this exception. This may
-     * only be called once. Subsequent calls throw an
-     * <code>IllegalStateException</code>.
-     * </p>
-     *
-     * @param cause the root cause of this exception
-     * @return the root cause of this exception
-     * @throws IllegalStateException if this method is called twice.
-     */
-    @Override
-    public Throwable initCause(Throwable cause)
-    {
-        if (this.cause == null) {
-            this.cause = cause;
-        } else {
-            throw new IllegalStateException("Cannot reset the cause");
-        }
-        return cause;
-    }
-
 }

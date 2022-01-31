@@ -30,6 +30,7 @@ package org.marc4j.marc;
 public class IllegalTagException
     extends IllegalArgumentException
 {
+    private static final long serialVersionUID = -1994172572514688876L;
 
     /**
      * <p>

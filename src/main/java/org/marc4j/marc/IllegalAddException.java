@@ -30,6 +30,7 @@ package org.marc4j.marc;
 public class IllegalAddException
     extends IllegalArgumentException
 {
+    private static final long serialVersionUID = 3177437281458300710L;
 
     /**
      * <p>

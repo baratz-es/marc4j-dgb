@@ -30,12 +30,11 @@ package org.marc4j;
 public class MarcReaderException
     extends Exception
 {
+    private static final long serialVersionUID = -8406057796165098547L;
 
-    private Throwable cause = null;
-
-    int pos;
-    String controlNumber;
-    String fileName = null;
+    final int pos;
+    final String controlNumber;
+    final String fileName;
 
     /**
      * <p>
@@ -49,7 +48,9 @@ public class MarcReaderException
     public MarcReaderException(String message, int pos)
     {
         super(message);
-        this.setPosition(pos);
+        this.fileName = null;
+        this.pos = pos;
+        this.controlNumber = null;
     }
 
     /**
@@ -63,8 +64,10 @@ public class MarcReaderException
      */
     public MarcReaderException(String message, Throwable ex)
     {
-        super(message);
-        this.initCause(ex);
+        super(message, ex);
+        this.fileName = null;
+        this.pos = 0;
+        this.controlNumber = null;
     }
 
     /**
@@ -80,8 +83,9 @@ public class MarcReaderException
     public MarcReaderException(String message, int pos, String controlNumber)
     {
         super(message);
-        this.setPosition(pos);
-        this.setControlNumber(controlNumber);
+        this.fileName = null;
+        this.pos = pos;
+        this.controlNumber = controlNumber;
     }
 
     /**
@@ -98,36 +102,9 @@ public class MarcReaderException
     public MarcReaderException(String message, String fileName, int pos, String controlNumber)
     {
         super(message);
-        this.setFileName(fileName);
-        this.setPosition(pos);
-        this.setControlNumber(controlNumber);
-    }
-
-    /**
-     * <p>
-     * Sets the root cause of this exception. This may
-     * only be called once. Subsequent calls throw an
-     * <code>IllegalStateException</code>.
-     * </p>
-     *
-     * @param cause the root cause of this exception
-     * @return the root cause of this exception
-     * @throws IllegalStateException if this method is called twice.
-     */
-    @Override
-    public Throwable initCause(Throwable cause)
-    {
-        if (this.cause == null) {
-            this.cause = cause;
-        } else {
-            throw new IllegalStateException("Cannot reset the cause");
-        }
-        return cause;
-    }
-
-    private void setFileName(String fileName)
-    {
         this.fileName = fileName;
+        this.pos = pos;
+        this.controlNumber = controlNumber;
     }
 
     /**
@@ -142,11 +119,6 @@ public class MarcReaderException
         return this.fileName;
     }
 
-    private void setPosition(int pos)
-    {
-        this.pos = pos;
-    }
-
     /**
      * <p>
      * Returns the position in the character stream where the exception is thrown.
@@ -157,11 +129,6 @@ public class MarcReaderException
     public int getPosition()
     {
         return this.pos;
-    }
-
-    private void setControlNumber(String controlNumber)
-    {
-        this.controlNumber = controlNumber;
     }
 
     /**
