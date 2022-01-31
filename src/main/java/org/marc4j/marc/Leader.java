@@ -23,71 +23,64 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
- * <p>
- * <code>Leader</code> defines behaviour for the record label
- * (record position 00-23).
- * </p>
+ * <code>Leader</code> defines behaviour for the record label (record position 00-23).
  *
  * <p>
- * The leader is a fixed field that occurs at the beginning of a
- * MARC record and provides information for the processing of the record.
- * The structure of the leader according to the MARC standard is as
- * follows:
+ * The leader is a fixed field that occurs at the beginning of a MARC record and provides information for the processing
+ * of the record. The structure of the leader according to the MARC standard is as follows:
  * </p>
  * 
  * <pre>
- * RECORD_LENGTH RECORD_STATUS TYPE_OF_RECORD IMPLEMENTATION-DEFINED
- * 00-04         05            06             07-08
- *   CHARACTER_CODING_SCHEME  INDICATOR_COUNT SUBFIELD_CODE_LENGTH
- *   09                       10              11
- *     BASE_ADDRESS_OF_DATA  IMPLEMENTATION-DEFINED  ENTRY_MAP
- *     12-16                 17-19                   20-23
+ * RECORD_LENGTH RECORD_STATUS TYPE_OF_RECORD IMPLEMENTATION-DEFINED CHARACTER_CODING_SCHEME  INDICATOR_COUNT SUBFIELD_CODE_LENGTH BASE_ADDRESS_OF_DATA  IMPLEMENTATION-DEFINED  ENTRY_MAP
+ * 00-04         05            06             07-08                  09                       10              11                   12-16                 17-19                   20-23
  * </pre>
  * <p>
  * This structure is returned by the {@link #marshal()} method.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  */
 public class Leader
     implements Serializable, Cloneable
 {
-
     private static final long serialVersionUID = 1L;
 
-    /** The logical record length. */
+    /** The logical record length (Position 0-4). */
     private int recordLength;
 
-    /** The record status. */
+    /** The record status (Position 5). */
     private char recordStatus;
 
-    /** Type of record. */
+    /** Type of record (Position 6). */
     private char typeOfRecord;
 
-    /** Implementation defined. */
+    /** Implementation defined (Position 7-8). */
     private char[] implDefined1;
 
-    /** Character coding scheme. */
+    /** Character coding scheme (Position 9). */
     private char charCodingScheme;
 
-    /** The indicator count. */
+    /** The indicator count (Position 10). */
     private int indicatorCount;
 
-    /** The subfield code length. */
+    /** The subfield code length (Position 11). */
     private int subfieldCodeLength;
 
-    /** The base address of data. */
+    /** The base address of data (Position 12-16). */
     private int baseAddressOfData;
 
-    /** Implementation defined. */
+    /** Implementation defined (Position 17-18). */
     private char[] implDefined2;
 
     /** Entry map. */
     private char[] entryMap;
 
     /** number format for both record length and base address of data */
-    DecimalFormat df = new DecimalFormat("00000");
+    private final DecimalFormat df = new DecimalFormat("00000");
 
     public Leader()
     {
@@ -96,6 +89,23 @@ public class Leader
     public Leader(String ldr)
     {
         this.unmarshal(ldr);
+    }
+
+    /**
+     * Copy constructor
+     */
+    public Leader(Leader other)
+    {
+        this.recordLength = other.recordLength;
+        this.recordStatus = other.recordStatus;
+        this.typeOfRecord = other.typeOfRecord;
+        this.implDefined1 = other.implDefined1.clone();
+        this.charCodingScheme = other.charCodingScheme;
+        this.indicatorCount = other.indicatorCount;
+        this.subfieldCodeLength = other.subfieldCodeLength;
+        this.baseAddressOfData = other.baseAddressOfData;
+        this.implDefined2 = other.implDefined2.clone();
+        this.entryMap = other.entryMap.clone();
     }
 
     public static Leader newEmptyLeader()
@@ -420,24 +430,27 @@ public class Leader
     }
 
     /**
+     * Returns a String representation of the record label following the MARC structure.
      * <p>
-     * Returns a String representation of the record label
-     * following the MARC structure.
-     * </p>
+     * Example:
+     * 
+     * <pre>
+     *  00714cam a2200205 a 4500
+     * </pre>
      *
      * @return <code>String</code> - the record label
      */
     public String marshal()
     {
         return new StringBuffer()
-            .append(this.df.format(this.recordLength).toString())
+            .append(this.df.format(this.recordLength))
             .append(this.recordStatus)
             .append(this.typeOfRecord)
             .append(this.implDefined1)
             .append(this.charCodingScheme)
             .append(this.indicatorCount)
             .append(this.subfieldCodeLength)
-            .append(this.df.format(this.baseAddressOfData).toString())
+            .append(this.df.format(this.baseAddressOfData))
             .append(this.implDefined2)
             .append(this.entryMap)
             .toString();
@@ -473,48 +486,29 @@ public class Leader
 
     /*
      * @see java.lang.Object#clone()
+     * @deprecated Use copy constructor  {@link #Leader(Leader)}
      */
+    @Deprecated
     @Override
     public Object clone()
     {
-        try {
-            // Creamos nueva instancia
-            Leader instance = (Leader)super.clone();
-
-            // Rellenamos la informaci�n
-            instance.recordLength = this.recordLength;
-            instance.recordStatus = this.recordStatus;
-            instance.typeOfRecord = this.typeOfRecord;
-            instance.implDefined1 = this.implDefined1.clone();
-            instance.charCodingScheme = this.charCodingScheme;
-            instance.indicatorCount = this.indicatorCount;
-            instance.subfieldCodeLength = this.subfieldCodeLength;
-            instance.baseAddressOfData = this.baseAddressOfData;
-            instance.implDefined2 = this.implDefined2.clone();
-            instance.entryMap = this.entryMap.clone();
-
-            return instance;
-        } catch (CloneNotSupportedException e) {
-            throw new MarcException(e.getMessage(), e);
-        }
+        return new Leader(this);
     }
 
     @Override
     public String toString()
     {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Leader [recordLength=").append(this.recordLength);
-        builder.append(",  recordStatus=").append(this.recordStatus);
-        builder.append(",  typeOfRecord=").append(this.typeOfRecord);
-        builder.append(",  implDefined1=").append(Arrays.toString(this.implDefined1));
-        builder.append(",  charCodingScheme=").append(this.charCodingScheme);
-        builder.append(",  indicatorCount=").append(this.indicatorCount);
-        builder.append(",  subfieldCodeLength=").append(this.subfieldCodeLength);
-        builder.append(",  baseAddressOfData=").append(this.baseAddressOfData);
-        builder.append(",  implDefined2=").append(Arrays.toString(this.implDefined2));
-        builder.append(",  entryMap=").append(Arrays.toString(this.entryMap));
-        builder.append(",  df=").append(this.df);
-        builder.append("]");
+        ToStringBuilder builder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        builder.append("recordLength", recordLength)
+            .append("recordStatus", recordStatus)
+            .append("typeOfRecord", typeOfRecord)
+            .append("implDefined1", Arrays.toString(implDefined1))
+            .append("charCodingScheme", charCodingScheme)
+            .append("indicatorCount", indicatorCount)
+            .append("subfieldCodeLength", subfieldCodeLength)
+            .append("baseAddressOfData", baseAddressOfData)
+            .append("implDefined2", Arrays.toString(implDefined2))
+            .append("entryMap", entryMap);
         return builder.toString();
     }
 
