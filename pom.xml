@@ -240,8 +240,8 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
                 <configuration>
-                	<useModulePath>false</useModulePath> <!-- https://issues.apache.org/jira/browse/SUREFIRE-1809 -->
-					<useFile>false</useFile>
+                    <useModulePath>false</useModulePath> <!-- https://issues.apache.org/jira/browse/SUREFIRE-1809 -->
+                    <useFile>false</useFile>
                     <includes>
                         <include>**/*Spec</include>
                         <include>**/*Test</include>
@@ -341,13 +341,13 @@
                 <spock.version>2.0-groovy-3.0</spock.version>
             </properties>
             <dependencies>
-				<dependency>
-					<groupId>org.spockframework</groupId>
-					<artifactId>spock-bom</artifactId>
-					<version>${spock.version}</version>
-					<type>pom</type>
-					<scope>test</scope>
-				</dependency>
+                <dependency>
+                    <groupId>org.spockframework</groupId>
+                    <artifactId>spock-bom</artifactId>
+                    <version>${spock.version}</version>
+                    <type>pom</type>
+                    <scope>test</scope>
+                </dependency>
             </dependencies>
         </profile>
     </profiles>
