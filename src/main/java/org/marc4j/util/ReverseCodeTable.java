@@ -1,4 +1,3 @@
-/// **
 /*
  * Copyright (C) 2002 Bas Peters
  * This file is part of MARC4J
@@ -38,8 +37,6 @@ import org.xml.sax.helpers.DefaultHandler;
  * </p>
  *
  * @author <a href="mailto:ckeith@loc.gov">Corey Keith</a>
- * @version $Revision: 1.2 $
- *
  * @see DefaultHandler
  */
 public class ReverseCodeTable

@@ -1,4 +1,3 @@
-// $Id: ErrorHandler.java,v 1.4 2002/08/03 15:14:39 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -27,7 +26,6 @@ package org.marc4j;
  * </p>
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.4 $
  */
 public interface ErrorHandler
 {

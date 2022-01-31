@@ -1,4 +1,3 @@
-// $Id: ControlField.java,v 1.6 2003/03/31 19:55:26 ceyates Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -48,8 +47,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * </p>
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.6 $
- *
  */
 public class ControlField
     extends VariableField

@@ -1,4 +1,3 @@
-// $Id: CharacterConverterLoader.java,v 1.2 2003/01/10 09:41:56 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters (mail@bpeters.com)
  *
@@ -30,8 +29,6 @@ import java.util.Properties;
  * </p>
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.2 $
- *
  */
 public final class CharacterConverterLoader
 {

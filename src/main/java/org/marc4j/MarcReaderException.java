@@ -1,4 +1,3 @@
-// $Id: MarcReaderException.java,v 1.8 2003/04/11 20:42:44 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -27,8 +26,6 @@ package org.marc4j;
  * </p>
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.8 $
- *
  */
 public class MarcReaderException
     extends Exception

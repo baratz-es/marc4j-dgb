@@ -1,4 +1,3 @@
-// $Id: XmlMarcWriter.java,v 1.16 2003/03/23 12:06:49 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters (mail@bpeters.com)
  *
@@ -90,8 +89,6 @@ import org.xml.sax.XMLReader;
  * </p>
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.16 $
- *
  * @see MarcXmlHandler
  * @see MarcWriter
  * @see Converter

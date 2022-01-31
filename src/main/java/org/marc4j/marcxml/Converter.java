@@ -1,4 +1,3 @@
-// $Id: Converter.java,v 1.7 2002/08/03 15:14:39 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -43,8 +42,6 @@ import org.xml.sax.XMLReader;
  * </p>
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.7 $
- *
  * @see Transformer
  */
 public class Converter

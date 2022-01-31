@@ -1,4 +1,3 @@
-// $Id: CodeTableTracker.java,v 1.1 2003/03/04 18:33:19 coreykeith Exp $
 /**
  * Copyright (C) 2002 Bas Peters (mail@bpeters.com)
  *
@@ -26,7 +25,6 @@ package org.marc4j.util;
  * </p>
  *
  * @author <a href="mailto:ckeith@loc.gov">Corey Keith</a>
- * @version $Revision: 1.1 $
  */
 public class CodeTableTracker
 {

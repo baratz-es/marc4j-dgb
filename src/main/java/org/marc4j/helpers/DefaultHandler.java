@@ -1,4 +1,3 @@
-// $Id: DefaultHandler.java,v 1.6 2002/08/03 15:14:39 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -38,8 +37,6 @@ import org.marc4j.marc.Leader;
  * </p>
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.6 $
- *
  * @see MarcHandler
  * @see ErrorHandler
  */

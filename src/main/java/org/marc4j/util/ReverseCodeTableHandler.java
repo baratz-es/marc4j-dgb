@@ -42,8 +42,6 @@ import org.xml.sax.helpers.DefaultHandler;
  * that builds a data structure to facilitate <code>UnicodeToAnsel</code> character conversion.
  *
  * @author <a href="mailto:ckeith@loc.gov">Corey Keith</a>
- * @version $Revision: 1.2 $
- *
  * @see DefaultHandler
  */
 public class ReverseCodeTableHandler

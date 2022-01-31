@@ -1,4 +1,3 @@
-// $Id: UnicodeToIso6937.java,v 1.1 2002/12/13 13:33:09 ypratter Exp $
 /**
  * Copyright (C) 2002 Bas Peters (mail@bpeters.com)
  *
@@ -27,7 +26,6 @@ package org.marc4j.util;
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
  * @author <a href="mailto:ypratter@club-internet.fr">Yves Pratter</a>
- * @version $Revision: 1.1 $
  */
 public class UnicodeToIso6937
     implements CharacterConverter

@@ -1,4 +1,3 @@
-// $Id: Collection.java,v 1.7 2003/03/31 19:55:26 ceyates Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -34,8 +33,6 @@ import java.util.List;
  * </p>
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.7 $
- *
  */
 public class Collection
     implements Serializable

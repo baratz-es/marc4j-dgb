@@ -1,4 +1,3 @@
-// $Id: MarcXmlWriter.java,v 1.18 2003/04/11 20:42:01 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -86,8 +85,6 @@ import org.xml.sax.SAXNotSupportedException;
  * </p>
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.18 $
- *
  * @see MarcXmlReader
  * @see Converter
  */

@@ -1,4 +1,3 @@
-// $Id: MarcReader.java,v 1.15 2003/02/26 23:22:43 ceyates Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -44,8 +43,6 @@ import org.marc4j.marc.Tag;
  * </p>
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.15 $
- *
  * @see MarcHandler
  * @see ErrorHandler
  */

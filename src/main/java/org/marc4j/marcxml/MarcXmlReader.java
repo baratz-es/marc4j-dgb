@@ -1,4 +1,3 @@
-// $Id: MarcXmlReader.java,v 1.1 2003/04/11 20:41:29 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -56,8 +55,6 @@ import org.xml.sax.helpers.DefaultHandler;
  * </p>
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.1 $
- *
  * @see MarcHandler
  * @see ContentHandler
  */

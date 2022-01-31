@@ -40,8 +40,6 @@ import org.xml.sax.helpers.DefaultHandler;
  * that builds a data structure to facilitate AnselToUnicode character conversion.
  *
  * @author <a href="mailto:ckeith@loc.gov">Corey Keith</a>
- * @version $Revision: 1.1 $
- *
  * @see DefaultHandler
  */
 public class CodeTableHandler

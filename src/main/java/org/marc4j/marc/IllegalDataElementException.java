@@ -1,4 +1,3 @@
-// $Id: IllegalDataElementException.java,v 1.1 2003/01/10 09:34:03 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -28,8 +27,6 @@ package org.marc4j.marc;
  * </p>
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.1 $
- *
  */
 public class IllegalDataElementException
     extends IllegalArgumentException

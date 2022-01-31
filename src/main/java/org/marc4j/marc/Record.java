@@ -1,4 +1,3 @@
-// $Id: Record.java,v 1.7 2003/03/31 19:55:26 ceyates Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -55,8 +54,6 @@ import org.apache.commons.lang3.StringUtils;
  * </p>
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.7 $
- *
  */
 public class Record
     implements Serializable, Cloneable

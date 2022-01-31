@@ -1,4 +1,3 @@
-// $Id: CharacterConverterLoaderException.java,v 1.2 2003/01/10 09:41:56 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters (mail@bpeters.com)
  *
@@ -27,8 +26,6 @@ package org.marc4j.util;
  * </p>
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.2 $
- *
  */
 public class CharacterConverterLoaderException
     extends RuntimeException

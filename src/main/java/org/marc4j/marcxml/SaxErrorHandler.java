@@ -1,4 +1,3 @@
-// $Id: SaxErrorHandler.java,v 1.5 2002/08/03 15:14:39 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -35,8 +34,6 @@ import org.xml.sax.SAXParseException;
  * </p>
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.5 $
- *
  * @see ErrorHandler
  */
 public class SaxErrorHandler

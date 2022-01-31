@@ -1,4 +1,3 @@
-// $Id: CharacterConverter.java,v 1.1 2002/12/11 19:24:38 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters (mail@bpeters.com)
  *
@@ -27,8 +26,6 @@ package org.marc4j.util;
  * </p>
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.1 $
- *
  */
 public interface CharacterConverter
 {

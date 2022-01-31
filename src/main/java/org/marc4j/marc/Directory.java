@@ -1,4 +1,3 @@
-// $Id: Directory.java,v 1.5 2003/03/31 19:55:26 ceyates Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -51,8 +50,6 @@ import java.text.DecimalFormat;
  * </p>
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.5 $
- *
  */
 public class Directory
     implements Serializable

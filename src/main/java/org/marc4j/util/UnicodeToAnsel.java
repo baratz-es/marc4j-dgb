@@ -1,4 +1,3 @@
-// $Id: UnicodeToAnsel.java,v 1.9 2003/03/23 12:05:54 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters (mail@bpeters.com)
  *
@@ -32,7 +31,6 @@ import org.marc4j.marc.MarcException;
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
  * @author <a href="mailto:ckeith@loc.gov">Corey Keith</a>
- * @version $Revision: 1.9 $
  */
 public class UnicodeToAnsel
     implements CharacterConverter

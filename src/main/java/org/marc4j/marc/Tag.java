@@ -1,4 +1,3 @@
-// $Id: Tag.java,v 1.5 2003/01/10 09:39:43 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -33,8 +32,6 @@ package org.marc4j.marc;
  * </p>
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.5 $
- *
  */
 public class Tag
 {

@@ -1,4 +1,3 @@
-// $Id: MarcWriter.java,v 1.11 2003/03/23 12:07:12 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters (mail@bpeters.com)
  *
@@ -42,8 +41,6 @@ import org.slf4j.LoggerFactory;
  * </p>
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.11 $
- *
  * @see MarcHandler
  */
 public class MarcWriter

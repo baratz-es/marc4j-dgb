@@ -1,4 +1,3 @@
-// $Id: Leader.java,v 1.10 2003/03/31 19:55:26 ceyates Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -50,8 +49,6 @@ import java.util.Arrays;
  * </p>
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.10 $
- *
  */
 public class Leader
     implements Serializable, Cloneable

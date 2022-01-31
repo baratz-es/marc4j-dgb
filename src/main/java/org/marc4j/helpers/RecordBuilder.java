@@ -1,4 +1,3 @@
-// $Id: RecordBuilder.java,v 1.5 2003/05/08 16:30:48 ceyates Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -34,8 +33,6 @@ import org.marc4j.marc.Subfield;
  * </p>
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.5 $
- *
  * @see RecordHandler
  */
 public class RecordBuilder

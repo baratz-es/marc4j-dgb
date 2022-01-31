@@ -1,4 +1,3 @@
-// $Id: MarcXmlFilter.java,v 1.16 2003/04/11 20:40:55 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -52,8 +51,6 @@ import org.xml.sax.helpers.AttributesImpl;
  *             {@link org.marc4j.marcxml.MarcXmlReader}
  * 
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.16 $
- *
  * @see ExtendedFilter
  * @see MarcHandler
  * @see ContentHandler
