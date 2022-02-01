@@ -2,6 +2,10 @@ Version v1.2.0
 
 * Using Java 8
 
+Version v1.1.2
+
+* Fix errror parsing leader - subfieldCodeLength
+
 Version v1.1.1
 
 * Tests uisng Junit5 + Spock . Optional usage of Spock v2 + Groovy v3
