@@ -1,4 +1,4 @@
-name: Deploy Javadoc
+name: Update gh-pages readme
 
 on:
   push:
