@@ -1,6 +1,6 @@
 # MARC4J-DGB
 
-![GitHub](https://img.shields.io/github/license/Digibis/marc4j-dgb) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Digibis/marc4j-dgb/Java%20CI) ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/Digibis/marc4j-dgb?sort=semver)
+![GitHub](https://img.shields.io/github/license/Digibis/marc4j-dgb) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Digibis/marc4j-dgb/Java%20CI) ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/Digibis/marc4j-dgb)
 
 
 The goal of MARC4J is to provide an easy to use Application Programming Interface (API) for working with MARC and MARCXML in Java. MARC stands for MAchine Readable Cataloging and is a widely used exchange format for bibliographic data. MARCXML provides a loss-less conversion between MARC (MARC21 but also other formats like UNIMARC) and XML.
