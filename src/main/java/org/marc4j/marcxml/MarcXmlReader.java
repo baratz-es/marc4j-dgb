@@ -25,7 +25,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 
 import org.marc4j.MarcHandler;
-// import org.marc4j.ErrorHandler;
 import org.marc4j.MarcReader;
 import org.marc4j.marc.Leader;
 import org.marc4j.util.CharacterConverter;
@@ -49,9 +48,8 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * <p>
- * <code>MarcXmlReader</code> is an <code>XMLReader</code> that
- * consumes <code>MarcHandler</code> events and reports events to
- * a SAX2 <code>ContentHandler</code>.
+ * <code>MarcXmlReader</code> is an <code>XMLReader</code> that consumes <code>MarcHandler</code> events and reports
+ * events to a SAX2 <code>ContentHandler</code>.
  * </p>
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
@@ -330,20 +328,7 @@ public class MarcXmlReader
             this.ch = new DefaultHandler();
         }
 
-        try {
-            // Convert the InputSource into a BufferedReader.
-            BufferedReader br = null;
-
-            if (input.getCharacterStream() != null) {
-                br = new BufferedReader(input.getCharacterStream());
-            } else if (input.getByteStream() != null) {
-                br = new BufferedReader(new InputStreamReader(input.getByteStream(), "ISO8859_1"));
-            } else if (input.getSystemId() != null) {
-                java.net.URL url = new URL(input.getSystemId());
-                br = new BufferedReader(new InputStreamReader(url.openStream(), "ISO8859_1"));
-            } else {
-                throw new SAXException("Invalid InputSource object");
-            }
+        try (BufferedReader br = this.getBufferedReaderFromInput(input, "ISO8859_1")) {
 
             // Create a new MarcReader object.
             MarcReader marcReader = new MarcReader();
@@ -359,10 +344,29 @@ public class MarcXmlReader
             // Send the file to the parse method.
             marcReader.parse(br);
 
-        } catch (Exception e) {
-            log.error("Se ha producido un error al realizar la conversi�n", e);
+        } catch (IOException | SAXException ex) {
+            log.error("An error happened when trying to parse a XML document.", ex);
         }
 
+    }
+
+    // Convert the InputSource into a BufferedReader.
+    private BufferedReader getBufferedReaderFromInput(InputSource input, String charsetName)
+        throws IOException, SAXException
+    {
+        BufferedReader bufferedReader = null;
+
+        if (input.getCharacterStream() != null) {
+            bufferedReader = new BufferedReader(input.getCharacterStream());
+        } else if (input.getByteStream() != null) {
+            bufferedReader = new BufferedReader(new InputStreamReader(input.getByteStream(), charsetName));
+        } else if (input.getSystemId() != null) {
+            java.net.URL url = new URL(input.getSystemId());
+            bufferedReader = new BufferedReader(new InputStreamReader(url.openStream(), charsetName));
+        } else {
+            throw new SAXException("Invalid InputSource object");
+        }
+        return bufferedReader;
     }
 
     /**
@@ -407,8 +411,8 @@ public class MarcXmlReader
             // Report root element
             this.ch.startElement(NS_URI, "collection", "collection", atts);
 
-        } catch (SAXException se) {
-            log.error("Se ha producido un error al añadir los elementos de inicio de documento", se);
+        } catch (SAXException ex) {
+            log.error("An error happended, when traying to add the initial elements of the document.", ex);
         }
     }
 
@@ -431,27 +435,11 @@ public class MarcXmlReader
                 this.ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
             }
 
-            // Se mira si el tipo y el nivel de la cabecera son correctos.
-            // Si no es as� se modifican para que sean monograf�a
-            Leader leaderCorrecto = null;
-            if (this.isCorrectoTipoActual(leader)) {
-                if (this.isCorrectoNivelBibliografico(leader)) {
-                    leaderCorrecto = leader;
-                } else {
-                    leaderCorrecto = new Leader(leader.marshal());
-                    this.setNivelBibliograficoMonografia(leaderCorrecto);
-                }
-            } else {
-                leaderCorrecto = new Leader(leader.marshal());
-                this.setTipoMonografia(leaderCorrecto);
-                if (!this.isCorrectoNivelBibliografico(leaderCorrecto)) {
-                    this.setNivelBibliograficoMonografia(leaderCorrecto);
-                }
-            }
+            Leader safeLeader = this.sanitizeLeader(leader);
 
-            this.writeElement(NS_URI, "leader", "leader", EMPTY_ATTS, leaderCorrecto.marshal());
+            this.writeElement(NS_URI, "leader", "leader", EMPTY_ATTS, safeLeader.marshal());
         } catch (SAXException se) {
-            log.error("Se ha producido un error al añadir los elementos de inicio de registro", se);
+            log.error("An error happended, when traying to add the initial elements of a record.", se);
         }
     }
 
@@ -475,7 +463,7 @@ public class MarcXmlReader
             }
             this.writeElement(NS_URI, "controlfield", "controlfield", atts, data);
         } catch (SAXException se) {
-            log.error("Se ha producido un error al añadir el nodo control", se);
+            log.error("An error happended when was trying to add the Control field", se);
         }
     }
 
@@ -493,9 +481,8 @@ public class MarcXmlReader
     public void startDataField(String tag, char ind1, char ind2, Long id)
     {
         try {
-            // Se modifican los indicadores si no son v�lidos
-            ind1 = this.getIndicadorValido(ind1);
-            ind2 = this.getIndicadorValido(ind2);
+            ind1 = this.sanitizeIndicatorChar(ind1);
+            ind2 = this.sanitizeIndicatorChar(ind2);
 
             AttributesImpl atts = new AttributesImpl();
             atts.addAttribute("", "tag", "tag", "CDATA", tag);
@@ -506,7 +493,9 @@ public class MarcXmlReader
             }
             this.ch.startElement(NS_URI, "datafield", "datafield", atts);
         } catch (SAXException se) {
-            log.error("Se ha producido un error al añadir los elementos de inicio de campo", se);
+            log.error(
+                "And error happended when trying to add the initial elementos of a Data field. Tag {}, {} {}, id {}",
+                tag, ind1, ind2, id, se);
         }
     }
 
@@ -537,7 +526,7 @@ public class MarcXmlReader
             }
             this.ch.endElement(NS_URI, "subfield", "subfield");
         } catch (SAXException se) {
-            log.error("Se ha producido un error al crear el subcampo", se);
+            log.error("An error happended trying to create a subfield with code {}", code, se);
         }
     }
 
@@ -555,7 +544,7 @@ public class MarcXmlReader
             this.ch.ignorableWhitespace("\n    ".toCharArray(), 0, 5);
             this.ch.endElement(NS_URI, "datafield", "datafield");
         } catch (SAXException se) {
-            log.error("Se ha producido un error al añadir los elementos de fin de campo", se);
+            log.error("An error happended trying to close a Data Field with tag {}", tag, se);
         }
     }
 
@@ -574,7 +563,7 @@ public class MarcXmlReader
             }
             this.ch.endElement(NS_URI, "record", "record");
         } catch (SAXException se) {
-            log.error("Se ha producido un error al añadir el elemento de fin de registro", se);
+            log.error("An error happended trying to close a record", se);
         }
     }
 
@@ -596,7 +585,7 @@ public class MarcXmlReader
             this.ch.endPrefixMapping("");
             this.ch.endDocument();
         } catch (SAXException e) {
-            log.error("Se ha producido un error al añadir los elementos de fin de colecci�n", e);
+            log.error("An error happened trying to add the elements to close a collection", e);
         }
     }
 
@@ -622,22 +611,41 @@ public class MarcXmlReader
                     (CharacterConverter)CharacterConverterLoader.createCharacterConverter("org.marc4j.charconv",
                         "org.marc4j.util.AnselToUnicode");
             } catch (CharacterConverterLoaderException e) {
-                log.error("Se ha producido un error al obtener el car�cter de conversi�n", e);
+                log.error("An error happended when trying to get the character converter.", e);
             }
         }
     }
 
     /**
-     * Devuelve si el tipo de la cabecera es un tipo correcto,
-     * es la posicion 6
-     * 
-     * @param leader
-     * @return
+     * Sanitizes the leader type of record and bibliograhic level
      */
-    private boolean isCorrectoTipoActual(Leader leader)
+    private Leader sanitizeLeader(Leader leader)
     {
-        char tipo = leader.getTypeOfRecord();
-        switch (tipo) {
+        Leader safeLeader = leader;
+        if (this.verifyLeaderTypeOfRecord(leader)) {
+            if (!this.verifyBibliographicLevel(leader)) {
+                safeLeader = new Leader(leader);
+                this.enforceBibliograchiLevelAsMonographic(safeLeader);
+            }
+        } else {
+            safeLeader = new Leader(leader);
+            this.enforceTypeOfRecordLanguageMaterial(safeLeader);
+            if (!this.verifyBibliographicLevel(safeLeader)) {
+                this.enforceBibliograchiLevelAsMonographic(safeLeader);
+            }
+        }
+        return safeLeader;
+    }
+
+    /**
+     * Checks if the record type of the leader (position 06), it's correct
+     * 
+     * @return True if the type of the record, it's valid
+     */
+    private boolean verifyLeaderTypeOfRecord(Leader leader)
+    {
+        char typeOfRecord = leader.getTypeOfRecord();
+        switch (typeOfRecord) {
             case 'a':
             case 'c':
             case 'd':
@@ -667,28 +675,21 @@ public class MarcXmlReader
     }
 
     /**
-     * Modifica el tipo de la cabecera para que sea una monograf�a
-     * 
-     * @param leader
-     * @return
+     * Enforces the type of record to 'a' -> Language material
      */
-    private Leader setTipoMonografia(Leader leader)
+    private Leader enforceTypeOfRecordLanguageMaterial(Leader leader)
     {
         leader.setTypeOfRecord('a');
         return leader;
     }
 
     /**
-     * Devuelve si el nivel bibliogr�fico de la cabecera es de un tipo correcto
-     * es la posicion 7
-     * 
-     * @param leader
-     * @return
+     * Checks if the bibliographic level of the leader (position 07), it's correct
      */
-    private boolean isCorrectoNivelBibliografico(Leader leader)
+    private boolean verifyBibliographicLevel(Leader leader)
     {
-        char tipo = leader.getImplDefined1()[0];
-        switch (tipo) {
+        char bibliographicLevel = leader.getImplDefined1()[0];
+        switch (bibliographicLevel) {
             case 'a':
             case 'b':
             case 'c':
@@ -709,15 +710,13 @@ public class MarcXmlReader
     }
 
     /**
-     * Modifica el nivel bibliogr�fico de la cabecera para que sea una monograf�a
-     * 
-     * @param leader
-     * @return
+     * Enforces the bibliographic level as a Monographic component part
      */
-    private Leader setNivelBibliograficoMonografia(Leader leader)
+    private Leader enforceBibliograchiLevelAsMonographic(Leader leader)
     {
-        char implDefined[] = leader.getImplDefined1();
-        // Si la posici�n 7 es #, se cambia a ' '
+        char[] implDefined = leader.getImplDefined1();
+
+        // If position 07 it's '#', then it's hcanged to ' '
         if (implDefined[0] == '#') {
             implDefined[0] = ' ';
         } else {
@@ -728,18 +727,16 @@ public class MarcXmlReader
     }
 
     /**
-     * Modifica el indicador pasado para que sea v�lido. S�lo son v�lidos un n�mero, una letra
-     * de la a a la z o un espacio en blanco. Si no es v�lido, devuelve un espacio en blanco
+     * Sanitize a indicator character. If a invalid indicator it's found, returns a ' '
      * 
-     * @param indicador
-     * @return
+     * Valid indicator characters are a to z, ' ', and 0 to 9
      */
-    private char getIndicadorValido(char indicador)
+    private char sanitizeIndicatorChar(char indicator)
     {
-        indicador = Character.toLowerCase(indicador);
-        if (!Character.isLetterOrDigit(indicador)) {
-            indicador = ' ';
+        indicator = Character.toLowerCase(indicator);
+        if (!Character.isLetterOrDigit(indicator)) {
+            indicator = ' ';
         }
-        return indicador;
+        return indicator;
     }
 }

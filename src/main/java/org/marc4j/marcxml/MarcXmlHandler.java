@@ -20,10 +20,9 @@
 package org.marc4j.marcxml;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.marc4j.MarcHandler;
-import org.marc4j.marc.ControlField;
-import org.marc4j.marc.DataField;
 import org.marc4j.marc.Leader;
 import org.marc4j.marc.MarcException;
 import org.marc4j.marc.Subfield;
@@ -34,10 +33,8 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * <p>
- * <code>MarcXmlHandler</code> is a SAX2 <code>ContentHandler</code>
- * that reports events to the <code>MarcHandler</code> interface.
- * </p>
+ * <code>MarcXmlHandler</code> is a SAX2 <code>ContentHandler</code> that reports events to the <code>MarcHandler</code>
+ * interface.
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
  * @see MarcHandler
@@ -67,8 +64,8 @@ public class MarcXmlHandler
     /** The second indicator attribute name string */
     private static final String IND_2_ATTR = "ind2";
 
-    /** Hashset for mapping of element strings to constants (Integer) */
-    private static final HashMap elementMap;
+    /** Map for mapping of element strings to constants (Integer) */
+    private static final Map<String, Integer> elementMap;
 
     /** Data element identifier */
     private String code;
@@ -89,13 +86,13 @@ public class MarcXmlHandler
     private Locator locator;
 
     static {
-        elementMap = new HashMap();
-        elementMap.put("collection", new Integer(COLLECTION_ID));
-        elementMap.put("leader", new Integer(LEADER_ID));
-        elementMap.put("record", new Integer(RECORD_ID));
-        elementMap.put("controlfield", new Integer(CONTROLFIELD_ID));
-        elementMap.put("datafield", new Integer(DATAFIELD_ID));
-        elementMap.put("subfield", new Integer(SUBFIELD_ID));
+        elementMap = new HashMap<>();
+        elementMap.put("collection", COLLECTION_ID);
+        elementMap.put("leader", LEADER_ID);
+        elementMap.put("record", RECORD_ID);
+        elementMap.put("controlfield", CONTROLFIELD_ID);
+        elementMap.put("datafield", DATAFIELD_ID);
+        elementMap.put("subfield", SUBFIELD_ID);
     }
 
     /**
@@ -137,15 +134,15 @@ public class MarcXmlHandler
     {
 
         String realname = (name.length() == 0) ? qName : name;
-        Integer el_type = (Integer)elementMap.get(realname);
+        Integer elementType = elementMap.get(realname);
 
         // If the element isn't in the map, ignore it. Might be part of a
         // different namespace.
-        if (el_type == null) {
+        if (elementType == null) {
             return;
         }
 
-        switch (el_type) {
+        switch (elementType) {
             case COLLECTION_ID:
                 if (this.mh != null) {
                     this.mh.startCollection();
@@ -182,6 +179,9 @@ public class MarcXmlHandler
             case SUBFIELD_ID:
                 this.code = atts.getValue(CODE_ATTR);
                 this.data.delete(0, this.data.length());
+                break;
+
+            default:
 
         }
     }
@@ -200,15 +200,15 @@ public class MarcXmlHandler
     {
 
         String realname = (name.length() == 0) ? qName : name;
-        Integer el_type = (Integer)elementMap.get(realname);
+        Integer elementType = elementMap.get(realname);
 
         // If the element isn't in the map, ignore it. Might be part of a
         // different namespace.
-        if (el_type == null) {
+        if (elementType == null) {
             return;
         }
 
-        switch (el_type) {
+        switch (elementType) {
             case COLLECTION_ID:
                 if (this.mh != null) {
                     this.mh.endCollection();
@@ -252,6 +252,8 @@ public class MarcXmlHandler
                 }
                 this.code = null;
                 break;
+
+            default:
         }
     }
 }
