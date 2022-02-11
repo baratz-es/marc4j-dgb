@@ -23,6 +23,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -237,15 +238,27 @@ public class DataField
     }
 
     /**
-     * <p>
-     * Returns the subfield for a given data element identifier.
-     * </p>
+     * Returns the first subfield for a given data element identifier.
      *
      * @param code the data element identifier
      * @return Subfield the data element
      * @see Subfield
+     * @deprecated Use {@link #getFirstSubfield(char)}
      */
+    @Deprecated
     public Subfield getSubfield(char code)
+    {
+        return this.getFirstSubfield(code);
+    }
+
+    /**
+     * Returns the first subfield for a given data element identifier.
+     *
+     * @param code The data element identifier
+     * @return Subfield the data element
+     * @see Subfield
+     */
+    public Subfield getFirstSubfield(char code)
     {
         for (Subfield sf : this.list) {
             if (sf.getCode() == code) {
@@ -253,6 +266,19 @@ public class DataField
             }
         }
         return null;
+    }
+
+    /**
+     * Returns a stream of Subfields for a given data element identifier
+     * 
+     * @param code The data element identifier
+     * @return A Stream of Subfield
+     * @see Subfield
+     * @see Stream
+     */
+    public Stream<Subfield> getSubFields(char code)
+    {
+        return this.list.stream().filter(subfield -> subfield.getCode() == code);
     }
 
     /**
