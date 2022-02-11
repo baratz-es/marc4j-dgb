@@ -48,7 +48,7 @@ public abstract class VariableField
     public static final Long EMPTY_ID = null;
 
     /** Field id */
-    private Long id;
+    private Long id = EMPTY_ID;
 
     /** The tag name. */
     private String tag;
@@ -58,7 +58,7 @@ public abstract class VariableField
      * Default constructor.
      * </p>
      */
-    public VariableField()
+    protected VariableField()
     {
     }
 
@@ -69,9 +69,20 @@ public abstract class VariableField
      *
      * @param tag the tag name
      */
-    public VariableField(String tag)
+    protected VariableField(String tag)
     {
         this.setTag(tag);
+    }
+
+    /**
+     * Copy constructor
+     * 
+     * @param other another Variablefield where copy the values
+     */
+    protected VariableField(VariableField other)
+    {
+        this.tag = other.tag;
+        this.id = other.id;
     }
 
     /**
@@ -84,6 +95,8 @@ public abstract class VariableField
     public void setTag(String tag)
     {
         if (!Tag.isValid(tag)) {
+            // NOTE WTF this exception will be never throw, as Tag.isXXField(String) throws an exception when is
+            // invalid!
             throw new IllegalTagException(tag);
         }
         this.tag = tag;
@@ -102,7 +115,7 @@ public abstract class VariableField
     }
 
     /**
-     * @return Devuelve el valor de id.
+     * @return Returns the id field value.
      */
     public Long getId()
     {
@@ -110,13 +123,17 @@ public abstract class VariableField
     }
 
     /**
-     * @param id Nuevo valor para id.
+     * @param id The new id value.
      */
     public void setId(Long id)
     {
         this.id = id;
     }
 
+    /**
+     * @deprecated Use copy constructor {@link #VariableField(VariableField)}
+     */
+    @Deprecated
     @Override
     public abstract Object clone();
 
@@ -128,4 +145,3 @@ public abstract class VariableField
 
 }
 
-// End of VariableField.java

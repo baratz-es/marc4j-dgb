@@ -27,23 +27,20 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * <p>
- * <code>ControlField</code> defines behaviour for a control
- * field (tag 001-009).
+ * <code>ControlField</code> defines behavior for a control field (tag 001-009).
  * </p>
  *
  * <p>
- * Control fields are variable fields identified by tags beginning
- * with two zero's. They are comprised of data and a field terminator
- * and do not contain indicators or subfield codes. The structure of a
- * control field according to the MARC standard is as follows:
+ * Control fields are variable fields identified by tags beginning with two zero's. They are comprised of data and a
+ * field terminator and do not contain indicators or subfield codes. The structure of a control field according to the
+ * MARC standard is as follows:
  * </p>
  * 
  * <pre>
  * DATA_ELEMENT FIELD_TERMINATOR
  * </pre>
  * <p>
- * This structure is returned by the {@link #marshal()}
- * method.
+ * This structure is returned by the {@link #marshal()} method.
  * </p>
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
@@ -65,6 +62,7 @@ public class ControlField
      */
     public ControlField()
     {
+        super();
     }
 
     /**
@@ -128,6 +126,12 @@ public class ControlField
         this(tag, data.toCharArray(), id);
     }
 
+    public ControlField(ControlField other)
+    {
+        super(other);
+        this.data = Arrays.copyOf(other.data, other.data.length);
+    }
+
     /**
      * <p>
      * Registers the tag.
@@ -140,24 +144,12 @@ public class ControlField
     @Override
     public void setTag(String tag)
     {
-        if (Tag.isControlField(tag)) {
-            super.setTag(tag);
-        } else {
+        if (!Tag.isControlField(tag)) {
+            // NOTE WTF this exception will be never throw, as Tag.isXXField(String) throws an exception when is
+            // invalid!
             throw new IllegalTagException(tag, "not a control field identifier");
         }
-    }
-
-    /**
-     * <p>
-     * Returns the tag name.
-     * </p>
-     *
-     * @return {@link String} - the tag name
-     */
-    @Override
-    public String getTag()
-    {
-        return super.getTag();
+        super.setTag(tag);
     }
 
     /**
@@ -225,12 +217,13 @@ public class ControlField
 
     /*
      * @see java.lang.Object#clone()
+     * @deprecated Use copy constructor  {@link #ControlField(ControlField)}
      */
+    @Deprecated
     @Override
     public Object clone()
     {
-        ControlField instance = new ControlField(this.getTag(), String.copyValueOf(this.data), VariableField.EMPTY_ID);
-        return instance;
+        return new ControlField(this);
     }
 
     /*

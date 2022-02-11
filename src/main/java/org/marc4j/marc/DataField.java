@@ -22,7 +22,6 @@ package org.marc4j.marc;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -30,26 +29,20 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * <p>
- * <code>DataField</code> defines behaviour for a data field
- * (tag 010-999).
+ * <code>DataField</code> defines behavior for a data field (tag 010-999).
  * </p>
  *
  * <p>
- * Data fields are variable fields identified by tags beginning
- * with ASCII numeric values other than two zero's. Data fields
- * contain indicators, subfield codes, data and a field terminator.
- * The structure of a data field according to the MARC standard is
- * as follows:
+ * Data fields are variable fields identified by tags beginning with ASCII numeric values other than two zero's. Data
+ * fields contain indicators, subfield codes, data and a field terminator. The structure of a data field according to
+ * the MARC standard is as follows:
  * </p>
  * 
  * <pre>
- * INDICATOR_1  INDICATOR_2  DELIMITER  DATA_ELEMENT_IDENTIFIER_1
- *   DATA_ELEMENT_1  ...  DELIMITER  DATA_ELEMENT_IDENTIFIER_n
- *     DATA_ELEMENT_n  FT
+ * INDICATOR_1  INDICATOR_2  DELIMITER  DATA_ELEMENT_IDENTIFIER_1  DATA_ELEMENT_1  ...  DELIMITER  DATA_ELEMENT_IDENTIFIER_n  DATA_ELEMENT_n  FT
  * </pre>
  * <p>
- * This structure is returned by the {@link #marshal()}
- * method.
+ * This structure is returned by the {@link #marshal()} method.
  * </p>
  *
  * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
@@ -68,7 +61,7 @@ public class DataField
     private char ind2;
 
     /** A collection of data elements. */
-    private ArrayList<Subfield> list;
+    private ArrayList<Subfield> list = new ArrayList<>();
 
     /**
      * <p>
@@ -77,7 +70,6 @@ public class DataField
      */
     public DataField()
     {
-        this.list = new ArrayList<>();
     }
 
     /**
@@ -91,7 +83,6 @@ public class DataField
     public DataField(String tag)
     {
         super(tag);
-        this.list = new ArrayList<>();
     }
 
     /**
@@ -130,6 +121,23 @@ public class DataField
     }
 
     /**
+     * Copy constructor
+     * 
+     * @param other Another instance of DataField, where to copy the values
+     */
+    public DataField(DataField other)
+    {
+        super(other);
+        this.ind1 = other.ind1;
+        this.ind2 = other.ind2;
+        if (other.list != null) {
+            for (Subfield subfield : other.list) {
+                this.add((Subfield)subfield.clone());
+            }
+        }
+    }
+
+    /**
      * <p>
      * Registers the tag.
      * </p>
@@ -141,24 +149,12 @@ public class DataField
     @Override
     public void setTag(String tag)
     {
-        if (Tag.isDataField(tag)) {
-            super.setTag(tag);
-        } else {
+        if (!Tag.isDataField(tag)) {
+            // NOTE WTF this exception will be never throw, as Tag.isXXField(String) throws an exception when is
+            // invalid!
             throw new IllegalTagException(tag, "not a data field identifier");
         }
-    }
-
-    /**
-     * <p>
-     * Returns the tag name.
-     * </p>
-     *
-     * @return {@link String} - the tag name
-     */
-    @Override
-    public String getTag()
-    {
-        return super.getTag();
+        super.setTag(tag);
     }
 
     /**
@@ -302,13 +298,7 @@ public class DataField
         }
         this.list = new ArrayList<>();
         for (Subfield subfield : newList) {
-            Object obj = subfield;
-            if (obj instanceof Subfield) {
-                this.add((Subfield)obj);
-            } else {
-                throw new IllegalAddException(obj.getClass().getName(),
-                    "a collection of subfields can only contain " + "Subfield objects.");
-            }
+            this.add(subfield);
         }
     }
 
@@ -322,10 +312,8 @@ public class DataField
      */
     public String marshal()
     {
-        StringBuffer dataField = new StringBuffer().append(this.ind1).append(this.ind2);
-        Iterator<Subfield> iterator = this.list.iterator();
-        while (iterator.hasNext()) {
-            Subfield subfield = iterator.next();
+        StringBuilder dataField = new StringBuilder().append(this.ind1).append(this.ind2);
+        for (Subfield subfield : this.list) {
             dataField.append(subfield.marshal());
         }
         dataField.append((char)MarcConstants.FT);
@@ -347,24 +335,15 @@ public class DataField
 
     /*
      * @see java.lang.Object#clone()
+     * @deprecated Use copy constructor  {@link #DataField(DataField)}
      */
+    @Deprecated
     @Override
     public Object clone()
     {
-        // Creamos una nueva instancia
-        DataField instance = new DataField(this.getTag(), this.ind1, this.ind2, VariableField.EMPTY_ID);
-
-        // Recorremos la lista de subcampos y clonamos cada uno de ellos
-        if (this.list != null) {
-            ArrayList<Subfield> newList = new ArrayList<>();
-            for (Subfield subfield : this.list) {
-                newList.add((Subfield)subfield.clone());
-            }
-            instance.setSubfieldList(newList);
-        }
-
-        // Devolvemos la nueva instancia
-        return instance;
+        DataField copy = new DataField(this);
+        copy.setId(EMPTY_ID);
+        return copy;
     }
 
     @Override
@@ -386,7 +365,7 @@ public class DataField
             .append(this.getId(), that.getId())
             .append(this.ind1, that.ind1)
             .append(this.ind2, that.ind2)
-            .append(this.list, that.list) // ArrayList.equals hace un deep equals
+            .append(this.list, that.list) // ArrayList.equals does a "deep" equals
             .isEquals();
     }
 
