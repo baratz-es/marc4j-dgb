@@ -53,7 +53,7 @@ import org.apache.commons.lang3.StringUtils;
  * control number field is supplied.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  */
 public class Record
     implements Serializable, Cloneable

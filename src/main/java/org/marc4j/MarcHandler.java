@@ -26,7 +26,7 @@ import org.marc4j.marc.Leader;
  * Defines Java callbacks to handle a collection of MARC records.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  */
 public interface MarcHandler
 {

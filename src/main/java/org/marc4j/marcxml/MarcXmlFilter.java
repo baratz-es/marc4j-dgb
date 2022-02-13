@@ -50,7 +50,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * @deprecated This class has been replaced by
  *                 {@link org.marc4j.marcxml.MarcXmlReader}
  * 
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  * @see ExtendedFilter
  * @see MarcHandler
  * @see ContentHandler

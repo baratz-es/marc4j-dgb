@@ -28,7 +28,7 @@ import java.util.Properties;
  * Loads a character converter using a system property.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  */
 public final class CharacterConverterLoader
 {

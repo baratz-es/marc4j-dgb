@@ -41,7 +41,7 @@ import org.xml.sax.XMLReader;
  * or transformation from a source, populating a result.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  * @see Transformer
  */
 public class Converter

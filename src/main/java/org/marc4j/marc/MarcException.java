@@ -25,7 +25,7 @@ package org.marc4j.marc;
  * while processing a record object.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  */
 public class MarcException
     extends RuntimeException

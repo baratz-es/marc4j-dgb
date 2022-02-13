@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
  * to write MARC data in tagged display format.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  * @see MarcHandler
  */
 public class TaggedWriter

@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  * to write record objects to tape format (ISO 2709).
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  * @see MarcHandler
  */
 public class MarcWriter

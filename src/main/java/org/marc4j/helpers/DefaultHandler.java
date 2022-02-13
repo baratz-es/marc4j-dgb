@@ -36,7 +36,7 @@ import org.marc4j.marc.Leader;
  * implement only part of an interface.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  * @see MarcHandler
  * @see ErrorHandler
  */

@@ -25,7 +25,7 @@ package org.marc4j.marc;
  * supplied object is illegal.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  */
 public class IllegalAddException
     extends IllegalArgumentException

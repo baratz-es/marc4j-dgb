@@ -33,7 +33,7 @@ import org.marc4j.MarcReader;
  * non-MARCXML conversions.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  */
 public class MarcSource
     implements Source

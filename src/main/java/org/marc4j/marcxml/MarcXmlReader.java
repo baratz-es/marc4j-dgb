@@ -52,7 +52,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * events to a SAX2 <code>ContentHandler</code>.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  * @see MarcHandler
  * @see ContentHandler
  */

@@ -29,7 +29,7 @@ import com.thaiopensource.relaxng.ValidatorHandler;
  * <code>com.thaiopensource.relaxng.ValidatorHandler</code> 
  * as an XML filter.</p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  * @version $Revision: 1.1 $
  * @see ValidatorHandler
  * @see XMLFilterImpl

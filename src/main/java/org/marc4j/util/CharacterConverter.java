@@ -25,7 +25,7 @@ package org.marc4j.util;
  * this interface new character conversions can be created.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  */
 public interface CharacterConverter
 {

@@ -33,7 +33,7 @@ import org.xml.sax.SAXParseException;
  * implementation.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  * @see ErrorHandler
  */
 public class SaxErrorHandler

@@ -29,7 +29,7 @@ package org.marc4j.marc;
  * and data elements are checked for MARC control characters.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  */
 public class Verifier
 {

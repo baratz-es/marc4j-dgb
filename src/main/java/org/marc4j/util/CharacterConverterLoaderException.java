@@ -25,7 +25,7 @@ package org.marc4j.util;
  * when an error occurs while loading a character conversion class.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  */
 public class CharacterConverterLoaderException
     extends RuntimeException

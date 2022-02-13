@@ -36,7 +36,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * <code>MarcXmlHandler</code> is a SAX2 <code>ContentHandler</code> that reports events to the <code>MarcHandler</code>
  * interface.
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  * @see MarcHandler
  * @see DefaultHandler
  */

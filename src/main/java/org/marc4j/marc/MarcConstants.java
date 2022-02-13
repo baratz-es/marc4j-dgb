@@ -25,7 +25,7 @@ package org.marc4j.marc;
  * as used in a record.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  */
 public class MarcConstants
 {

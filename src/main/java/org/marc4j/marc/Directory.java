@@ -49,7 +49,7 @@ import java.text.DecimalFormat;
  * unused positions contain zero's.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  */
 public class Directory
     implements Serializable

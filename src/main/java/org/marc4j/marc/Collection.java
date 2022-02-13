@@ -31,7 +31,7 @@ import java.util.List;
  * <code>Record</code> objects.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  */
 public class Collection
     implements Serializable

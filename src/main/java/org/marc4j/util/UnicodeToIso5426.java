@@ -24,7 +24,7 @@ package org.marc4j.util;
  * A utility to convert UCS/Unicode data to UNIMARC (ISO 5426 charset).
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  * @author <a href="mailto:ypratter@club-internet.fr">Yves Pratter</a>
  */
 public class UnicodeToIso5426

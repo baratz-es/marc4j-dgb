@@ -25,7 +25,7 @@ package org.marc4j.marcxml;
  * declaration.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  */
 public class DoctypeDecl
 {

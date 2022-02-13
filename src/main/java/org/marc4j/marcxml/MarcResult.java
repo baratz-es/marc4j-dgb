@@ -28,7 +28,7 @@ import org.marc4j.MarcHandler;
  * Collects the result of a MARC conversion.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  * @see MarcHandler
  */
 public class MarcResult

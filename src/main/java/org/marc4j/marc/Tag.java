@@ -31,7 +31,7 @@ package org.marc4j.marc;
  * ASCII alphabetic characters (uppercase or lowercase, but not both).
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  */
 public class Tag
 {

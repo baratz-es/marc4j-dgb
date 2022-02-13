@@ -27,7 +27,7 @@ import org.marc4j.marc.Record;
  * objects.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  * @see Record
  */
 public interface RecordHandler

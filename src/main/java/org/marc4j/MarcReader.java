@@ -43,7 +43,7 @@ import org.marc4j.marc.VariableField;
  * and optionally the <code>ErrorHandler</code>.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  * @see MarcHandler
  * @see ErrorHandler
  */

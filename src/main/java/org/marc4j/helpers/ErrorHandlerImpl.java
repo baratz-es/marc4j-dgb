@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
  * warnings and errors that occur during the parsing of a MARC record.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  * @see ErrorHandler
  */
 public class ErrorHandlerImpl

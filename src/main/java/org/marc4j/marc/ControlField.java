@@ -45,7 +45,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * This structure is returned by the {@link #marshal()} method.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  */
 public class ControlField
     extends VariableField

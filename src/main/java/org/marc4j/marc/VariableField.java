@@ -35,7 +35,7 @@ import java.io.Serializable;
  * the directory.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  * @see ControlField
  * @see DataField
  */

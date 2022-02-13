@@ -32,7 +32,7 @@ import org.marc4j.marc.Subfield;
  * events to the <code>RecordHandler</code>.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  * @see RecordHandler
  */
 public class RecordBuilder

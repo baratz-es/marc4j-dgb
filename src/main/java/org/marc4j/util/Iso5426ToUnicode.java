@@ -25,7 +25,7 @@ package org.marc4j.util;
  * A utility to convert UNIMARC data to UCS/Unicode.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  * @author <a href="mailto:ypratter@club-internet.fr">Yves Pratter</a>
  */
 public class Iso5426ToUnicode

@@ -47,7 +47,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * method.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  */
 public class Subfield
     implements Serializable, Cloneable

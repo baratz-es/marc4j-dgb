@@ -84,7 +84,7 @@ import org.xml.sax.SAXNotSupportedException;
  * <b>Note:</b> this class requires a JAXP compliant XSLT processor.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  * @see MarcXmlReader
  * @see Converter
  */

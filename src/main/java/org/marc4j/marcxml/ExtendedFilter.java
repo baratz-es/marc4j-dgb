@@ -31,7 +31,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * with an implementation of the <code>LexicalHandler</code> interface.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  */
 public class ExtendedFilter
     extends XMLFilterImpl

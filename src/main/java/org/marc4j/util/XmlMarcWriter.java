@@ -88,7 +88,7 @@ import org.xml.sax.XMLReader;
  * MARCXML</a> for more information about the MARCXML format.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  * @see MarcXmlHandler
  * @see MarcWriter
  * @see Converter

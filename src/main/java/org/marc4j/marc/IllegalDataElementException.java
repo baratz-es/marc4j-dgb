@@ -26,7 +26,7 @@ package org.marc4j.marc;
  * or a delimiter.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  */
 public class IllegalDataElementException
     extends IllegalArgumentException

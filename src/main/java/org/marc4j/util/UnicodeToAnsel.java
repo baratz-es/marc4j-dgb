@@ -29,7 +29,7 @@ import org.marc4j.marc.MarcException;
  * A utility to convert UCS/Unicode data to MARC-8.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  * @author <a href="mailto:ckeith@loc.gov">Corey Keith</a>
  */
 public class UnicodeToAnsel
