@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -125,6 +126,29 @@ public class DataField
                 this.addSubfield(new Subfield(subfield));
             }
         }
+    }
+
+    /**
+     * Returns <code>true</code> if a match is found for the supplied regular expression pattern; else,
+     * <code>false</code>.
+     *
+     * @param regex A regular expression pattern to find in the subfields
+     */
+    public boolean find(String regex)
+    {
+        Pattern pattern = Pattern.compile(regex);
+        return this.find(pattern);
+    }
+
+    /**
+     * Returns <code>true</code> if a match is found for the supplied regular expression pattern; else,
+     * <code>false</code>.
+     *
+     * @param pattern An instance of a compiled Pattern to use as matcher
+     */
+    public boolean find(Pattern pattern)
+    {
+        return this.subfields.stream().anyMatch(subfield -> subfield.find(pattern));
     }
 
     /**
