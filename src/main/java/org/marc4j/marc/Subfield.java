@@ -161,7 +161,7 @@ public class Subfield
         if (this.data == null) {
             return false;
         }
-        Matcher matcher = pattern.matcher(Arrays.toString(this.getData()));
+        Matcher matcher = pattern.matcher(new String(this.getData()));
 
         return matcher.find();
     }
