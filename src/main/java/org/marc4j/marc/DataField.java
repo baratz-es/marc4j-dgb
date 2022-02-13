@@ -122,7 +122,7 @@ public class DataField
         this.ind2 = other.ind2;
         if (other.subfields != null) {
             for (Subfield subfield : other.subfields) {
-                this.addSubfield((Subfield)subfield.clone());
+                this.addSubfield(new Subfield(subfield));
             }
         }
     }

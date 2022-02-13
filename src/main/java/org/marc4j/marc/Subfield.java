@@ -153,6 +153,8 @@ public class Subfield
     /**
      * Returns <code>true</code> is the supplied regular expression pattern matches the {@link Subfield} data; else,
      * <code>false</code>.
+     *
+     * @param pattern An instance of a compiled Pattern to use as matcher
      */
     public boolean find(Pattern pattern)
     {
@@ -167,6 +169,8 @@ public class Subfield
     /**
      * Returns <code>true</code> is the supplied regular expression pattern matches the {@link Subfield} data; else,
      * <code>false</code>.
+     *
+     * @param regex A regular expression pattern to find in the subfields
      */
     public boolean find(String regex)
     {
