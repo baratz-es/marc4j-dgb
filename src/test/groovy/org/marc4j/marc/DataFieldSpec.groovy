@@ -36,7 +36,7 @@ class DataFieldSpec extends Specification {
         f.tag == null
         f.ind1 == UNDEF_CHAR
         f.ind2 == UNDEF_CHAR
-        f.list == []
+        f.subfields == []
     }
     def "Datafield constructor with valid tag" () {
         when:
@@ -47,7 +47,7 @@ class DataFieldSpec extends Specification {
         f.tag == "100"
         f.ind1 == UNDEF_CHAR
         f.ind2 == UNDEF_CHAR
-        f.list == []
+        f.subfields == []
     }
     def "Datafield constructor with an invalid tag raises exception" () {
         when:
@@ -77,7 +77,7 @@ class DataFieldSpec extends Specification {
         f.tag == "100"
         f.ind1 == 'a'
         f.ind2 == 'b'
-        f.list == []
+        f.subfields == []
     }
     def "Datafield constructor with tag and invalid indicators raises exception" () {
         when:
@@ -105,7 +105,7 @@ class DataFieldSpec extends Specification {
         f.tag == "100"
         f.ind1 == 'a'
         f.ind2 == 'b'
-        f.list == []
+        f.subfields == []
     }
 
     def "setTag raises an exception when passed an invaliddatafield tag" () {

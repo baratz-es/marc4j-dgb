@@ -50,6 +50,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public class Subfield
     implements Serializable, Cloneable
 {
+    private static final long serialVersionUID = 7416630407651432911L;
 
     /** Empty value for the link code */
     public static final String EMPTY_LINK_CODE = null;
