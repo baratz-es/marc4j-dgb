@@ -60,13 +60,10 @@ public class Verifier
     }
 
     /**
-     * <p>
      * Checks if the data element does not contain control charecters.
-     * </p>
      *
      * @param data the characters to check
-     * @throws IllegalDataElementException if the data element
-     *         contains control characters
+     * @throws IllegalDataElementException if the data element contains control characters
      */
     public static void checkDataElement(char[] data)
     {
@@ -86,8 +83,7 @@ public class Verifier
      * </p>
      *
      * @param ch - the character to check
-     * @throws IllegalDataElementException if the data element
-     *         contains control characters
+     * @throws IllegalDataElementException if the data element contains control characters
      */
     public static void checkDataElement(char ch)
     {

@@ -21,6 +21,8 @@ package org.marc4j.marc;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -35,7 +37,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * field terminator and do not contain indicators or subfield codes. The structure of a control field according to the
  * MARC standard is as follows:
  * </p>
- * 
+ *
  * <pre>
  * DATA_ELEMENT FIELD_TERMINATOR
  * </pre>
@@ -56,9 +58,7 @@ public class ControlField
     private char[] data;
 
     /**
-     * <p>
      * Default constructor.
-     * </p>
      */
     public ControlField()
     {
@@ -66,10 +66,7 @@ public class ControlField
     }
 
     /**
-     * <p>
-     * Creates a new control field instance and registers the tag
-     * and the control field data.
-     * </p>
+     * Creates a new control field instance and registers the tag and the control field data.
      *
      * @param tag the tag name
      * @param data the control field data
@@ -81,10 +78,7 @@ public class ControlField
     }
 
     /**
-     * <p>
-     * Creates a new control field instance and registers the tag
-     * and the control field data.
-     * </p>
+     * Creates a new control field instance and registers the tag and the control field data.
      *
      * @param tag the tag name
      * @param data the control field data
@@ -96,10 +90,8 @@ public class ControlField
     }
 
     /**
-     * <p>
      * Creates a new control field instance and registers the tag
      * and the control field data.
-     * </p>
      *
      * @param tag the tag name
      * @param data the control field data
@@ -112,10 +104,8 @@ public class ControlField
     }
 
     /**
-     * <p>
      * Creates a new control field instance and registers the tag
      * and the control field data.
-     * </p>
      *
      * @param tag the tag name
      * @param data the control field data
@@ -126,6 +116,11 @@ public class ControlField
         this(tag, data.toCharArray(), id);
     }
 
+    /**
+     * Copy constructor
+     *
+     * @param other Another instance of ControlField
+     */
     public ControlField(ControlField other)
     {
         super(other);
@@ -133,13 +128,37 @@ public class ControlField
     }
 
     /**
-     * <p>
+     * Returns <code>true</code> is the supplied regular expression pattern matches the {@link ControlField} data; else,
+     * <code>false</code>.
+     *
+     * @param regex A regular expression pattern to find in the subfields
+     */
+    public boolean find(String regex)
+    {
+        return this.find(Pattern.compile(regex));
+    }
+
+    /**
+     * Returns <code>true</code> is the supplied regular expression pattern matches the {@link ControlField} data; else,
+     * <code>false</code>.
+     *
+     * @param pattern An instance of a compiled Pattern to use as matcher
+     */
+    public boolean find(Pattern pattern)
+    {
+        if (this.data == null) {
+            return false;
+        }
+        Matcher matcher = pattern.matcher(Arrays.toString(this.getData()));
+
+        return matcher.find();
+    }
+
+    /**
      * Registers the tag.
-     * </p>
      *
      * @param tag the tag name
-     * @throws IllegalTagException when the tag is not a valid
-     *         control field identifier
+     * @throws IllegalTagException when the tag is not a valid control field identifier
      */
     @Override
     public void setTag(String tag)
@@ -153,11 +172,10 @@ public class ControlField
     }
 
     /**
-     * <p>
      * Registers the control field data.
-     * </p>
      *
      * @param data the control field data
+     * @throws IllegalDataElementException if the data element contains control characters
      */
     public void setData(char[] data)
     {
@@ -166,11 +184,10 @@ public class ControlField
     }
 
     /**
-     * <p>
      * Registers the control field data.
-     * </p>
      *
      * @param data the control field data
+     * @throws IllegalDataElementException if the data element contains control characters
      */
     public void setData(String data)
     {
@@ -178,12 +195,9 @@ public class ControlField
     }
 
     /**
-     * <p>
      * Returns the control field data.
-     * </p>
      *
-     * @return <code>char[]</code> - control field as a
-     *             character array
+     * @return <code>char[]</code> - control field as a character array
      */
     public char[] getData()
     {
@@ -191,10 +205,7 @@ public class ControlField
     }
 
     /**
-     * <p>
-     * Returns a <code>String</code> representation for a control
-     * field following the structure of a MARC control field.
-     * </p>
+     * Returns a <code>String</code> representation for a control field following the structure of a MARC control field.
      *
      * @return <code>String</code> - control field
      */
@@ -204,9 +215,7 @@ public class ControlField
     }
 
     /**
-     * <p>
      * Returns the length of the serialized form of the control field.
-     * </p>
      *
      * @return <code>int</code> - length of control field
      */
