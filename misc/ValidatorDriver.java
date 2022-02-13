@@ -31,7 +31,6 @@ import com.thaiopensource.relaxng.util.*;
  * <p>This is a driver class to test ValidatorFilter.
  *
  * @author Bas Peters
- * @version $Revision: 1.1 $
  * @see ValidatorFilter
  */
 public class ValidatorDriver {

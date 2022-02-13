@@ -30,7 +30,6 @@ import com.thaiopensource.relaxng.ValidatorHandler;
  * as an XML filter.</p>
  *
  * @author Bas Peters
- * @version $Revision: 1.1 $
  * @see ValidatorHandler
  * @see XMLFilterImpl
  */
