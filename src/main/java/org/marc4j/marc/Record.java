@@ -23,7 +23,10 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -379,13 +382,47 @@ public class Record
      * @return {@link List} - the variable field collection
      * @see ControlField
      * @see DataField
+     * @deprecated Use {@link #getVariableFields()}
      */
+    @Deprecated
     public List<VariableField> getVariableFieldList()
+    {
+        return this.getVariableFields();
+    }
+
+    /**
+     * Returns the collection of variable fields.
+     *
+     * <p>
+     * The collection of variable fields contains:
+     * </p>
+     * <ul>
+     * <li>the control number field
+     * <li>control fields
+     * <li>data fields
+     * </ul>
+     * <p>
+     *
+     * @return {@link List} - the variable field collection
+     * @see ControlField
+     * @see DataField
+     */
+    public List<VariableField> getVariableFields()
     {
         List<VariableField> variableFields = new ArrayList<>();
         variableFields.addAll(this.controlFields);
         variableFields.addAll(this.dataFields);
         return variableFields;
+    }
+
+    /**
+     * Returns a stream of the variable fields of this record
+     */
+    public Stream<VariableField> getVariableFieldsStream()
+    {
+        Stream<VariableField> controlFieldsStream = this.controlFields.stream().map(VariableField.class::cast);
+        Stream<VariableField> dataFieldsStream = this.dataFields.stream().map(VariableField.class::cast);
+        return Stream.concat(controlFieldsStream, dataFieldsStream);
     }
 
     /**
@@ -429,6 +466,55 @@ public class Record
     }
 
     /**
+     * Returns a List of VariableField objects that have a data element that matches the given regular expression.
+     * <p>
+     * See {@link java.util.regex.Pattern} for more information about Java regular expressions.
+     * </p>
+     *
+     * @param pattern An instance of a compiled Pattern to use as matcher
+     * @return A stream of VariableFields that matches the pattern
+     */
+    public Stream<VariableField> find(Pattern pattern)
+    {
+        return this.getVariableFieldsStream()
+            .filter(variablefield -> variablefield.find(pattern));
+    }
+
+    /**
+     * Returns a List of VariableField objects with the given tag that have a data element that matches the given
+     * regular expression.
+     * <p>
+     * See {@link java.util.regex.Pattern} for more information about Java regular expressions.
+     * </p>
+     *
+     * @param tag A field tag value
+     * @param pattern An instance of a compiled Pattern to use as matcher
+     * @return A stream of VariableFields that matches the given tags, and the pattern
+     */
+    public Stream<VariableField> find(String tag, Pattern pattern)
+    {
+        return this.find(Collections.singletonList(tag), pattern);
+    }
+
+    /**
+     * Returns a List of VariableField objects with the given tags that have a data element that matches the given
+     * regular expression.
+     * <p>
+     * See {@link java.util.regex.Pattern} for more information about Java regular expressions.
+     * </p>
+     *
+     * @param tags A collection of tag values
+     * @param pattern An instance of a compiled Pattern to use as matcher
+     * @return A stream of VariableFields that matches any tag of the given tags, and the pattern
+     */
+    public Stream<VariableField> find(java.util.Collection<String> tags, Pattern pattern)
+    {
+        return this.getVariableFieldsStream()
+            .filter(variableField -> tags.contains(variableField.getTag()))
+            .filter(variableField -> variableField.find(pattern));
+    }
+
+    /**
      * Returns a <code>String</code> representation for a record following the structure of a MARC record (tape format).
      *
      * <p>
@@ -450,7 +536,7 @@ public class Record
      * Variable fields are sorted by tag name.
      * </p>
      *
-     * @param encoding charset enconding used to calculate the fields length.
+     * @param encoding charset encoding used to calculate the fields length.
      * @return <code>String</code> - the MARC record
      * @throws MarcException if the record contains no leader or no control number field.
      * @throws MarcException if the encoding is invalid.

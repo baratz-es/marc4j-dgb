@@ -132,20 +132,9 @@ public class DataField
      * Returns <code>true</code> if a match is found for the supplied regular expression pattern; else,
      * <code>false</code>.
      *
-     * @param regex A regular expression pattern to find in the subfields
-     */
-    public boolean find(String regex)
-    {
-        Pattern pattern = Pattern.compile(regex);
-        return this.find(pattern);
-    }
-
-    /**
-     * Returns <code>true</code> if a match is found for the supplied regular expression pattern; else,
-     * <code>false</code>.
-     *
      * @param pattern An instance of a compiled Pattern to use as matcher
      */
+    @Override
     public boolean find(Pattern pattern)
     {
         return this.subfields.stream().anyMatch(subfield -> subfield.find(pattern));

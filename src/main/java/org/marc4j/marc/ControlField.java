@@ -131,19 +131,9 @@ public class ControlField
      * Returns <code>true</code> is the supplied regular expression pattern matches the {@link ControlField} data; else,
      * <code>false</code>.
      *
-     * @param regex A regular expression pattern to find in the subfields
-     */
-    public boolean find(String regex)
-    {
-        return this.find(Pattern.compile(regex));
-    }
-
-    /**
-     * Returns <code>true</code> is the supplied regular expression pattern matches the {@link ControlField} data; else,
-     * <code>false</code>.
-     *
      * @param pattern An instance of a compiled Pattern to use as matcher
      */
+    @Override
     public boolean find(Pattern pattern)
     {
         if (this.data == null) {

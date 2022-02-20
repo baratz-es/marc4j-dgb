@@ -20,6 +20,7 @@
 package org.marc4j.marc;
 
 import java.io.Serializable;
+import java.util.regex.Pattern;
 
 /**
  * <p>
@@ -76,7 +77,7 @@ public abstract class VariableField
 
     /**
      * Copy constructor
-     * 
+     *
      * @param other another Variablefield where copy the values
      */
     protected VariableField(VariableField other)
@@ -129,6 +130,15 @@ public abstract class VariableField
     {
         this.id = id;
     }
+
+    /**
+     * Returns <code>true</code> is the supplied regular expression pattern matches the {@link Variablefield} data;
+     * else,
+     * <code>false</code>.
+     *
+     * @param regex A regular expression pattern to find in the subfields
+     */
+    public abstract boolean find(Pattern pattern);
 
     /**
      * @deprecated Use copy constructor {@link #VariableField(VariableField)}

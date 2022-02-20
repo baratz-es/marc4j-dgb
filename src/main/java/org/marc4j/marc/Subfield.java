@@ -167,17 +167,6 @@ public class Subfield
     }
 
     /**
-     * Returns <code>true</code> is the supplied regular expression pattern matches the {@link Subfield} data; else,
-     * <code>false</code>.
-     *
-     * @param regex A regular expression pattern to find in the subfields
-     */
-    public boolean find(String regex)
-    {
-        return this.find(Pattern.compile(regex));
-    }
-
-    /**
      * Sets the {@link Subfield} code.
      *
      * @param code The code identifier

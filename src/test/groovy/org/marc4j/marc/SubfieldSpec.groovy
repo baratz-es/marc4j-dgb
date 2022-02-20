@@ -19,6 +19,8 @@
  */
 package org.marc4j.marc
 
+import java.util.regex.Pattern
+
 import spock.lang.Specification
 
 /**
@@ -102,7 +104,7 @@ class SubfieldSpec extends Specification {
         def subfield = new Subfield('a' as char, value.toCharArray())
 
         expect:
-        subfield.find(regex) == found
+        subfield.find(Pattern.compile(regex)) == found
 
         where:
         value                                   | regex                 || found
