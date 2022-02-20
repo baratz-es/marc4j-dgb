@@ -19,6 +19,8 @@
  */
 package org.marc4j.marc
 
+import java.util.regex.Pattern
+
 import spock.lang.Specification
 
 /**
@@ -192,48 +194,54 @@ class DataFieldSpec extends Specification {
 
         when:
         def f = new DataField("100")
-        f.add (subfield)
+        f.addSubfield (subfield)
 
         then:
-        f.getSubfieldList() == [subfield]
+        f.getSubfields() == [subfield]
         f.getSubfield("a" as char) == subfield
     }
 
     def "adding twice the same subfield generates two subfields" () {
         when:
         def f = new DataField("100")
-        f.add (new Subfield("a" as char, "value1"))
-        f.add (new Subfield("a" as char, "value2"))
+        f.addSubfield (new Subfield("a" as char, "value1"))
+        f.addSubfield (new Subfield("a" as char, "value2"))
 
         then:
-        f.getSubfieldList() == [
+        f.getSubfields() == [
             new Subfield("a" as char, "value1"),
             new Subfield("a" as char, "value2")
         ]
     }
 
-    def "getSubfield returns only the first matching subfield" () {
-        when:
+    def "getFirstSubfield returns only the first matching subfield" () {
+        given:
         def f = new DataField("100")
-        f.add (new Subfield("a" as char, "value1"))
-        f.add (new Subfield("a" as char, "value2"))
+        f.addSubfield (new Subfield("a" as char, "value1"))
+        f.addSubfield (new Subfield("a" as char, "value2"))
 
-        then:
-        f.getSubfieldList() == [
+        expect:
+        f.getSubfields() == [
             new Subfield("a" as char, "value1"),
             new Subfield("a" as char, "value2")
         ]
-        f.getSubfield("a" as char) == new Subfield("a" as char, "value1")
+
+        when:
+        def firstSubfield = f.getFirstSubfield("a" as char)
+
+        then:
+        firstSubfield.isPresent()
+        firstSubfield.get() == new Subfield("a" as char, "value1")
     }
 
     def "adding two different unordered subfield generates two subfields in the same order" () {
         when:
         def f = new DataField("100")
-        f.add (new Subfield("b" as char, "valueB"))
-        f.add (new Subfield("a" as char, "valueA"))
+        f.addSubfield (new Subfield("b" as char, "valueB"))
+        f.addSubfield (new Subfield("a" as char, "valueA"))
 
         then:
-        f.getSubfieldList() == [
+        f.getSubfields() == [
             new Subfield("b" as char, "valueB"),
             new Subfield("a" as char, "valueA")
         ]
@@ -242,7 +250,7 @@ class DataFieldSpec extends Specification {
     def "comparing the same datafield returns true" () {
         when:
         def f = new DataField("100", " " as char, "b" as char, 1)
-        f.add (new Subfield ("a" as char, "valuea"))
+        f.addSubfield (new Subfield ("a" as char, "valuea"))
 
         then:
         f.equals(f) == true
@@ -251,11 +259,11 @@ class DataFieldSpec extends Specification {
     def "equals with an different datafield with same data returns true" () {
         when:
         def f1 = new DataField("100", " " as char, "b" as char, 1)
-        f1.add (new Subfield ("a" as char, "valuea"))
-        f1.add (new Subfield ("b" as char, "valueb"))
+        f1.addSubfield (new Subfield ("a" as char, "valuea"))
+        f1.addSubfield (new Subfield ("b" as char, "valueb"))
         def f2 = new DataField("100", " " as char, "b" as char, 1)
-        f2.add (new Subfield ("a" as char, "valuea"))
-        f2.add (new Subfield ("b" as char, "valueb"))
+        f2.addSubfield (new Subfield ("a" as char, "valuea"))
+        f2.addSubfield (new Subfield ("b" as char, "valueb"))
 
         then:
         f1.equals(f2) == true
@@ -264,11 +272,11 @@ class DataFieldSpec extends Specification {
     def "equals with an similar datafield with different ordered subfields returns false" () {
         when:
         def f1 = new DataField("100", " " as char, "b" as char, 1)
-        f1.add (new Subfield ("a" as char, "valuea"))
-        f1.add (new Subfield ("b" as char, "valueb"))
+        f1.addSubfield (new Subfield ("a" as char, "valuea"))
+        f1.addSubfield (new Subfield ("b" as char, "valueb"))
         def f2 = new DataField("100", " " as char, "b" as char, 1)
-        f2.add (new Subfield ("b" as char, "valueb"))
-        f2.add (new Subfield ("a" as char, "valuea"))
+        f2.addSubfield (new Subfield ("b" as char, "valueb"))
+        f2.addSubfield (new Subfield ("a" as char, "valuea"))
 
         then:
         f1.equals(f2) == false
@@ -277,22 +285,22 @@ class DataFieldSpec extends Specification {
     def "a clone has all fields equal except id" () {
         when:
         def f1 = new DataField("100", " " as char, "b" as char, 1)
-        f1.add (new Subfield ("a" as char, "valuea"))
+        f1.addSubfield (new Subfield ("a" as char, "valuea"))
         def f2 = f1.clone()
 
         then:
         f1.getTag() == f2.getTag()
         f1.getIndicator1() == f2.getIndicator1()
         f1.getIndicator2() == f2.getIndicator2()
-        f1.getSubfieldList() == f2.getSubfieldList()
+        f1.getSubfields() == f2.getSubfields()
         f1.getId() != f2.getId()
     }
 
     def "equals of a Datafield with id and its clone returns false" () {
         when:
         def f1 = new DataField("100", " " as char, "b" as char, 1)
-        f1.add (new Subfield ("a" as char, "valuea"))
-        f1.add (new Subfield ("b" as char, "valueb"))
+        f1.addSubfield (new Subfield ("a" as char, "valuea"))
+        f1.addSubfield (new Subfield ("b" as char, "valueb"))
         def f2 = f1.clone()
 
         then:
@@ -302,8 +310,8 @@ class DataFieldSpec extends Specification {
     def "equals with a clone with same id returns true" () {
         when:
         def f1 = new DataField("100", " " as char, "b" as char, 1)
-        f1.add (new Subfield ("a" as char, "valuea"))
-        f1.add (new Subfield ("b" as char, "valueb"))
+        f1.addSubfield (new Subfield ("a" as char, "valuea"))
+        f1.addSubfield (new Subfield ("b" as char, "valueb"))
         def f2 = f1.clone()
         f2.setId(f1.getId())
         then:
@@ -324,20 +332,20 @@ class DataFieldSpec extends Specification {
     def "equals with a modified clone with diffent list returns false" () {
         when:
         def f1 = new DataField("100", " " as char, "b" as char, 1)
-        f1.add (new Subfield ("a" as char, "valuea"))
+        f1.addSubfield (new Subfield ("a" as char, "valuea"))
         def f2 = (DataField) f1.clone()
         f2.setId(f1.getId())
-        f2.getSubfield("a" as char).getData()[0]="x"
+        f2.getFirstSubfield("a" as char).get().getData()[0]="x"
 
         then:
-        f2.getSubfield("a" as char).getData().toString()=="xaluea"
+        f2.getFirstSubfield("a" as char).get().getData().toString()=="xaluea"
         f1.equals(f2) == false
     }
 
     def "test HasSubfield"() {
         when:
         def df = new DataField("245", "1" as char, "2" as char)
-        df.add(new Subfield('a' as char, "test"))
+        df.addSubfield(new Subfield('a' as char, "test"))
 
         then:
         df.hasSubfield('a' as char) == true
@@ -347,10 +355,30 @@ class DataFieldSpec extends Specification {
     def "Verify correct marshal output"() {
         when:
         def df = new DataField("245", "1" as char, "2" as char)
-        df.add(new Subfield('a' as char, "test"))
+        df.addSubfield(new Subfield('a' as char, "test"))
 
         then:
         df.marshal() == "12\u001Fatest\u001E"
         df.getLength() == 9
+    }
+
+    def "Finding if a subfield value matches a regex pattern"() {
+        given: "A DataField with a few subfields"
+        def dataField = new DataField("245", "1" as char, "2" as char)
+        dataField.addSubfield(new Subfield('a' as char, "Calderón de la Barca"))
+        dataField.addSubfield (new Subfield ("a" as char, "לדרון דה לה ברקה, פדרו"))
+        dataField.addSubfield (new Subfield ("b" as char, "Diccionario Biográfico Electrónico"))
+
+        expect:
+        dataField.find(Pattern.compile(regex)) == found
+
+        where:
+        regex                 || found
+        "pablito"             || false
+        ".*Becquer.*"         || false
+        ".*Calderón.*"        || true
+        ".*Biográfico.*"      || true
+        "\\p{IsAlphabetic}"   || true
+        ".*ר.*"               || true
     }
 }
