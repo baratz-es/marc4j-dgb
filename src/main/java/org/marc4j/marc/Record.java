@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -415,15 +416,6 @@ public class Record
         return variableFields;
     }
 
-    /**
-     * Returns a stream of the variable fields of this record
-     */
-    public Stream<VariableField> getVariableFieldsStream()
-    {
-        Stream<VariableField> controlFieldsStream = this.controlFields.stream().map(VariableField.class::cast);
-        Stream<VariableField> dataFieldsStream = this.dataFields.stream().map(VariableField.class::cast);
-        return Stream.concat(controlFieldsStream, dataFieldsStream);
-    }
 
     /**
      * <p>
@@ -463,6 +455,91 @@ public class Record
                     "a collection of variable fields can only contain " + "ControlField or DataField objects.");
             }
         }
+    }
+
+    /**
+     * Returns a stream of the variable fields of this record
+     */
+    public Stream<VariableField> getVariableFieldsStream()
+    {
+        Stream<VariableField> controlFieldsStream = this.controlFields.stream().map(VariableField.class::cast);
+        Stream<VariableField> dataFieldsStream = this.dataFields.stream().map(VariableField.class::cast);
+        return Stream.concat(controlFieldsStream, dataFieldsStream);
+    }
+
+    /**
+     * Returns a stream of the variable fields of this record, that have the indicated tag
+     *
+     * @param tag Complete Fieldtag (ie, 010, 200, 536, etc) or the fieldtag prefix (1 -> returns the datafields 1XX)
+     * @return A stream of VariableFields that matchs the tag. If the tag is empty, then returns an empty stream.
+     */
+    public Stream<? extends VariableField> getVariableFieldsStream(final String tag)
+    {
+        Stream<? extends VariableField> fields;
+
+        if (StringUtils.isEmpty(tag)) {
+            return Stream.empty();
+        }
+
+        if ((tag.length() == 3) && (Tag.isControlField(tag))) {
+            fields = this.controlFields.stream();
+        } else {
+            fields = this.dataFields.stream();
+        }
+
+        return fields
+            .filter(Objects::nonNull)
+            .filter(field -> StringUtils.equals(field.getTag(), tag) || field.getTag().startsWith(tag));
+    }
+
+    /**
+     * Returns a stream of the control fields of this record
+     */
+    public Stream<ControlField> getControlFieldsStream()
+    {
+        return this.controlFields.stream();
+    }
+
+    /**
+     * Returns a stream of the control fields of this record, that have the indicated tag
+     *
+     * @param tag Complete Fieldtag (ie, 010, 001, etc) or the fieldtag prefix (01 -> returns the controlfields 01X)
+     * @return A stream of ControlField that matchs the tag. If the tag is empty, then returns all the control fields
+     */
+    public Stream<ControlField> getControlFieldsStream(final String tag)
+    {
+        if (StringUtils.isEmpty(tag)) {
+            return this.getControlFieldsStream();
+        }
+
+        return this.controlFields.stream()
+            .filter(Objects::nonNull)
+            .filter(field -> StringUtils.equals(field.getTag(), tag) || field.getTag().startsWith(tag));
+    }
+
+    /**
+     * Returns a stream of the data fields of this record
+     */
+    public Stream<DataField> getDataFieldsStream()
+    {
+        return this.dataFields.stream();
+    }
+
+    /**
+     * Returns a stream of the data fields of this record, that have the indicated tag
+     *
+     * @param tag Complete Fieldtag (ie, 100, 200, 345, etc) or the fieldtag prefix (1 -> returns the datafields 1XX)
+     * @return A stream of ControlField that matchs the tag. If the tag is empty, then returns all data fields
+     */
+    public Stream<DataField> getDataFieldsStream(final String tag)
+    {
+        if (StringUtils.isEmpty(tag)) {
+            return this.getDataFieldsStream();
+        }
+
+        return this.dataFields.stream()
+            .filter(Objects::nonNull)
+            .filter(field -> StringUtils.equals(field.getTag(), tag) || field.getTag().startsWith(tag));
     }
 
     /**
@@ -543,7 +620,6 @@ public class Record
      */
     public String marshal(String encoding)
     {
-
         // throw exception if record contains no leader
         if (this.leader == null) {
             throw new MarcException("Record contains no leader");

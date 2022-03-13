@@ -233,17 +233,109 @@ class RecordSpec extends Specification {
 
         return record
     }
-    
+
     def "Trying to add multiple 001 ControlFields"() {
         given:
         def leader = new Leader("00714cam a2200205 a 4500")
         def record = new Record(leader)
         record.add(new ControlField("001", "12883376"))
-        
+
         when:
         record.add(new ControlField("001", "12883376"))
-        
+
         then:
         thrown(IllegalAddException)
+    }
+
+    def "Getting Streams of Variable fields from a Record"() {
+        given:
+        def record = this.makeSummerlandRecord()
+
+        when:
+        def variableFieldsStream = record.getVariableFieldsStream()
+
+        then:
+        variableFieldsStream != null
+        variableFieldsStream.count() == record.getVariableFields().size()
+
+        and:
+        def controlFieldsStream = record.getControlFieldsStream()
+
+        then:
+        controlFieldsStream != null
+        controlFieldsStream.count() == record.getControlFieldList().size()
+
+        and:
+        def dataFieldsStream = record.getDataFieldsStream()
+
+        then:
+        dataFieldsStream != null
+        dataFieldsStream.count() == record.getDataFieldList().size()
+    }
+
+    def "Getting Streams of Variable fields from a Record, filtered by tag"() {
+        given:
+        def record = this.makeSummerlandRecord()
+
+        when: "Filtering by an exact tag, returns the expected result"
+        def variableFieldsStream = record.getVariableFieldsStream("100")
+
+        then:
+        variableFieldsStream != null
+        variableFieldsStream.count() == 1
+
+        and: "An empty tag, returns an empty stream"
+        record.getVariableFieldsStream("").count() == 0
+
+        when: "Filtering by prefix '2', returns all the 2XX datafields"
+        variableFieldsStream = record.getVariableFieldsStream("2")
+
+        then:
+        variableFieldsStream != null
+        variableFieldsStream.count() == 3
+    }
+
+    def "Getting Streams of Control fields from a Record, filtered by tag"() {
+        given:
+        def record = this.makeSummerlandRecord()
+
+        when: "Filtering by an exact tag, returns the expected result"
+        def controlFieldsStream = record.getControlFieldsStream("005")
+
+        then:
+        controlFieldsStream != null
+        controlFieldsStream.count() == 1
+
+        and: "An empty tag, returns all the control fileds"
+        record.getControlFieldsStream("").count() == record.getControlFieldList().size()
+
+        when: "Filtering by prefix '00', returns all the 00X datafields"
+        controlFieldsStream = record.getControlFieldsStream("00")
+
+        then:
+        controlFieldsStream != null
+        controlFieldsStream.count() == 3
+    }
+
+    def "Getting Streams of Data fields from a Record, filtered by tag"() {
+        given:
+        def record = this.makeSummerlandRecord()
+
+        when: "Filtering by an exact tag, returns the expected result"
+        def datalFieldsStream = record.getDataFieldsStream("100")
+
+        then:
+        datalFieldsStream != null
+        datalFieldsStream.count() == 1
+
+        and: "An empty tag, returns all the control fileds"
+        record.getDataFieldsStream("").count() == record.getDataFieldList().size()
+
+        when: "Filtering by prefix '2', returns all the 2XX datafields"
+        datalFieldsStream = record.getDataFieldsStream("2")
+
+        then:
+        datalFieldsStream != null
+        datalFieldsStream.count() == 3
     }
 }
