@@ -56,7 +56,6 @@ import org.apache.commons.lang3.StringUtils;
 public class Record
     implements Serializable, Cloneable
 {
-
     private static final long serialVersionUID = 1L;
 
     /** The record terminator. */
@@ -213,7 +212,7 @@ public class Record
      */
     public boolean hasVariableField(String tag)
     {
-        List<VariableField> list = this.getVariableFieldList();
+        List<VariableField> list = this.getVariableFields();
         for (VariableField variableField : list) {
             VariableField vf = variableField;
             if (vf.getTag().equals(tag)) {
@@ -290,8 +289,30 @@ public class Record
      *
      * @return {@link List} - the control field collection
      * @see ControlField
+     * @deprecated Use {@link #getControlFields()}
      */
+    @Deprecated
     public List<ControlField> getControlFieldList()
+    {
+        return this.getControlFields();
+    }
+
+    /**
+     * Returns the collection of control fields.
+     *
+     * <p>
+     * The collection of control fields contains:
+     * </p>
+     * <ul>
+     * <li>the control number field
+     * <li>control fields
+     * </ul>
+     * <p>
+     *
+     * @return {@link List} - the control field collection
+     * @see ControlField
+     */
+    public List<ControlField> getControlFields()
     {
         return this.controlFields;
     }
@@ -310,20 +331,43 @@ public class Record
      * </p>
      *
      * @param newList the new control field collection
+     * @deprecated Use {@link #setControlFields(List)}
      */
+    @Deprecated
     public void setControlFieldList(List<ControlField> newList)
     {
-        if (newList == null) {
+        this.setControlFields(newList);
+    }
+
+    /**
+     * Sets the collection of control fields.
+     *
+     * <p>
+     * A collection of control fields is a {@link List} object
+     * with null or more {@link ControlField} objects.
+     * </p>
+     *
+     * <p>
+     * <b>Note:</b> this method replaces the current {@link List}
+     * of control fields with the control fields in the new {@link List}.
+     * </p>
+     *
+     * @param newList the new control field collection
+     * @throws IllegalAddException if newList contains an object that isn't an instance of ControlField
+     */
+    public void setControlFields(List<ControlField> newList)
+    {
+        if (newList == null || newList.isEmpty()) {
             this.controlFields = new ArrayList<>();
             return;
         }
+
         this.controlFields = new ArrayList<>();
         for (ControlField controlField : newList) {
-            Object obj = controlField;
-            if (obj instanceof ControlField) {
-                this.add((ControlField)obj);
+            if (controlField instanceof ControlField) {
+                this.add(controlField);
             } else {
-                throw new IllegalAddException(obj.getClass().getName(),
+                throw new IllegalAddException(controlField.getClass().getName(),
                     "a collection of control fields can only contain " + "ControlField objects.");
             }
         }
@@ -334,8 +378,21 @@ public class Record
      *
      * @return {@link List} - the data field collection
      * @see DataField
+     * @deprecated Use {@link #getDataFields()}
      */
+    @Deprecated
     public List<DataField> getDataFieldList()
+    {
+        return this.getDataFields();
+    }
+
+    /**
+     * Returns the collection of data fields.
+     *
+     * @return {@link List} - the data field collection
+     * @see DataField
+     */
+    public List<DataField> getDataFields()
     {
         return this.dataFields;
     }
@@ -354,17 +411,36 @@ public class Record
      * </p>
      *
      * @param newList the new data field collection
+     * @deprecated Use {@link #setDataFields(List)}
      */
+    @Deprecated
     public void setDataFieldList(List<DataField> newList)
     {
-        if (newList == null) {
+        this.setDataFields(newList);
+    }
+
+    /**
+     * Sets the collection of data fields.
+     *
+     * <p>
+     * A collection of data fields is a {@link List} object
+     * with null or more {@link DataField} objects.
+     * </p>
+     *
+     * <p>
+     * <b>Note:</b> this method replaces the current {@link List}
+     * of data fields with the data fields in the new {@link List}.
+     * </p>
+     *
+     * @param newList the new data field collection
+     */
+    public void setDataFields(List<DataField> newList)
+    {
+        if (newList == null || newList.isEmpty()) {
             this.dataFields = new ArrayList<>();
             return;
         }
-        this.dataFields = new ArrayList<>();
-        for (DataField dataField : newList) {
-            this.add(dataField);
-        }
+        this.dataFields = new ArrayList<>(newList);
     }
 
     /**
@@ -416,11 +492,31 @@ public class Record
         return variableFields;
     }
 
+    /**
+     * Sets the collection of variable fields.
+     *
+     * <p>
+     * A collection of variable fields is a {@link List} object
+     * with null or more {@link ControlField} or {@link DataField}
+     * objects.
+     * </p>
+     *
+     * <p>
+     * <b>Note:</b> this method replaces the current {@link List}
+     * of variable fields with the variable fields in the new {@link List}.
+     * </p>
+     *
+     * @param newList the new variable field collection
+     * @deprecated Use {@link #setVariableFields(List)
+     */
+    @Deprecated
+    public void setVariableFieldList(List<VariableField> newList)
+    {
+        this.setVariableFields(newList);
+    }
 
     /**
-     * <p>
      * Sets the collection of variable fields.
-     * </p>
      *
      * <p>
      * A collection of variable fields is a {@link List} object
@@ -435,23 +531,23 @@ public class Record
      *
      * @param newList the new variable field collection
      */
-    public void setVariableFieldList(List<VariableField> newList)
+    public void setVariableFields(List<VariableField> newList)
     {
-        if (newList == null) {
+        if (newList == null || newList.isEmpty()) {
             this.controlFields = new ArrayList<>();
             this.dataFields = new ArrayList<>();
             return;
         }
+
         this.controlFields = new ArrayList<>();
         this.dataFields = new ArrayList<>();
         for (VariableField variableField : newList) {
-            Object obj = variableField;
-            if (obj instanceof ControlField) {
-                this.add((ControlField)obj);
-            } else if (obj instanceof DataField) {
-                this.add((DataField)obj);
+            if (variableField instanceof ControlField) {
+                this.add((ControlField)variableField);
+            } else if (variableField instanceof DataField) {
+                this.add((DataField)variableField);
             } else {
-                throw new IllegalAddException(obj.getClass().getName(),
+                throw new IllegalAddException(variableField.getClass().getName(),
                     "a collection of variable fields can only contain " + "ControlField or DataField objects.");
             }
         }
@@ -490,6 +586,17 @@ public class Record
         return fields
             .filter(Objects::nonNull)
             .filter(field -> StringUtils.equals(field.getTag(), tag) || field.getTag().startsWith(tag));
+    }
+
+    /**
+     * Returns the first Variable Field for the given tag.
+     *
+     * @param tag Tag name
+     * @return VariableField or null
+     */
+    public VariableField getFirstVariableField(final String tag)
+    {
+        return this.getVariableFieldsStream(tag).findFirst().orElse(null);
     }
 
     /**
