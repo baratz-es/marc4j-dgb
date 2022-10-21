@@ -274,17 +274,17 @@ class RecordSpec extends Specification {
         def record = this.makeSummerlandRecord()
 
         when: "Filtering by an exact tag, returns the expected result"
-        def variableFieldsStream = record.getVariableFieldsStream("100")
+        def variableFieldsStream = record.getVariableFieldsStreamPrefixedBy("100")
 
         then:
         variableFieldsStream != null
         variableFieldsStream.count() == 1
 
         and: "An empty tag, returns an empty stream"
-        record.getVariableFieldsStream("").count() == 0
+        record.getVariableFieldsStreamPrefixedBy("").count() == 0
 
         when: "Filtering by prefix '2', returns all the 2XX datafields"
-        variableFieldsStream = record.getVariableFieldsStream("2")
+        variableFieldsStream = record.getVariableFieldsStreamPrefixedBy("2")
 
         then:
         variableFieldsStream != null
@@ -296,17 +296,17 @@ class RecordSpec extends Specification {
         def record = this.makeSummerlandRecord()
 
         when: "Filtering by an exact tag, returns the expected result"
-        def controlFieldsStream = record.getControlFieldsStream("005")
+        def controlFieldsStream = record.getControlFieldsStreamPrefixedBy("005")
 
         then:
         controlFieldsStream != null
         controlFieldsStream.count() == 1
 
         and: "An empty tag, returns all the control fileds"
-        record.getControlFieldsStream("").count() == record.getControlFieldList().size()
+        record.getControlFieldsStreamPrefixedBy("").count() == record.getControlFieldList().size()
 
         when: "Filtering by prefix '00', returns all the 00X datafields"
-        controlFieldsStream = record.getControlFieldsStream("00")
+        controlFieldsStream = record.getControlFieldsStreamPrefixedBy("00")
 
         then:
         controlFieldsStream != null
@@ -318,17 +318,17 @@ class RecordSpec extends Specification {
         def record = this.makeSummerlandRecord()
 
         when: "Filtering by an exact tag, returns the expected result"
-        def datalFieldsStream = record.getDataFieldsStream("100")
+        def datalFieldsStream = record.getDataFieldsStreamPrefixedBy("100")
 
         then:
         datalFieldsStream != null
         datalFieldsStream.count() == 1
 
         and: "An empty tag, returns all the control fileds"
-        record.getDataFieldsStream("").count() == record.getDataFieldList().size()
+        record.getDataFieldsStreamPrefixedBy("").count() == record.getDataFieldList().size()
 
         when: "Filtering by prefix '2', returns all the 2XX datafields"
-        datalFieldsStream = record.getDataFieldsStream("2")
+        datalFieldsStream = record.getDataFieldsStreamPrefixedBy("2")
 
         then:
         datalFieldsStream != null

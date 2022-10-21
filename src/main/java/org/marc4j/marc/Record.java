@@ -352,18 +352,18 @@ public class Record
      * of control fields with the control fields in the new {@link List}.
      * </p>
      *
-     * @param newList the new control field collection
+     * @param newControlFields the new control field collection
      * @throws IllegalAddException if newList contains an object that isn't an instance of ControlField
      */
-    public void setControlFields(List<ControlField> newList)
+    public void setControlFields(java.util.Collection<ControlField> newControlFields)
     {
-        if (newList == null || newList.isEmpty()) {
+        if (newControlFields == null || newControlFields.isEmpty()) {
             this.controlFields = new ArrayList<>();
             return;
         }
 
         this.controlFields = new ArrayList<>();
-        for (ControlField controlField : newList) {
+        for (ControlField controlField : newControlFields) {
             if (controlField instanceof ControlField) {
                 this.add(controlField);
             } else {
@@ -423,24 +423,23 @@ public class Record
      * Sets the collection of data fields.
      *
      * <p>
-     * A collection of data fields is a {@link List} object
-     * with null or more {@link DataField} objects.
+     * A collection of data fields is a {@link List} object with null or more {@link DataField} objects.
      * </p>
      *
      * <p>
-     * <b>Note:</b> this method replaces the current {@link List}
-     * of data fields with the data fields in the new {@link List}.
+     * <b>Note:</b> this method replaces the current {@link List} of data fields with the data fields in the new
+     * {@link List}.
      * </p>
      *
-     * @param newList the new data field collection
+     * @param newDataFields the new data field collection
      */
-    public void setDataFields(List<DataField> newList)
+    public void setDataFields(java.util.Collection<DataField> newDataFields)
     {
-        if (newList == null || newList.isEmpty()) {
+        if (newDataFields == null || newDataFields.isEmpty()) {
             this.dataFields = new ArrayList<>();
             return;
         }
-        this.dataFields = new ArrayList<>(newList);
+        this.dataFields = new ArrayList<>(newDataFields);
     }
 
     /**
@@ -529,11 +528,11 @@ public class Record
      * of variable fields with the variable fields in the new {@link List}.
      * </p>
      *
-     * @param newList the new variable field collection
+     * @param newVariableFields the new variable field collection
      */
-    public void setVariableFields(List<VariableField> newList)
+    public void setVariableFields(java.util.Collection<VariableField> newVariableFields)
     {
-        if (newList == null || newList.isEmpty()) {
+        if (newVariableFields == null || newVariableFields.isEmpty()) {
             this.controlFields = new ArrayList<>();
             this.dataFields = new ArrayList<>();
             return;
@@ -541,7 +540,7 @@ public class Record
 
         this.controlFields = new ArrayList<>();
         this.dataFields = new ArrayList<>();
-        for (VariableField variableField : newList) {
+        for (VariableField variableField : newVariableFields) {
             if (variableField instanceof ControlField) {
                 this.add((ControlField)variableField);
             } else if (variableField instanceof DataField) {
@@ -564,9 +563,36 @@ public class Record
     }
 
     /**
+     * Returns a stream of the variable fields of this record, that have the indicated tag or are prefixed by a tag
+     * value
+     *
+     * @param tagPrefix Complete Fieldtag (ie, 010, 200, 536, etc) or the fieldtag prefix (1 -> returns the datafields
+     * 1XX)
+     * @return A stream of VariableFields that matchs the tag. If the tag is empty, then returns an empty stream.
+     */
+    public Stream<? extends VariableField> getVariableFieldsStreamPrefixedBy(final String tagPrefix)
+    {
+        Stream<? extends VariableField> fields;
+
+        if (StringUtils.isEmpty(tagPrefix)) {
+            return Stream.empty();
+        }
+
+        if ((tagPrefix.length() == 3) && (Tag.isControlField(tagPrefix))) {
+            fields = this.controlFields.stream();
+        } else {
+            fields = this.dataFields.stream();
+        }
+
+        return fields
+            .filter(Objects::nonNull)
+            .filter(field -> StringUtils.equals(field.getTag(), tagPrefix) || field.getTag().startsWith(tagPrefix));
+    }
+
+    /**
      * Returns a stream of the variable fields of this record, that have the indicated tag
      *
-     * @param tag Complete Fieldtag (ie, 010, 200, 536, etc) or the fieldtag prefix (1 -> returns the datafields 1XX)
+     * @param tag Complete Fieldtag (ie, 010, 200, 536, etc)
      * @return A stream of VariableFields that matchs the tag. If the tag is empty, then returns an empty stream.
      */
     public Stream<? extends VariableField> getVariableFieldsStream(final String tag)
@@ -585,7 +611,7 @@ public class Record
 
         return fields
             .filter(Objects::nonNull)
-            .filter(field -> StringUtils.equals(field.getTag(), tag) || field.getTag().startsWith(tag));
+            .filter(field -> StringUtils.equals(field.getTag(), tag));
     }
 
     /**
@@ -608,9 +634,28 @@ public class Record
     }
 
     /**
+     * Returns a stream of the control fields of this record, that have the indicated tag or are prefixed by a tag
+     * value
+     *
+     * @param tagPrefix Complete Fieldtag (ie, 010, 001, etc) or the fieldtag prefix (01 -> returns the controlfields
+     * 01X)
+     * @return A stream of ControlField that matchs the tag. If the tag is empty, then returns all the control fields
+     */
+    public Stream<ControlField> getControlFieldsStreamPrefixedBy(final String tagPrefix)
+    {
+        if (StringUtils.isEmpty(tagPrefix)) {
+            return this.getControlFieldsStream();
+        }
+
+        return this.controlFields.stream()
+            .filter(Objects::nonNull)
+            .filter(field -> StringUtils.equals(field.getTag(), tagPrefix) || field.getTag().startsWith(tagPrefix));
+    }
+
+    /**
      * Returns a stream of the control fields of this record, that have the indicated tag
      *
-     * @param tag Complete Fieldtag (ie, 010, 001, etc) or the fieldtag prefix (01 -> returns the controlfields 01X)
+     * @param tag Complete Fieldtag (ie, 010, 001, etc)
      * @return A stream of ControlField that matchs the tag. If the tag is empty, then returns all the control fields
      */
     public Stream<ControlField> getControlFieldsStream(final String tag)
@@ -621,7 +666,7 @@ public class Record
 
         return this.controlFields.stream()
             .filter(Objects::nonNull)
-            .filter(field -> StringUtils.equals(field.getTag(), tag) || field.getTag().startsWith(tag));
+            .filter(field -> StringUtils.equals(field.getTag(), tag));
     }
 
     /**
@@ -633,9 +678,28 @@ public class Record
     }
 
     /**
+     * Returns a stream of the data fields of this record, that have the indicated tag or are prefixed by a tag
+     * value
+     *
+     * @param tagPrefix Complete Fieldtag (ie, 100, 200, 345, etc) or the fieldtag prefix (1 -> returns the datafields
+     * 1XX)
+     * @return A stream of ControlField that matchs the tag. If the tag is empty, then returns all data fields
+     */
+    public Stream<DataField> getDataFieldsStreamPrefixedBy(final String tagPrefix)
+    {
+        if (StringUtils.isEmpty(tagPrefix)) {
+            return this.getDataFieldsStream();
+        }
+
+        return this.dataFields.stream()
+            .filter(Objects::nonNull)
+            .filter(field -> StringUtils.equals(field.getTag(), tagPrefix) || field.getTag().startsWith(tagPrefix));
+    }
+
+    /**
      * Returns a stream of the data fields of this record, that have the indicated tag
      *
-     * @param tag Complete Fieldtag (ie, 100, 200, 345, etc) or the fieldtag prefix (1 -> returns the datafields 1XX)
+     * @param tag Complete Fieldtag (ie, 100, 200, 345, etc)
      * @return A stream of ControlField that matchs the tag. If the tag is empty, then returns all data fields
      */
     public Stream<DataField> getDataFieldsStream(final String tag)
@@ -646,7 +710,7 @@ public class Record
 
         return this.dataFields.stream()
             .filter(Objects::nonNull)
-            .filter(field -> StringUtils.equals(field.getTag(), tag) || field.getTag().startsWith(tag));
+            .filter(field -> StringUtils.equals(field.getTag(), tag));
     }
 
     /**
@@ -794,7 +858,7 @@ public class Record
         try {
             instance = (Record)super.clone();
         } catch (CloneNotSupportedException ex) {
-            throw new MarcException("Unssoported clone method.", ex);
+            throw new MarcException("Unsupported clone method.", ex);
         }
 
         instance.leader = (Leader)this.leader.clone();
