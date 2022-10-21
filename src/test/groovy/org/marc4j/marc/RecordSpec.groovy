@@ -289,6 +289,13 @@ class RecordSpec extends Specification {
         then:
         variableFieldsStream != null
         variableFieldsStream.count() == 3
+
+        when: "Filtering by tag '260', returns all the 260 datafields"
+        variableFieldsStream = record.getVariableFieldsStream("260")
+
+        then:
+        variableFieldsStream != null
+        variableFieldsStream.count() == 1
     }
 
     def "Getting Streams of Control fields from a Record, filtered by tag"() {
@@ -311,6 +318,13 @@ class RecordSpec extends Specification {
         then:
         controlFieldsStream != null
         controlFieldsStream.count() == 3
+
+        when: "Filtering by tag '008', returns the only 008 controlfields"
+        controlFieldsStream = record.getControlFieldsStream("008")
+
+        then:
+        controlFieldsStream != null
+        controlFieldsStream.count() == 1
     }
 
     def "Getting Streams of Data fields from a Record, filtered by tag"() {
@@ -333,5 +347,12 @@ class RecordSpec extends Specification {
         then:
         datalFieldsStream != null
         datalFieldsStream.count() == 3
+
+        when: "Filtering by tag '260', returns all the 260 datafields"
+        datalFieldsStream = record.getDataFieldsStream("260")
+
+        then:
+        datalFieldsStream != null
+        datalFieldsStream.count() == 1
     }
 }
