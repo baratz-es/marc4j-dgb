@@ -36,12 +36,13 @@ import java.util.List;
 public class Collection
     implements Serializable
 {
+  private static final long serialVersionUID = -7628512102418177574L;
 
-    private List list;
+  private List<Record> list;
 
     public Collection()
     {
-        this.list = new ArrayList();
+      this.list = new ArrayList<>();
     }
 
     public void add(Record record)
@@ -62,7 +63,7 @@ public class Collection
         if (this.list.size() < index) {
             return null;
         }
-        return (Record)this.list.get(index);
+        return this.list.get(index);
     }
 
     /**
@@ -89,8 +90,7 @@ public class Collection
     public void marshal(Writer out)
         throws IOException, MarcException
     {
-        for (Object element : this.list) {
-            Record record = (Record)element;
+      for (Record record : this.list) {
             out.write(record.marshal());
         }
     }
