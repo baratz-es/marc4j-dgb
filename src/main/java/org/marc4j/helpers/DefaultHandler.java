@@ -1,4 +1,3 @@
-// $Id: DefaultHandler.java,v 1.6 2002/08/03 15:14:39 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -37,9 +36,7 @@ import org.marc4j.marc.Leader;
  * implement only part of an interface.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.6 $
- *
+ * @author Bas Peters
  * @see MarcHandler
  * @see ErrorHandler
  */
@@ -47,21 +44,25 @@ public class DefaultHandler
     implements MarcHandler, ErrorHandler
 {
 
+    @Override
     public void startCollection()
     {
         // Do nothing.
     }
 
+    @Override
     public void endCollection()
     {
         // Do nothing.
     }
 
+    @Override
     public void startRecord(Leader leader)
     {
         // Do nothing.
     }
 
+    @Override
     public void endRecord()
     {
         // Do nothing.
@@ -79,6 +80,7 @@ public class DefaultHandler
         // Do nothing.
     }
 
+    @Override
     public void endDataField(String tag)
     {
         // Do nothing.
@@ -90,16 +92,19 @@ public class DefaultHandler
         // Do nothing.
     }
 
+    @Override
     public void warning(MarcReaderException exception)
     {
         // Do nothing.
     }
 
+    @Override
     public void error(MarcReaderException exception)
     {
         // Do nothing.
     }
 
+    @Override
     public void fatalError(MarcReaderException exception)
     {
         // Do nothing.

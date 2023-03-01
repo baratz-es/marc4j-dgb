@@ -1,4 +1,3 @@
-/// **
 /*
  * Copyright (C) 2002 Bas Peters
  * This file is part of MARC4J
@@ -37,8 +36,6 @@ import org.xml.sax.XMLReader;
  * </p>
  *
  * @author <a href="mailto:ckeith@loc.gov">Corey Keith</a>
- * @version $Revision: 1.2 $
- *
  */
 public class CodeTable
 {
@@ -59,9 +56,9 @@ public class CodeTable
 
     public static char getChar(int c, int mode)
     {
-        if (c == 0x20)
+        if (c == 0x20) {
             return (char)c;
-        else {
+        } else {
             Hashtable charset = (Hashtable)charsets.get(new Integer(mode));
 
             if (charset == null) {
@@ -72,19 +69,22 @@ public class CodeTable
                 if (ch == null) {
 
                     int newc;
-                    if (c < 0x80)
+                    if (c < 0x80) {
                         newc = c + 0x80;
-                    else
+                    } else {
                         newc = c - 0x80;
+                    }
                     ch = (Character)charset.get(new Integer(newc));
                     if (ch == null) {
                         log.error("Character not found: " + Integer.toHexString(c) + " in Code Table: "
                             + Integer.toHexString(mode));
                         return (char)c;
-                    } else
+                    } else {
                         return ch;
-                } else
+                    }
+                } else {
                     return ch;
+                }
             }
         }
     }

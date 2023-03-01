@@ -30,8 +30,7 @@ import com.thaiopensource.relaxng.util.*;
 /**
  * <p>This is a driver class to test ValidatorFilter.
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.1 $
+ * @author Bas Peters
  * @see ValidatorFilter
  */
 public class ValidatorDriver {

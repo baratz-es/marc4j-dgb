@@ -1,4 +1,3 @@
-// $Id: CharacterConverter.java,v 1.1 2002/12/11 19:24:38 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters (mail@bpeters.com)
  *
@@ -26,15 +25,13 @@ package org.marc4j.util;
  * this interface new character conversions can be created.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.1 $
- *
+ * @author Bas Peters
  */
 public interface CharacterConverter
 {
 
-    public abstract String convert(String data);
+    String convert(String data);
 
-    public abstract char[] convert(char[] data);
+    char[] convert(char[] data);
 
 }

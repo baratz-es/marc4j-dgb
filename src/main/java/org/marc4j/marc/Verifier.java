@@ -1,4 +1,3 @@
-// $Id: Verifier.java,v 1.1 2003/01/10 09:34:29 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -30,9 +29,7 @@ package org.marc4j.marc;
  * and data elements are checked for MARC control characters.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.1 $
- *
+ * @author Bas Peters
  */
 public class Verifier
 {
@@ -57,26 +54,26 @@ public class Verifier
      */
     public static void checkTag(String tag)
     {
-        if (tag.length() != 3) throw new IllegalTagException(tag, "not a variable field identifier");
-        return;
+        if (tag.length() != 3) {
+            throw new IllegalTagException(tag, "not a variable field identifier");
+        }
     }
 
     /**
-     * <p>
      * Checks if the data element does not contain control charecters.
-     * </p>
      *
      * @param data the characters to check
-     * @throws IllegalDataElementException if the data element
-     *         contains control characters
+     * @throws IllegalDataElementException if the data element contains control characters
      */
     public static void checkDataElement(char[] data)
     {
         int len = data.length;
-        if (len == 0) return;
+        if (len == 0) {
+            return;
+        }
         int i = 0;
         do {
-            checkDataElement(data[i]);
+            Verifier.checkDataElement(data[i]);
         } while (++i < len);
     }
 
@@ -86,20 +83,21 @@ public class Verifier
      * </p>
      *
      * @param ch - the character to check
-     * @throws IllegalDataElementException if the data element
-     *         contains control characters
+     * @throws IllegalDataElementException if the data element contains control characters
      */
     public static void checkDataElement(char ch)
     {
         switch (ch) {
             case RT:
                 throw new IllegalDataElementException("Invalid character: record terminator");
+
             case FT:
                 throw new IllegalDataElementException("Invalid character: field Terminator");
+
             case US:
                 throw new IllegalDataElementException("Invalid character: subfield code identifier");
+
             default:
-                return;
         }
     }
 }

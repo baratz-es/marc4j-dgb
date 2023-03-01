@@ -40,8 +40,6 @@ import org.xml.sax.helpers.DefaultHandler;
  * that builds a data structure to facilitate AnselToUnicode character conversion.
  *
  * @author <a href="mailto:ckeith@loc.gov">Corey Keith</a>
- * @version $Revision: 1.1 $
- *
  * @see DefaultHandler
  */
 public class CodeTableHandler
@@ -70,12 +68,12 @@ public class CodeTableHandler
 
     public Hashtable getCharSets()
     {
-        return sets;
+        return this.sets;
     }
 
     public Hashtable getCombiningChars()
     {
-        return combiningchars;
+        return this.combiningchars;
     }
 
     /**
@@ -85,59 +83,65 @@ public class CodeTableHandler
      *
      * @param locator the {@link Locator} object
      */
+    @Override
     public void setDocumentLocator(Locator locator)
     {
         this.locator = locator;
     }
 
+    @Override
     public void startElement(String uri, String name, String qName, Attributes atts)
         throws SAXParseException
     {
-        if (name.equals("characterSet")) {
-            charset = new Hashtable();
-            isocode = Integer.valueOf(atts.getValue("ISOcode"), 16);
-            combining = new Vector();
-        } else if (name.equals("marc"))
-            data = new StringBuffer();
-        else if (name.equals("codeTables")) {
-            sets = new Hashtable();
-            combiningchars = new Hashtable();
-        } else if (name.equals("ucs"))
-            data = new StringBuffer();
-        else if (name.equals("isCombining"))
-            data = new StringBuffer();
-        else if (name.equals("code")) iscombining = false;
-    }
-
-    public void characters(char[] ch, int start, int length)
-    {
-        if (data != null) {
-            data.append(ch, start, length);
+        if ("characterSet".equals(name)) {
+            this.charset = new Hashtable();
+            this.isocode = Integer.valueOf(atts.getValue("ISOcode"), 16);
+            this.combining = new Vector();
+        } else if ("marc".equals(name)) {
+            this.data = new StringBuffer();
+        } else if ("codeTables".equals(name)) {
+            this.sets = new Hashtable();
+            this.combiningchars = new Hashtable();
+        } else if ("ucs".equals(name)) {
+            this.data = new StringBuffer();
+        } else if ("isCombining".equals(name)) {
+            this.data = new StringBuffer();
+        } else if ("code".equals(name)) {
+            this.iscombining = false;
         }
     }
 
+    @Override
+    public void characters(char[] ch, int start, int length)
+    {
+        if (this.data != null) {
+            this.data.append(ch, start, length);
+        }
+    }
+
+    @Override
     public void endElement(String uri, String name, String qName)
         throws SAXParseException
     {
-        if (name.equals("characterSet")) {
-            sets.put(isocode, charset);
-            combiningchars.put(isocode, combining);
-            combining = null;
-            charset = null;
-        } else if (name.equals("marc")) {
-            marc = Integer.valueOf(data.toString(), 16);
-        } else if (name.equals("ucs")) {
-            ucs = new Character((char)Integer.parseInt(data.toString(), 16));
-        } else if (name.equals("code")) {
-            if (iscombining) {
-                combining.add(marc);
+        if ("characterSet".equals(name)) {
+            this.sets.put(this.isocode, this.charset);
+            this.combiningchars.put(this.isocode, this.combining);
+            this.combining = null;
+            this.charset = null;
+        } else if ("marc".equals(name)) {
+            this.marc = Integer.valueOf(this.data.toString(), 16);
+        } else if ("ucs".equals(name)) {
+            this.ucs = new Character((char)Integer.parseInt(this.data.toString(), 16));
+        } else if ("code".equals(name)) {
+            if (this.iscombining) {
+                this.combining.add(this.marc);
             }
-            charset.put(marc, ucs);
-        } else if (name.equals("isCombining")) {
-            if (data.toString().equals("true")) iscombining = true;
+            this.charset.put(this.marc, this.ucs);
+        } else if ("isCombining".equals(name) && "true".equals(this.data.toString())) {
+            this.iscombining = true;
         }
 
-        data = null;
+        this.data = null;
     }
 
     public static void main(String[] args)

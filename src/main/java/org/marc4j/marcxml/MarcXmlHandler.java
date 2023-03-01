@@ -1,4 +1,3 @@
-// $Id: MarcXmlHandler.java,v 1.8 2003/03/23 11:56:20 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -21,27 +20,23 @@
 package org.marc4j.marcxml;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.marc4j.MarcHandler;
-import org.marc4j.marc.ControlField;
-import org.marc4j.marc.DataField;
 import org.marc4j.marc.Leader;
 import org.marc4j.marc.MarcException;
 import org.marc4j.marc.Subfield;
+import org.marc4j.marc.VariableField;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * <p>
- * <code>MarcXmlHandler</code> is a SAX2 <code>ContentHandler</code>
- * that reports events to the <code>MarcHandler</code> interface.
- * </p>
+ * <code>MarcXmlHandler</code> is a SAX2 <code>ContentHandler</code> that reports events to the <code>MarcHandler</code>
+ * interface.
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.8 $
- *
+ * @author Bas Peters
  * @see MarcHandler
  * @see DefaultHandler
  */
@@ -69,8 +64,8 @@ public class MarcXmlHandler
     /** The second indicator attribute name string */
     private static final String IND_2_ATTR = "ind2";
 
-    /** Hashset for mapping of element strings to constants (Integer) */
-    private static final HashMap elementMap;
+    /** Map for mapping of element strings to constants (Integer) */
+    private static final Map<String, Integer> elementMap;
 
     /** Data element identifier */
     private String code;
@@ -91,13 +86,13 @@ public class MarcXmlHandler
     private Locator locator;
 
     static {
-        elementMap = new HashMap();
-        elementMap.put("collection", new Integer(COLLECTION_ID));
-        elementMap.put("leader", new Integer(LEADER_ID));
-        elementMap.put("record", new Integer(RECORD_ID));
-        elementMap.put("controlfield", new Integer(CONTROLFIELD_ID));
-        elementMap.put("datafield", new Integer(DATAFIELD_ID));
-        elementMap.put("subfield", new Integer(SUBFIELD_ID));
+        elementMap = new HashMap<>();
+        elementMap.put("collection", COLLECTION_ID);
+        elementMap.put("leader", LEADER_ID);
+        elementMap.put("record", RECORD_ID);
+        elementMap.put("controlfield", CONTROLFIELD_ID);
+        elementMap.put("datafield", DATAFIELD_ID);
+        elementMap.put("subfield", SUBFIELD_ID);
     }
 
     /**
@@ -105,7 +100,7 @@ public class MarcXmlHandler
      */
     public MarcXmlHandler()
     {
-        data = new StringBuffer();
+        this.data = new StringBuffer();
     }
 
     /**
@@ -127,105 +122,138 @@ public class MarcXmlHandler
      *
      * @param locator the {@link Locator} object
      */
+    @Override
     public void setDocumentLocator(Locator locator)
     {
         this.locator = locator;
     }
 
+    @Override
     public void startElement(String uri, String name, String qName, Attributes atts)
         throws SAXParseException
     {
 
         String realname = (name.length() == 0) ? qName : name;
-        Integer el_type = (Integer)elementMap.get(realname);
+        Integer elementType = elementMap.get(realname);
 
         // If the element isn't in the map, ignore it. Might be part of a
         // different namespace.
-        if (el_type == null) return;
+        if (elementType == null) {
+            return;
+        }
 
-        switch (el_type.intValue()) {
+        switch (elementType) {
             case COLLECTION_ID:
-                if (mh != null) mh.startCollection();
+                if (this.mh != null) {
+                    this.mh.startCollection();
+                }
                 break;
 
             case LEADER_ID:
-                data.delete(0, data.length());
+                this.data.delete(0, this.data.length());
                 break;
 
             case CONTROLFIELD_ID:
-                if (atts.getLength() < 1) throw new SAXParseException("Invalid controlfield", locator);
-                tag = atts.getValue(TAG_ATTR);
+                if (atts.getLength() < 1) {
+                    throw new SAXParseException("Invalid controlfield", this.locator);
+                }
+                this.tag = atts.getValue(TAG_ATTR);
 
-                data.delete(0, data.length());
+                this.data.delete(0, this.data.length());
                 break;
 
             case DATAFIELD_ID:
-                if (atts.getLength() < 3) throw new SAXParseException("Invalid datafield", locator);
-                tag = atts.getValue(TAG_ATTR);
+                if (atts.getLength() < 3) {
+                    throw new SAXParseException("Invalid datafield", this.locator);
+                }
+                this.tag = atts.getValue(TAG_ATTR);
                 String ind1 = atts.getValue(IND_1_ATTR);
                 String ind2 = atts.getValue(IND_2_ATTR);
-                if (mh != null) mh.startDataField(tag, ind1.charAt(0), ind2.charAt(0), DataField.EMPTY_ID);
+                if (this.mh != null) {
+                    this.mh.startDataField(this.tag, ind1.charAt(0), ind2.charAt(0), VariableField.EMPTY_ID);
+                }
 
-                data.delete(0, data.length());
+                this.data.delete(0, this.data.length());
                 break;
 
             case SUBFIELD_ID:
-                code = atts.getValue(CODE_ATTR);
-                data.delete(0, data.length());
+                this.code = atts.getValue(CODE_ATTR);
+                this.data.delete(0, this.data.length());
+                break;
+
+            default:
 
         }
     }
 
+    @Override
     public void characters(char[] ch, int start, int length)
     {
-        if (data != null) {
-            data.append(ch, start, length);
+        if (this.data != null) {
+            this.data.append(ch, start, length);
         }
     }
 
+    @Override
     public void endElement(String uri, String name, String qName)
         throws SAXParseException
     {
 
         String realname = (name.length() == 0) ? qName : name;
-        Integer el_type = (Integer)elementMap.get(realname);
+        Integer elementType = elementMap.get(realname);
 
         // If the element isn't in the map, ignore it. Might be part of a
         // different namespace.
-        if (el_type == null) return;
+        if (elementType == null) {
+            return;
+        }
 
-        switch (el_type.intValue()) {
+        switch (elementType) {
             case COLLECTION_ID:
-                if (mh != null) mh.endCollection();
+                if (this.mh != null) {
+                    this.mh.endCollection();
+                }
 
                 break;
 
             case RECORD_ID:
-                if (mh != null) mh.endRecord();
+                if (this.mh != null) {
+                    this.mh.endRecord();
+                }
                 break;
 
             case LEADER_ID:
                 try {
-                    if (mh != null) mh.startRecord(new Leader(data.toString()));
+                    if (this.mh != null) {
+                        this.mh.startRecord(new Leader(this.data.toString()));
+                    }
                 } catch (MarcException e) {
-                    throw new SAXParseException("Unable to unmarshal leader", locator);
+                    throw new SAXParseException("Unable to unmarshal leader", this.locator);
                 }
                 break;
 
             case CONTROLFIELD_ID:
-                if (mh != null) mh.controlField(tag, data.toString().toCharArray(), ControlField.EMPTY_ID);
+                if (this.mh != null) {
+                    this.mh.controlField(this.tag, this.data.toString().toCharArray(), VariableField.EMPTY_ID);
+                }
                 break;
 
             case DATAFIELD_ID:
-                if (mh != null) mh.endDataField(tag);
-                tag = null;
+                if (this.mh != null) {
+                    this.mh.endDataField(this.tag);
+                }
+                this.tag = null;
                 break;
 
             case SUBFIELD_ID:
-                char[] ch = data.toString().toCharArray();
-                if (mh != null) mh.subfield(code.charAt(0), ch, Subfield.EMPTY_LINK_CODE);
-                code = null;
+                char[] ch = this.data.toString().toCharArray();
+                if (this.mh != null) {
+                    this.mh.subfield(this.code.charAt(0), ch, Subfield.EMPTY_LINK_CODE);
+                }
+                this.code = null;
                 break;
+
+            default:
         }
     }
 }

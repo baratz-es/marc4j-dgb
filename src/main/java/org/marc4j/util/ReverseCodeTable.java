@@ -1,4 +1,3 @@
-/// **
 /*
  * Copyright (C) 2002 Bas Peters
  * This file is part of MARC4J
@@ -38,8 +37,6 @@ import org.xml.sax.helpers.DefaultHandler;
  * </p>
  *
  * @author <a href="mailto:ckeith@loc.gov">Corey Keith</a>
- * @version $Revision: 1.2 $
- *
  * @see DefaultHandler
  */
 public class ReverseCodeTable
@@ -60,8 +57,9 @@ public class ReverseCodeTable
         if (chars == null) {
             log.error("Not Found: " + c);
             return chars;
-        } else
+        } else {
             return chars;
+        }
     }
 
     public static boolean inPreviousCharCodeTable(Character c, CodeTableTracker ctt)
@@ -70,15 +68,12 @@ public class ReverseCodeTable
         if (chars == null) {
             log.error("Not Found: " + c);
             return false;
+        } else if ((chars.get(ctt.getPrevious(CodeTableTracker.G0)) != null)
+            || (chars.get(ctt.getPrevious(CodeTableTracker.G1)) != null)) {
+            ctt.makePreviousCurrent();
+            return true;
         } else {
-
-            if ((chars.get(ctt.getPrevious(CodeTableTracker.G0)) != null)
-                || (chars.get(ctt.getPrevious(CodeTableTracker.G1)) != null)) {
-                ctt.makePreviousCurrent();
-                return true;
-            } else
-                return false;
-
+            return false;
         }
     }
 

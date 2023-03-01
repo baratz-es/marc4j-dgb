@@ -1,4 +1,3 @@
-// $Id: MarcWriter.java,v 1.11 2003/03/23 12:07:12 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters (mail@bpeters.com)
  *
@@ -41,9 +40,7 @@ import org.slf4j.LoggerFactory;
  * to write record objects to tape format (ISO 2709).
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.11 $
- *
+ * @author Bas Peters
  * @see MarcHandler
  */
 public class MarcWriter
@@ -134,7 +131,9 @@ public class MarcWriter
     @Deprecated
     public void setUnicodeToAnsel(boolean convert)
     {
-        if (convert) this.charconv = new UnicodeToAnsel();
+        if (convert) {
+            this.charconv = new UnicodeToAnsel();
+        }
     }
 
     /**
@@ -181,7 +180,9 @@ public class MarcWriter
     @Override
     public void startCollection()
     {
-        if (this.out == null) System.exit(0);
+        if (this.out == null) {
+            System.exit(0);
+        }
     }
 
     @Override
@@ -206,10 +207,11 @@ public class MarcWriter
     @Override
     public void subfield(char code, char[] data, String linkCode)
     {
-        if (this.charconv != null)
+        if (this.charconv != null) {
             this.datafield.add(new Subfield(code, this.charconv.convert(data), linkCode));
-        else
+        } else {
             this.datafield.add(new Subfield(code, data, linkCode));
+        }
     }
 
     @Override

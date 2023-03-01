@@ -1,4 +1,3 @@
-// $Id: VariableField.java,v 1.6 2003/03/31 19:55:26 ceyates Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -21,6 +20,7 @@
 package org.marc4j.marc;
 
 import java.io.Serializable;
+import java.util.regex.Pattern;
 
 /**
  * <p>
@@ -36,26 +36,20 @@ import java.io.Serializable;
  * the directory.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.6 $
- *
+ * @author Bas Peters
  * @see ControlField
  * @see DataField
  */
 public abstract class VariableField
     implements Serializable, Cloneable
 {
-
     private static final long serialVersionUID = -5303416788186473947L;
-
-    /** The field terminator */
-    public static final char FT = MarcConstants.FT;
 
     /** Empty value for the field id */
     public static final Long EMPTY_ID = null;
 
     /** Field id */
-    private Long id;
+    private Long id = EMPTY_ID;
 
     /** The tag name. */
     private String tag;
@@ -65,7 +59,7 @@ public abstract class VariableField
      * Default constructor.
      * </p>
      */
-    public VariableField()
+    protected VariableField()
     {
     }
 
@@ -76,9 +70,20 @@ public abstract class VariableField
      *
      * @param tag the tag name
      */
-    public VariableField(String tag)
+    protected VariableField(String tag)
     {
-        setTag(tag);
+        this.setTag(tag);
+    }
+
+    /**
+     * Copy constructor
+     *
+     * @param other another Variablefield where copy the values
+     */
+    protected VariableField(VariableField other)
+    {
+        this.tag = other.tag;
+        this.id = other.id;
     }
 
     /**
@@ -90,7 +95,11 @@ public abstract class VariableField
      */
     public void setTag(String tag)
     {
-        if (!Tag.isValid(tag)) throw new IllegalTagException(tag);
+        if (!Tag.isValid(tag)) {
+            // NOTE WTF this exception will be never throw, as Tag.isXXField(String) throws an exception when is
+            // invalid!
+            throw new IllegalTagException(tag);
+        }
         this.tag = tag;
     }
 
@@ -103,31 +112,46 @@ public abstract class VariableField
      */
     public String getTag()
     {
-        return tag;
+        return this.tag;
     }
 
     /**
-     * @return Devuelve el valor de id.
+     * @return Returns the id field value.
      */
     public Long getId()
     {
-        return id;
+        return this.id;
     }
 
     /**
-     * @param id Nuevo valor para id.
+     * @param id The new id value.
      */
     public void setId(Long id)
     {
         this.id = id;
     }
 
+    /**
+     * Returns <code>true</code> is the supplied regular expression pattern matches the {@link Variablefield} data;
+     * else,
+     * <code>false</code>.
+     *
+     * @param regex A regular expression pattern to find in the subfields
+     */
+    public abstract boolean find(Pattern pattern);
+
+    /**
+     * @deprecated Use copy constructor {@link #VariableField(VariableField)}
+     */
+    @Deprecated
+    @Override
     public abstract Object clone();
 
+    @Override
     public abstract boolean equals(Object obj);
 
+    @Override
     public abstract int hashCode();
 
 }
 
-// End of VariableField.java

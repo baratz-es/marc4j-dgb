@@ -1,4 +1,3 @@
-// $Id: UnicodeToAnsel.java,v 1.9 2003/03/23 12:05:54 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters (mail@bpeters.com)
  *
@@ -30,9 +29,8 @@ import org.marc4j.marc.MarcException;
  * A utility to convert UCS/Unicode data to MARC-8.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  * @author <a href="mailto:ckeith@loc.gov">Corey Keith</a>
- * @version $Revision: 1.9 $
  */
 public class UnicodeToAnsel
     implements CharacterConverter
@@ -53,7 +51,7 @@ public class UnicodeToAnsel
         // System.exit(1);
         // }
         try {
-            rct = new ReverseCodeTable(ResourcesUtil.getStream("/org/marc4j/util/resources/codetables.xml"));
+            this.rct = new ReverseCodeTable(ResourcesUtil.getStream("/org/marc4j/util/resources/codetables.xml"));
         } catch (IOException e) {
             throw new MarcException(e.getMessage(), e);
         }
@@ -74,7 +72,7 @@ public class UnicodeToAnsel
     @Override
     public String convert(String data)
     {
-        return new String(convert(data.toCharArray()));
+        return new String(this.convert(data.toCharArray()));
     }
 
     /**
@@ -97,16 +95,16 @@ public class UnicodeToAnsel
 
         boolean technique1 = false;
 
-        for (int i = 0; i < data.length; i++) {
-            Character c = new Character(data[i]);
+        for (char element : data) {
+            Character c = new Character(element);
             Integer table;
             StringBuffer marc = new StringBuffer();
-            Hashtable h = rct.codeTableHash(c);
+            Hashtable h = ReverseCodeTable.codeTableHash(c);
 
-            if (h.keySet().contains(ctt.getPrevious(CodeTableTracker.G0))) {
+            if (h.containsKey(ctt.getPrevious(CodeTableTracker.G0))) {
                 ctt.makePreviousCurrent();
                 marc.append((char[])h.get(ctt.getPrevious(CodeTableTracker.G0)));
-            } else if (h.keySet().contains(ctt.getPrevious(CodeTableTracker.G1))) {
+            } else if (h.containsKey(ctt.getPrevious(CodeTableTracker.G1))) {
                 ctt.makePreviousCurrent();
                 marc.append((char[])h.get(ctt.getPrevious(CodeTableTracker.G1)));
             } else {
@@ -134,10 +132,11 @@ public class UnicodeToAnsel
                 marc.append(marc8);
             }
 
-            if (rct.isCombining(c))
+            if (ReverseCodeTable.isCombining(c)) {
                 sb.insert(sb.length() - 1, marc.toString());
-            else
+            } else {
                 sb.append(marc);
+            }
         }
 
         if (ctt.getPrevious(CodeTableTracker.G0).intValue() != ASCII) {

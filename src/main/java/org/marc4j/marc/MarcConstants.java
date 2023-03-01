@@ -1,4 +1,3 @@
-// $Id: MarcConstants.java,v 1.5 2002/08/03 15:14:39 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -26,9 +25,7 @@ package org.marc4j.marc;
  * as used in a record.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.5 $
- *
+ * @author Bas Peters
  */
 public class MarcConstants
 {

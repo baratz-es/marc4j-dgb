@@ -1,4 +1,3 @@
-// $Id: MarcException.java,v 1.5 2003/01/10 09:38:37 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -26,15 +25,13 @@ package org.marc4j.marc;
  * while processing a record object.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.5 $
- *
+ * @author Bas Peters
  */
 public class MarcException
     extends RuntimeException
 {
-
-    private Throwable cause = null;
+    private static final long serialVersionUID = -6222249908452467092L;
+    
 
     /**
      * <p>
@@ -71,44 +68,7 @@ public class MarcException
      */
     public MarcException(String message, Throwable ex)
     {
-        super(message);
-        initCause(ex);
-    }
-
-    /**
-     * <p>
-     * Return the root cause or null if there was no
-     * original exception.
-     * </p>
-     *
-     * @return the root cause of this exception
-     */
-    @Override
-    public Throwable getCause()
-    {
-        return cause;
-    }
-
-    /**
-     * <p>
-     * Sets the root cause of this exception. This may
-     * only be called once. Subsequent calls throw an
-     * <code>IllegalStateException</code>.
-     * </p>
-     *
-     * @param cause the root cause of this exception
-     * @return the root cause of this exception
-     * @throws IllegalStateException if this method is called twice.
-     */
-    @Override
-    public Throwable initCause(Throwable cause)
-    {
-        if (this.cause == null) {
-            this.cause = cause;
-        } else {
-            throw new IllegalStateException("Cannot reset the cause");
-        }
-        return cause;
+        super(message, ex);
     }
 
 }
