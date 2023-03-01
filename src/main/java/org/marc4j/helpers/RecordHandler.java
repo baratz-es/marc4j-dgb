@@ -1,4 +1,3 @@
-// $Id: RecordHandler.java,v 1.5 2002/08/03 15:14:39 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -28,9 +27,7 @@ import org.marc4j.marc.Record;
  * objects.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.5 $
- *
+ * @author Bas Peters
  * @see Record
  */
 public interface RecordHandler
@@ -41,7 +38,7 @@ public interface RecordHandler
      * Receives notification at the start of the collection.
      * </p>
      */
-    public void startCollection();
+    void startCollection();
 
     /**
      * <p>
@@ -50,13 +47,13 @@ public interface RecordHandler
      *
      * @param record the {@link Record} object.
      */
-    public void record(Record record);
+    void record(Record record);
 
     /**
      * <p>
      * Receives notification at the end of the collection.
      * </p>
      */
-    public void endCollection();
+    void endCollection();
 
 }

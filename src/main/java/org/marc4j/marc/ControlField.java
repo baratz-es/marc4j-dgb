@@ -1,4 +1,3 @@
-// $Id: ControlField.java,v 1.6 2003/03/31 19:55:26 ceyates Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -22,34 +21,31 @@ package org.marc4j.marc;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * <p>
- * <code>ControlField</code> defines behaviour for a control
- * field (tag 001-009).
+ * <code>ControlField</code> defines behavior for a control field (tag 001-009).
  * </p>
  *
  * <p>
- * Control fields are variable fields identified by tags beginning
- * with two zero's. They are comprised of data and a field terminator
- * and do not contain indicators or subfield codes. The structure of a
- * control field according to the MARC standard is as follows:
+ * Control fields are variable fields identified by tags beginning with two zero's. They are comprised of data and a
+ * field terminator and do not contain indicators or subfield codes. The structure of a control field according to the
+ * MARC standard is as follows:
  * </p>
- * 
+ *
  * <pre>
  * DATA_ELEMENT FIELD_TERMINATOR
  * </pre>
  * <p>
- * This structure is returned by the {@link #marshal()}
- * method.
+ * This structure is returned by the {@link #marshal()} method.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.6 $
- *
+ * @author Bas Peters
  */
 public class ControlField
     extends VariableField
@@ -62,9 +58,7 @@ public class ControlField
     private char[] data;
 
     /**
-     * <p>
      * Default constructor.
-     * </p>
      */
     public ControlField()
     {
@@ -72,10 +66,7 @@ public class ControlField
     }
 
     /**
-     * <p>
-     * Creates a new control field instance and registers the tag
-     * and the control field data.
-     * </p>
+     * Creates a new control field instance and registers the tag and the control field data.
      *
      * @param tag the tag name
      * @param data the control field data
@@ -83,14 +74,11 @@ public class ControlField
     public ControlField(String tag, char[] data)
     {
         super(tag);
-        setData(data);
+        this.setData(data);
     }
 
     /**
-     * <p>
-     * Creates a new control field instance and registers the tag
-     * and the control field data.
-     * </p>
+     * Creates a new control field instance and registers the tag and the control field data.
      *
      * @param tag the tag name
      * @param data the control field data
@@ -98,14 +86,12 @@ public class ControlField
     public ControlField(String tag, String data)
     {
         super(tag);
-        setData(data.toCharArray());
+        this.setData(data.toCharArray());
     }
 
     /**
-     * <p>
      * Creates a new control field instance and registers the tag
      * and the control field data.
-     * </p>
      *
      * @param tag the tag name
      * @param data the control field data
@@ -118,10 +104,8 @@ public class ControlField
     }
 
     /**
-     * <p>
      * Creates a new control field instance and registers the tag
      * and the control field data.
-     * </p>
      *
      * @param tag the tag name
      * @param data the control field data
@@ -133,43 +117,55 @@ public class ControlField
     }
 
     /**
-     * <p>
+     * Copy constructor
+     *
+     * @param other Another instance of ControlField
+     */
+    public ControlField(ControlField other)
+    {
+        super(other);
+        this.data = Arrays.copyOf(other.data, other.data.length);
+    }
+
+    /**
+     * Returns <code>true</code> is the supplied regular expression pattern matches the {@link ControlField} data; else,
+     * <code>false</code>.
+     *
+     * @param pattern An instance of a compiled Pattern to use as matcher
+     */
+    @Override
+    public boolean find(Pattern pattern)
+    {
+        if (this.data == null) {
+            return false;
+        }
+        Matcher matcher = pattern.matcher(Arrays.toString(this.getData()));
+
+        return matcher.find();
+    }
+
+    /**
      * Registers the tag.
-     * </p>
      *
      * @param tag the tag name
-     * @throws IllegalTagException when the tag is not a valid
-     *         control field identifier
+     * @throws IllegalTagException when the tag is not a valid control field identifier
      */
     @Override
     public void setTag(String tag)
     {
-        if (Tag.isControlField(tag)) {
-            super.setTag(tag);
-        } else {
+        if (!Tag.isControlField(tag)) {
+            // NOTE WTF this exception will be never throw, as Tag.isXXField(String) throws an exception when is
+            // invalid!
             throw new IllegalTagException(tag, "not a control field identifier");
         }
+        super.setTag(tag);
     }
 
     /**
-     * <p>
-     * Returns the tag name.
-     * </p>
-     *
-     * @return {@link String} - the tag name
-     */
-    @Override
-    public String getTag()
-    {
-        return super.getTag();
-    }
-
-    /**
-     * <p>
      * Registers the control field data.
-     * </p>
      *
      * @param data the control field data
+     * @throws IllegalDataElementException if the data element contains control characters
      */
     public void setData(char[] data)
     {
@@ -178,47 +174,38 @@ public class ControlField
     }
 
     /**
-     * <p>
      * Registers the control field data.
-     * </p>
      *
      * @param data the control field data
+     * @throws IllegalDataElementException if the data element contains control characters
      */
     public void setData(String data)
     {
-        setData(data.toCharArray());
+        this.setData(data.toCharArray());
     }
 
     /**
-     * <p>
      * Returns the control field data.
-     * </p>
      *
-     * @return <code>char[]</code> - control field as a
-     *         character array
+     * @return <code>char[]</code> - control field as a character array
      */
     public char[] getData()
     {
-        return data;
+        return this.data;
     }
 
     /**
-     * <p>
-     * Returns a <code>String</code> representation for a control
-     * field following the structure of a MARC control field.
-     * </p>
+     * Returns a <code>String</code> representation for a control field following the structure of a MARC control field.
      *
      * @return <code>String</code> - control field
      */
     public String marshal()
     {
-        return new String(data) + FT;
+        return new String(this.data) + (char)MarcConstants.FT;
     }
 
     /**
-     * <p>
      * Returns the length of the serialized form of the control field.
-     * </p>
      *
      * @return <code>int</code> - length of control field
      */
@@ -229,12 +216,13 @@ public class ControlField
 
     /*
      * @see java.lang.Object#clone()
+     * @deprecated Use copy constructor  {@link #ControlField(ControlField)}
      */
+    @Deprecated
     @Override
     public Object clone()
     {
-        ControlField instance = new ControlField(this.getTag(), String.copyValueOf(this.data), ControlField.EMPTY_ID);
-        return instance;
+        return new ControlField(this);
     }
 
     /*
@@ -243,9 +231,15 @@ public class ControlField
     @Override
     public boolean equals(Object obj)
     {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        if (obj.getClass() != getClass()) return false;
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != this.getClass()) {
+            return false;
+        }
 
         ControlField that = (ControlField)obj;
         return new EqualsBuilder()
@@ -267,9 +261,9 @@ public class ControlField
         final StringBuilder sb = new StringBuilder();
         sb
             .append("\n    CONTROLFIELD [  tag: ")
-            .append(getTag())
+            .append(this.getTag())
             .append(", Data:")
-            .append(Arrays.toString(data))
+            .append(Arrays.toString(this.data))
             .append(this.getId() != null ? (", id: ") + this.getId() : "")
             .append(" ] ");
         return sb.toString();

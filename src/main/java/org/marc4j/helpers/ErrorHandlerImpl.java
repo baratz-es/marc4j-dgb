@@ -1,4 +1,3 @@
-// $Id: ErrorHandlerImpl.java,v 1.5 2002/08/03 15:14:39 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -31,38 +30,35 @@ import org.slf4j.LoggerFactory;
  * warnings and errors that occur during the parsing of a MARC record.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.5 $
- *
+ * @author Bas Peters
  * @see ErrorHandler
  */
 public class ErrorHandlerImpl
     implements ErrorHandler
 {
-
     private static final Logger log = LoggerFactory.getLogger(ErrorHandlerImpl.class);
 
     @Override
     public void warning(MarcReaderException exception)
     {
-        log.warn(printMarcException("Warning", exception), exception);
+        log.warn(ErrorHandlerImpl.printMarcException("Warning", exception), exception);
     }
 
     @Override
     public void error(MarcReaderException exception)
     {
-        log.error(printMarcException("Error", exception), exception);
+        log.error(ErrorHandlerImpl.printMarcException("Error", exception), exception);
     }
 
     @Override
     public void fatalError(MarcReaderException exception)
     {
-        log.error(printMarcException("FATAL", exception), exception);
+        log.error(ErrorHandlerImpl.printMarcException("FATAL", exception), exception);
     }
 
     public static String printMarcException(String label, MarcReaderException e)
     {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append("** ");
         buf.append(label);
         buf.append(": ");

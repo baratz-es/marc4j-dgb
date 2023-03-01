@@ -1,4 +1,3 @@
-// $Id: TaggedWriter.java,v 1.3 2002/08/03 15:14:39 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters (mail@bpeters.com)
  *
@@ -36,9 +35,7 @@ import org.slf4j.LoggerFactory;
  * to write MARC data in tagged display format.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.3 $
- *
+ * @author Bas Peters
  * @see MarcHandler
  */
 public class TaggedWriter
@@ -123,7 +120,9 @@ public class TaggedWriter
     @Override
     public void startCollection()
     {
-        if (this.out == null) System.exit(0);
+        if (this.out == null) {
+            System.exit(0);
+        }
     }
 
     @Override

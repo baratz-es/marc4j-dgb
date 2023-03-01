@@ -1,4 +1,3 @@
-// $Id: IllegalAddException.java,v 1.4 2002/08/03 15:14:39 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters (mail@bpeters.com)
  *
@@ -26,13 +25,12 @@ package org.marc4j.marc;
  * supplied object is illegal.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.4 $
- *
+ * @author Bas Peters
  */
 public class IllegalAddException
     extends IllegalArgumentException
 {
+    private static final long serialVersionUID = 3177437281458300710L;
 
     /**
      * <p>

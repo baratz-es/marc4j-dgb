@@ -1,4 +1,3 @@
-// $Id: ErrorHandler.java,v 1.4 2002/08/03 15:14:39 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -26,8 +25,7 @@ package org.marc4j;
  * Defines Java callbacks to handle exceptions.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.4 $
+ * @author Bas Peters
  */
 public interface ErrorHandler
 {
@@ -38,7 +36,7 @@ public interface ErrorHandler
      * </p>
      *
      */
-    public abstract void warning(MarcReaderException exception);
+    void warning(MarcReaderException exception);
 
     /**
      * <p>
@@ -46,7 +44,7 @@ public interface ErrorHandler
      * </p>
      *
      */
-    public abstract void error(MarcReaderException exception);
+    void error(MarcReaderException exception);
 
     /**
      * <p>
@@ -54,6 +52,6 @@ public interface ErrorHandler
      * </p>
      *
      */
-    public abstract void fatalError(MarcReaderException exception);
+    void fatalError(MarcReaderException exception);
 
 }

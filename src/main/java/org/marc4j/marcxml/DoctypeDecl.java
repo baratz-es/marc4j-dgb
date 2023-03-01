@@ -1,4 +1,3 @@
-// $Id: DoctypeDecl.java,v 1.4 2002/08/03 15:14:39 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -26,9 +25,7 @@ package org.marc4j.marcxml;
  * declaration.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.4 $
- *
+ * @author Bas Peters
  */
 public class DoctypeDecl
 {
@@ -53,9 +50,9 @@ public class DoctypeDecl
      */
     public DoctypeDecl(String name, String publicId, String systemId)
     {
-        setName(name);
-        setPublicId(publicId);
-        setSystemId(systemId);
+        this.setName(name);
+        this.setPublicId(publicId);
+        this.setSystemId(systemId);
     }
 
     /**
@@ -103,7 +100,7 @@ public class DoctypeDecl
      */
     public String getName()
     {
-        return name;
+        return this.name;
     }
 
     /**
@@ -115,7 +112,7 @@ public class DoctypeDecl
      */
     public String getPublicId()
     {
-        return publicId;
+        return this.publicId;
     }
 
     /**
@@ -127,7 +124,7 @@ public class DoctypeDecl
      */
     public String getSystemId()
     {
-        return systemId;
+        return this.systemId;
     }
 
 }

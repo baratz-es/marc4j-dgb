@@ -1,4 +1,3 @@
-// $Id: MarcResult.java,v 1.4 2002/08/03 15:14:39 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -29,9 +28,7 @@ import org.marc4j.MarcHandler;
  * Collects the result of a MARC conversion.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.4 $
- *
+ * @author Bas Peters
  * @see MarcHandler
  */
 public class MarcResult
@@ -55,7 +52,7 @@ public class MarcResult
      */
     public MarcResult(MarcHandler handler)
     {
-        setHandler(handler);
+        this.setHandler(handler);
     }
 
     /**
@@ -77,6 +74,7 @@ public class MarcResult
      *
      * @param systemID the system identifier
      */
+    @Override
     public void setSystemId(String systemID)
     {
         this.systemId = systemID;
@@ -91,7 +89,7 @@ public class MarcResult
      */
     public MarcHandler getHandler()
     {
-        return handler;
+        return this.handler;
     }
 
     /**
@@ -101,9 +99,10 @@ public class MarcResult
      *
      * @return String - the system identifier
      */
+    @Override
     public String getSystemId()
     {
-        return systemId;
+        return this.systemId;
     }
 
 }

@@ -1,4 +1,3 @@
-// $Id: Subfield.java,v 1.6 2003/03/31 19:55:26 ceyates Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -22,6 +21,8 @@ package org.marc4j.marc;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -37,7 +38,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * identifier (together the subfield code) and a data element. The structure
  * of a data element according to the MARC standard is as follows:
  * </p>
- * 
+ *
  * <pre>
  * DELIMITER DATA_ELEMENT_IDENTIFIER DATA_ELEMENT
  * </pre>
@@ -46,27 +47,26 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * method.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.6 $
- *
+ * @author Bas Peters
  */
 public class Subfield
     implements Serializable, Cloneable
 {
+    private static final long serialVersionUID = 7416630407651432911L;
 
     /** Empty value for the link code */
     public static final String EMPTY_LINK_CODE = null;
 
     private static final char US = MarcConstants.US;
 
-    /** The data element identifier. */
+    /** The code identifier. */
     private char code;
 
     /** The data element. */
     private char[] data;
 
     /** A code if the subfield has a link with another Record */
-    private String linkCode;
+    private String linkCode = EMPTY_LINK_CODE;
 
     /** Default constructor */
     public Subfield()
@@ -84,8 +84,8 @@ public class Subfield
      */
     public Subfield(char code, char[] data)
     {
-        setCode(code);
-        setData(data);
+        this.setCode(code);
+        this.setData(data);
     }
 
     /**
@@ -99,8 +99,8 @@ public class Subfield
      */
     public Subfield(char code, String data)
     {
-        setCode(code);
-        setData(data.toCharArray());
+        this.setCode(code);
+        this.setData(data.toCharArray());
     }
 
     /**
@@ -115,9 +115,9 @@ public class Subfield
      */
     public Subfield(char code, char[] data, String linkCode)
     {
-        setCode(code);
-        setData(data);
-        setLinkCode(linkCode);
+        this.setCode(code);
+        this.setData(data);
+        this.setLinkCode(linkCode);
     }
 
     /**
@@ -132,20 +132,44 @@ public class Subfield
      */
     public Subfield(char code, String data, String linkCode)
     {
-        setCode(code);
-        setData(data.toCharArray());
-        setLinkCode(linkCode);
+        this.setCode(code);
+        this.setData(data.toCharArray());
+        this.setLinkCode(linkCode);
     }
 
     /**
-     * <p>
-     * Registers the data element identifier.
-     * </p>
+     * Copy constructor
      *
-     * @param code the data element identifier
-     * @throws IllegalIdentifierException when the data element identifier
-     *         is not a valid data element
-     *         identifier
+     * @param other Another instance of Subfield
+     */
+    public Subfield(Subfield other)
+    {
+        this.code = other.code;
+        this.linkCode = other.linkCode;
+        this.data = String.copyValueOf(other.data).toCharArray();
+    }
+
+
+    /**
+     * Returns <code>true</code> is the supplied regular expression pattern matches the {@link Subfield} data; else,
+     * <code>false</code>.
+     *
+     * @param pattern An instance of a compiled Pattern to use as matcher
+     */
+    public boolean find(Pattern pattern)
+    {
+        if (this.data == null) {
+            return false;
+        }
+        Matcher matcher = pattern.matcher(new String(this.getData()));
+
+        return matcher.find();
+    }
+
+    /**
+     * Sets the {@link Subfield} code.
+     *
+     * @param code The code identifier
      */
     public void setCode(char code)
     {
@@ -153,11 +177,19 @@ public class Subfield
     }
 
     /**
-     * <p>
-     * Registers the data element.
-     * </p>
+     * Gets the {@link Subfield} code.
      *
-     * @param data the data element
+     * @return <code>char</code> The code identifier
+     */
+    public char getCode()
+    {
+        return this.code;
+    }
+
+    /**
+     * Sets the {@link Subfield} data.
+     *
+     * @param data The data element
      */
     public void setData(char[] data)
     {
@@ -166,51 +198,27 @@ public class Subfield
     }
 
     /**
-     * <p>
-     * Registers the data element.
-     * </p>
+     * Sets the {@link Subfield} data.
      *
-     * @param data the data element
+     * @param data The data element
      */
     public void setData(String data)
     {
-        setData(data.toCharArray());
+        this.setData(data.toCharArray());
     }
 
     /**
-     * <p>
-     * Returns the data element identifier.
-     * </p>
+     * Gets the {@link Subfield} data.
      *
-     * @return <code>char</code> - the data element identifier
-     */
-    public char getCode()
-    {
-        return code;
-    }
-
-    /**
-     * <p>
-     * Returns the data element.
-     * </p>
-     *
-     * @return <code>char[]</code> - the data element
+     * @return <code>char[]</code> The data element
      */
     public char[] getData()
     {
-        return data;
+        return this.data;
     }
 
     /**
-     * @return Devuelve el valor de linkCode.
-     */
-    public String getLinkCode()
-    {
-        return linkCode;
-    }
-
-    /**
-     * @param linkCode Nuevo valor para linkCode.
+     * Sets the {@link Subfield} link code.
      */
     public void setLinkCode(String linkCode)
     {
@@ -218,34 +226,45 @@ public class Subfield
     }
 
     /**
-     * <p>
-     * Returns a <code>String</code> representation for a data element
-     * following the structure of a MARC data element.
-     * </p>
+     * Gets the {@link Subfield} link code.
+     */
+    public String getLinkCode()
+    {
+        return this.linkCode;
+    }
+
+    /**
+     * Returns a <code>String</code> representation for a data element following the structure of a MARC data element.
      *
-     * @return <code>String</code> - the data element
+     * @return <code>String</code> The marshaled representation of this Subfield
      */
     public String marshal()
     {
-        return new StringBuffer().append(US).append(code).append(data).toString();
+        return new StringBuffer().append(US).append(this.code).append(this.data).toString();
     }
 
     /*
-     * @see java.lang.Object#clone()
+     * @deprecated Use {@link #Subfield(Subfield)}
      */
+    @Deprecated
     @Override
     public Object clone()
     {
-        // Creamos nueva instancia
-        return new Subfield(this.code, String.copyValueOf(this.data), this.linkCode);
+        return new Subfield(this);
     }
 
     @Override
     public boolean equals(Object obj)
     {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        if (obj.getClass() != getClass()) return false;
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != this.getClass()) {
+            return false;
+        }
 
         Subfield that = (Subfield)obj;
         return new EqualsBuilder()
@@ -267,9 +286,9 @@ public class Subfield
         final StringBuilder sb = new StringBuilder();
         sb
             .append("\n            SUBFIELD - code:[ ")
-            .append(code)
+            .append(this.code)
             .append(", Data:")
-            .append(Arrays.toString(data))
+            .append(Arrays.toString(this.data))
             .append(this.getLinkCode() != null ? (", linkCode: ") + this.getLinkCode() : "")
             .append(" ] ");
         return sb.toString();

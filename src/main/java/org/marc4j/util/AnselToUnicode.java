@@ -1,4 +1,3 @@
-// $Id: AnselToUnicode.java,v 1.13 2003/03/23 12:05:54 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters (mail@bpeters.com)
  *
@@ -30,9 +29,8 @@ import org.marc4j.marc.MarcException;
  * A utility to convert MARC-8 data to non-precomposed UCS/Unicode.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
+ * @author Bas Peters
  * @author <a href="mailto:ckeith@loc.gov">Corey Keith</a>
- * @version $Revision: 1.13 $
  */
 public class AnselToUnicode
     implements CharacterConverter
@@ -49,7 +47,7 @@ public class AnselToUnicode
          */
         public Object put(Object item)
         {
-            addElement(item);
+            this.addElement(item);
 
             return item;
         }
@@ -60,10 +58,10 @@ public class AnselToUnicode
         public Object get()
         {
             Object obj;
-            int len = size();
+            int len = this.size();
 
-            obj = peek();
-            removeElementAt(0);
+            obj = this.peek();
+            this.removeElementAt(0);
 
             return obj;
         }
@@ -73,9 +71,9 @@ public class AnselToUnicode
          */
         public Object peek()
         {
-            int len = size();
+            int len = this.size();
 
-            return elementAt(0);
+            return this.elementAt(0);
         }
 
         /**
@@ -83,7 +81,7 @@ public class AnselToUnicode
          */
         public boolean empty()
         {
-            return size() == 0;
+            return this.size() == 0;
         }
     }
 
@@ -97,8 +95,8 @@ public class AnselToUnicode
         @Override
         public String toString()
         {
-            return "Offset: " + offset + " G0: " + Integer.toHexString(g0) + " G1: " + Integer.toHexString(g1)
-                + " Multibyte: " + multibyte;
+            return "Offset: " + this.offset + " G0: " + Integer.toHexString(this.g0) + " G1: " + Integer.toHexString(this.g1)
+                + " Multibyte: " + this.multibyte;
         }
     }
 
@@ -116,7 +114,7 @@ public class AnselToUnicode
         // System.exit(1);
         // }
         try {
-            ct = new CodeTable(ResourcesUtil.getStream("/org/marc4j/util/resources/codetablesnocjk.xml"));
+            this.ct = new CodeTable(ResourcesUtil.getStream("/org/marc4j/util/resources/codetablesnocjk.xml"));
         } catch (IOException e) {
             throw new MarcException(e.getMessage(), e);
         }
@@ -138,7 +136,7 @@ public class AnselToUnicode
         // System.exit(1);
         // }
         try {
-            ct = new CodeTable(ResourcesUtil.getStream("/org/marc4j/util/resources/codetables.xml"));
+            this.ct = new CodeTable(ResourcesUtil.getStream("/org/marc4j/util/resources/codetables.xml"));
         } catch (IOException e) {
             throw new MarcException(e.getMessage(), e);
         }
@@ -155,12 +153,12 @@ public class AnselToUnicode
     @Override
     public String convert(String data)
     {
-        return new String(convert(data.toCharArray()));
+        return new String(this.convert(data.toCharArray()));
     }
 
     private void checkMode(char[] data, CodeTracker cdt)
     {
-        while (cdt.offset < data.length && isEscape(data[cdt.offset])) {
+        while (cdt.offset < data.length && AnselToUnicode.isEscape(data[cdt.offset])) {
             switch (data[cdt.offset + 1]) {
                 case 0x28:
                 case 0x2c:
@@ -168,17 +166,19 @@ public class AnselToUnicode
                     cdt.offset += 3;
                     cdt.multibyte = false;
                     break;
+
                 case 0x29:
                 case 0x2d:
                     cdt.g1 = data[cdt.offset + 2];
                     cdt.offset += 3;
                     cdt.multibyte = false;
                     break;
+
                 case 0x24:
                     cdt.multibyte = true;
-                    if (!loadedMultibyte) {
-                        loadMultibyte();
-                        loadedMultibyte = true;
+                    if (!this.loadedMultibyte) {
+                        this.loadMultibyte();
+                        this.loadedMultibyte = true;
                     }
                     switch (data[cdt.offset + 1]) {
                         case 0x29:
@@ -186,16 +186,19 @@ public class AnselToUnicode
                             cdt.g1 = data[cdt.offset + 3];
                             cdt.offset += 4;
                             break;
+
                         case 0x2c:
                             cdt.g0 = data[cdt.offset + 3];
                             cdt.offset += 4;
                             break;
+
                         default:
                             cdt.g0 = data[cdt.offset + 2];
                             cdt.offset += 3;
                             break;
                     }
                     break;
+
                 case 0x67:
                 case 0x62:
                 case 0x70:
@@ -203,6 +206,7 @@ public class AnselToUnicode
                     cdt.offset += 2;
                     cdt.multibyte = false;
                     break;
+
                 case 0x73:
                     cdt.g0 = 0x42;
                     cdt.offset += 2;
@@ -234,38 +238,40 @@ public class AnselToUnicode
 
         cdt.offset = 0;
 
-        checkMode(data, cdt);
+        this.checkMode(data, cdt);
 
         Queue diacritics = new Queue();
 
         while (cdt.offset < data.length) {
-            if (ct.isCombining(data[cdt.offset], cdt.g0, cdt.g1) && hasNext(cdt.offset, len)) {
+            if (CodeTable.isCombining(data[cdt.offset], cdt.g0, cdt.g1) && AnselToUnicode.hasNext(cdt.offset, len)) {
 
-                while (ct.isCombining(data[cdt.offset], cdt.g0, cdt.g1) && hasNext(cdt.offset, len)) {
-                    diacritics.put(new Character(getChar(data[cdt.offset], cdt.g0, cdt.g1)));
+                while (CodeTable.isCombining(data[cdt.offset], cdt.g0, cdt.g1) && AnselToUnicode.hasNext(cdt.offset, len)) {
+                    diacritics.put(new Character(this.getChar(data[cdt.offset], cdt.g0, cdt.g1)));
                     cdt.offset++;
-                    checkMode(data, cdt);
+                    this.checkMode(data, cdt);
                 }
 
-                char c2 = getChar(data[cdt.offset], cdt.g0, cdt.g1);
+                char c2 = this.getChar(data[cdt.offset], cdt.g0, cdt.g1);
                 cdt.offset++;
-                checkMode(data, cdt);
+                this.checkMode(data, cdt);
                 sb.append(c2);
 
                 while (!diacritics.isEmpty()) {
-                    char c1 = ((Character)diacritics.get()).charValue();
+                    char c1 = ((Character)diacritics.get());
                     sb.append(c1);
                 }
 
             } else if (cdt.multibyte) {
-                sb.append(ct.getChar(
-                    makeMultibyte(new String(data).substring(cdt.offset, cdt.offset + 4).toCharArray()), cdt.g0));
+                sb.append(CodeTable.getChar(
+                    this.makeMultibyte(new String(data).substring(cdt.offset, cdt.offset + 4).toCharArray()), cdt.g0));
                 cdt.offset += 3;
             } else {
-                sb.append(getChar(data[cdt.offset], cdt.g0, cdt.g1));
+                sb.append(this.getChar(data[cdt.offset], cdt.g0, cdt.g1));
                 cdt.offset += 1;
             }
-            if (hasNext(cdt.offset, len)) checkMode(data, cdt);
+            if (AnselToUnicode.hasNext(cdt.offset, len)) {
+                this.checkMode(data, cdt);
+            }
         }
         return sb.toString().toCharArray();
     }
@@ -281,26 +287,31 @@ public class AnselToUnicode
 
     private char getChar(int ch, int g0, int g1)
     {
-        if (ch <= 0x7E)
-            return ct.getChar(ch, g0);
-        else
-            return ct.getChar(ch, g1);
+        if (ch <= 0x7E) {
+            return CodeTable.getChar(ch, g0);
+        } else {
+            return CodeTable.getChar(ch, g1);
+        }
     }
 
     private char getMBChar(int ch)
     {
-        return ct.getChar(ch, 0x31);
+        return CodeTable.getChar(ch, 0x31);
     }
 
     private static boolean hasNext(int pos, int len)
     {
-        if (pos < (len - 1)) return true;
+        if (pos < (len - 1)) {
+            return true;
+        }
         return false;
     }
 
     private static boolean isEscape(int i)
     {
-        if (i == 0x1B) return true;
+        if (i == 0x1B) {
+            return true;
+        }
         return false;
     }
 }

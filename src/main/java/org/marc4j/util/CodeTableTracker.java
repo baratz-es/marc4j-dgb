@@ -1,4 +1,3 @@
-// $Id: CodeTableTracker.java,v 1.1 2003/03/04 18:33:19 coreykeith Exp $
 /**
  * Copyright (C) 2002 Bas Peters (mail@bpeters.com)
  *
@@ -26,7 +25,6 @@ package org.marc4j.util;
  * </p>
  *
  * @author <a href="mailto:ckeith@loc.gov">Corey Keith</a>
- * @version $Revision: 1.1 $
  */
 public class CodeTableTracker
 {
@@ -40,45 +38,45 @@ public class CodeTableTracker
 
     public CodeTableTracker()
     {
-        g = new Integer[2][3];
-        g[G0][prev] = new Integer(0x42);
-        g[G1][prev] = new Integer(0x45);
+        this.g = new Integer[2][3];
+        this.g[G0][prev] = new Integer(0x42);
+        this.g[G1][prev] = new Integer(0x45);
     }
 
     public void makePreviousCurrent()
     {
-        g[G0][curr] = g[G0][prev];
-        g[G1][curr] = g[G1][prev];
+        this.g[G0][curr] = this.g[G0][prev];
+        this.g[G1][curr] = this.g[G1][prev];
     }
 
     public Integer getPrevious(byte set)
     {
-        return g[set][prev];
+        return this.g[set][prev];
     }
 
     public Integer getCurrent(byte set)
     {
-        return g[set][curr];
+        return this.g[set][curr];
     }
 
     public Integer getNext(byte set)
     {
-        return g[set][next];
+        return this.g[set][next];
     }
 
     public void setPrevious(byte set, Integer table)
     {
-        g[set][prev] = table;
+        this.g[set][prev] = table;
     }
 
     public void setCurrent(byte set, Integer table)
     {
-        g[set][curr] = table;
+        this.g[set][curr] = table;
     }
 
     public void setNext(byte set, Integer table)
     {
-        g[set][next] = table;
+        this.g[set][next] = table;
     }
 
     /*

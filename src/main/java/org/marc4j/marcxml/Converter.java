@@ -1,4 +1,3 @@
-// $Id: Converter.java,v 1.7 2002/08/03 15:14:39 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -42,9 +41,7 @@ import org.xml.sax.XMLReader;
  * or transformation from a source, populating a result.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.7 $
- *
+ * @author Bas Peters
  * @see Transformer
  */
 public class Converter
@@ -76,10 +73,10 @@ public class Converter
         throws TransformerException, SAXException, IOException
     {
         if (source instanceof MarcSource && result instanceof MarcResult) {
-            convert((MarcSource)source, (MarcResult)result);
+            this.convert((MarcSource)source, (MarcResult)result);
         } else {
             Source stylesheet = null;
-            convert(stylesheet, source, result);
+            this.convert(stylesheet, source, result);
         }
     }
 
@@ -97,16 +94,16 @@ public class Converter
         throws TransformerException, SAXException, IOException
     {
         if (result instanceof MarcResult) {
-            convert(stylesheet, (SAXSource)source, (MarcResult)result);
+            this.convert(stylesheet, (SAXSource)source, (MarcResult)result);
         } else {
             if (stylesheet != null) {
-                Templates templates = tryCache(stylesheet);
-                transformer = templates.newTransformer();
+                Templates templates = this.tryCache(stylesheet);
+                this.transformer = templates.newTransformer();
             } else {
-                factory = TransformerFactory.newInstance();
-                transformer = factory.newTransformer();
+                this.factory = TransformerFactory.newInstance();
+                this.transformer = this.factory.newTransformer();
             }
-            transformer.transform(source, result);
+            this.transformer.transform(source, result);
         }
     }
 
@@ -117,9 +114,9 @@ public class Converter
         handler.setMarcHandler(result.getHandler());
         if (stylesheet != null) {
             SAXResult out = new SAXResult(handler);
-            Templates templates = tryCache(stylesheet);
-            transformer = templates.newTransformer();
-            transformer.transform(source, out);
+            Templates templates = this.tryCache(stylesheet);
+            this.transformer = templates.newTransformer();
+            this.transformer.transform(source, out);
         } else {
             XMLReader reader = source.getXMLReader();
             reader.setContentHandler(handler);
@@ -131,30 +128,32 @@ public class Converter
         throws IOException
     {
         MarcReader reader;
-        if (source.getMarcReader() != null)
+        if (source.getMarcReader() != null) {
             reader = source.getMarcReader();
-        else
+        } else {
             reader = new MarcReader();
+        }
         reader.setMarcHandler(result.getHandler());
-        if (source.getReader() != null)
+        if (source.getReader() != null) {
             reader.parse(source.getReader());
-        else if (source.getInputStream() != null)
+        } else if (source.getInputStream() != null) {
             reader.parse(source.getInputStream());
-        else if (source.getSystemId() != null)
+        } else if (source.getSystemId() != null) {
             reader.parse(source.getSystemId());
-        else
+        } else {
             throw new IOException("Invalid MarcSource object");
+        }
     }
 
     private synchronized Templates tryCache(Source stylesheet)
         throws TransformerException
     {
         String uri = stylesheet.getSystemId();
-        Templates templates = (Templates)cache.get(uri);
+        Templates templates = (Templates)this.cache.get(uri);
         if (templates == null) {
-            factory = TransformerFactory.newInstance();
-            templates = factory.newTemplates(stylesheet);
-            cache.put(uri, templates);
+            this.factory = TransformerFactory.newInstance();
+            templates = this.factory.newTemplates(stylesheet);
+            this.cache.put(uri, templates);
         }
         return templates;
     }
@@ -168,7 +167,7 @@ public class Converter
      */
     public synchronized void clearCache()
     {
-        cache = new Hashtable();
+        this.cache = new Hashtable();
     }
 
 }

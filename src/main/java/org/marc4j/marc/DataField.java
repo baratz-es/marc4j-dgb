@@ -1,4 +1,3 @@
-// $Id: DataField.java,v 1.6 2003/03/31 19:55:26 ceyates Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -23,39 +22,33 @@ package org.marc4j.marc;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * <p>
- * <code>DataField</code> defines behaviour for a data field
- * (tag 010-999).
+ * <code>DataField</code> defines behavior for a data field (tag 010-999).
  * </p>
  *
  * <p>
- * Data fields are variable fields identified by tags beginning
- * with ASCII numeric values other than two zero's. Data fields
- * contain indicators, subfield codes, data and a field terminator.
- * The structure of a data field according to the MARC standard is
- * as follows:
+ * Data fields are variable fields identified by tags beginning with ASCII numeric values other than two zero's. Data
+ * fields contain indicators, subfield codes, data and a field terminator. The structure of a data field according to
+ * the MARC standard is as follows:
  * </p>
- * 
+ *
  * <pre>
- * INDICATOR_1  INDICATOR_2  DELIMITER  DATA_ELEMENT_IDENTIFIER_1
- *   DATA_ELEMENT_1  ...  DELIMITER  DATA_ELEMENT_IDENTIFIER_n
- *     DATA_ELEMENT_n  FT
+ * INDICATOR_1  INDICATOR_2  DELIMITER  DATA_ELEMENT_IDENTIFIER_1  DATA_ELEMENT_1  ...  DELIMITER  DATA_ELEMENT_IDENTIFIER_n  DATA_ELEMENT_n  FT
  * </pre>
  * <p>
- * This structure is returned by the {@link #marshal()}
- * method.
+ * This structure is returned by the {@link #marshal()} method.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.6 $
- *
+ * @author Bas Peters
  */
 public class DataField
     extends VariableField
@@ -71,66 +64,178 @@ public class DataField
     private char ind2;
 
     /** A collection of data elements. */
-    private ArrayList<Subfield> list;
+    private ArrayList<Subfield> subfields = new ArrayList<>();
 
     /**
-     * <p>
      * Default constructor.
-     * </p>
      */
     public DataField()
     {
-        super();
-        this.list = new ArrayList<>();
     }
 
     /**
-     * <p>
-     * Creates a new <code>DataField</code> instance and
-     * registers the tag name.
-     * </p>
+     * Creates a new {@link DataField} instance and registers the tag name.
      *
-     * @param tag the tag name
+     * @param tag The tag name
      */
     public DataField(String tag)
     {
         super(tag);
-        this.list = new ArrayList<>();
     }
 
     /**
-     * <p>
-     * Creates a new <code>DataField</code> instance and
-     * registers the tag name and the indicator values.
-     * </p>
+     * Creates a new {@link DataField} and sets the tag name and the first and second indicator.
      *
-     * @param tag the tag name
-     * @param ind1 the first indicator
-     * @param ind2 the second indicator
+     * @param tag The tag name
+     * @param ind1 The first indicator
+     * @param ind2 The second indicator
      */
     public DataField(String tag, char ind1, char ind2)
     {
         super(tag);
-        setIndicator1(ind1);
-        setIndicator2(ind2);
-        this.list = new ArrayList<>();
+        this.setIndicator1(ind1);
+        this.setIndicator2(ind2);
     }
 
     /**
-     * <p>
-     * Creates a new <code>DataField</code> instance and
-     * registers the id, the tag name and the indicator values.
-     * </p>
+     * Creates a new {@link DataField} and sets the tag name and the first and second indicator, and the id
      *
-     * @param tag the tag name
-     * @param ind1 the first indicator
-     * @param ind2 the second indicator
-     * @param id the id for the field
+     * @param tag The tag name
+     * @param ind1 The first indicator
+     * @param ind2 The second indicator
+     * @param id The id for the DataField
      */
     public DataField(String tag, char ind1, char ind2, Long id)
     {
         this(tag, ind1, ind2);
         this.setId(id);
+    }
+
+    /**
+     * Copy constructor
+     *
+     * @param other Another instance of {@link DataField}, where to copy all the values
+     */
+    public DataField(DataField other)
+    {
+        super(other);
+        this.ind1 = other.ind1;
+        this.ind2 = other.ind2;
+        if (other.subfields != null) {
+            for (Subfield subfield : other.subfields) {
+                this.addSubfield(new Subfield(subfield));
+            }
+        }
+    }
+
+    /**
+     * Returns <code>true</code> if a match is found for the supplied regular expression pattern; else,
+     * <code>false</code>.
+     *
+     * @param pattern An instance of a compiled Pattern to use as matcher
+     */
+    @Override
+    public boolean find(Pattern pattern)
+    {
+        return this.subfields.stream().anyMatch(subfield -> subfield.find(pattern));
+    }
+
+    /**
+     * <p>
+     * Adds a new {@link Subfield} instance to
+     * the collection of data elements.
+     * </p>
+     *
+     * @param subfield the data element
+     * @see Subfield
+     * @deprecated Use {{@link #addSubfield(Subfield)}
+     */
+    @Deprecated
+    public void add(Subfield subfield)
+    {
+        this.subfields.add(subfield);
+    }
+
+    /**
+     * Adds a new {@link Subfield} instance to the collection of data elements.
+     *
+     * @param subfield The {@link Subfield} of a {@link DataField}
+     * @see Subfield
+     */
+    public void addSubfield(Subfield subfield)
+    {
+        this.subfields.add(subfield);
+    }
+
+    /**
+     * Adds a new {@link Subfield} instance at the specified position.
+     * Shifts the element currently at that position (if any) and any subsequent elements to the right (adds one to
+     * their indices).
+     *
+     * @param index The subfield's position within the list
+     * @param subfield The {@link Subfield} of a {@link DataField}
+     */
+    public void addSubfield(int index, Subfield subfield)
+    {
+        this.subfields.add(index, subfield);
+    }
+
+    /**
+     * Removes a {@link Subfield} from the field.
+     *
+     * @param subfield The subfield to remove from the field.
+     */
+    public void removeSubfield(Subfield subfield)
+    {
+        this.subfields.remove(subfield);
+    }
+
+    /**
+     * Returns the first {@link Subfield} with the supplied <code>char</code> code.
+     *
+     * @param code A Subfield code
+     * @return A Subfield instance or null
+     * @deprecated Use {@link #getFirstSubfield(char)}
+     */
+    @Deprecated
+    public Subfield getSubfield(char code)
+    {
+        return this.getFirstSubfield(code).orElse(null);
+    }
+
+    /**
+     * Returns the first {@link Subfield} with the supplied <code>char</code> code.
+     *
+     * @param code A Subfield code
+     * @return An <code>Optional&lt;Subfield&gt;</code> of the first subfield with the supplied <code>char</code> code
+     */
+    public Optional<Subfield> getFirstSubfield(char code)
+    {
+        return this.getSubfields(code).findFirst();
+    }
+
+    /**
+     * Returns a {@link Stream} of {@link Subfield}s with the supplied <code>char</code> code.
+     *
+     * @param code A Subfield code
+     * @return A Stream of Subfield
+     */
+    public Stream<Subfield> getSubfields(char code)
+    {
+        return this.subfields.stream().filter(subfield -> subfield.getCode() == code);
+    }
+
+    /**
+     * <p>
+     * Returns true if there is a subfield with the given identifier.
+     * </p>
+     *
+     * @param code the data element identifier
+     * @return true if the data element exists, false if not
+     */
+    public boolean hasSubfield(char code)
+    {
+        return this.subfields.stream().anyMatch(subfield -> subfield.getCode() == code);
     }
 
     /**
@@ -145,24 +250,12 @@ public class DataField
     @Override
     public void setTag(String tag)
     {
-        if (Tag.isDataField(tag)) {
-            super.setTag(tag);
-        } else {
+        if (!Tag.isDataField(tag)) {
+            // NOTE WTF this exception will be never throw, as Tag.isXXField(String) throws an exception when is
+            // invalid!
             throw new IllegalTagException(tag, "not a data field identifier");
         }
-    }
-
-    /**
-     * <p>
-     * Returns the tag name.
-     * </p>
-     *
-     * @return {@link String} - the tag name
-     */
-    @Override
-    public String getTag()
-    {
-        return super.getTag();
+        super.setTag(tag);
     }
 
     /**
@@ -195,20 +288,6 @@ public class DataField
 
     /**
      * <p>
-     * Adds a new <code>subfield</code> instance to
-     * the collection of data elements.
-     * </p>
-     *
-     * @param subfield the data element
-     * @see Subfield
-     */
-    public void add(Subfield subfield)
-    {
-        list.add(subfield);
-    }
-
-    /**
-     * <p>
      * Returns the first indicator.
      * </p>
      *
@@ -216,7 +295,7 @@ public class DataField
      */
     public char getIndicator1()
     {
-        return ind1;
+        return this.ind1;
     }
 
     /**
@@ -228,7 +307,7 @@ public class DataField
      */
     public char getIndicator2()
     {
-        return ind2;
+        return this.ind2;
     }
 
     /**
@@ -238,45 +317,47 @@ public class DataField
      *
      * @return {@link List} - the data element collection
      * @see Subfield
+     * @deprecated Use {{@link #getSubfields()}
      */
+    @Deprecated
     public List<Subfield> getSubfieldList()
     {
-        return list;
+        return this.getSubfields();
     }
 
     /**
-     * <p>
-     * Returns the subfield for a given data element identifier.
-     * </p>
+     * Returns the collection of Subfields
      *
-     * @param code the data element identifier
-     * @return Subfield the data element
+     * @return {@link List<Subfield>} the Subfield element collection
      * @see Subfield
      */
-    public Subfield getSubfield(char code)
+    public List<Subfield> getSubfields()
     {
-        for (Iterator<Subfield> i = list.iterator(); i.hasNext();) {
-            Subfield sf = i.next();
-            if (sf.getCode() == code) return sf;
-        }
-        return null;
+        return this.subfields;
     }
 
     /**
      * <p>
-     * Returns true if there is a subfield with the given identifier.
+     * Sets the collection of data elements.
      * </p>
      *
-     * @param code the data element identifier
-     * @return true if the data element exists, false if not
+     * <p>
+     * A collection of data elements is a {@link List} object
+     * with null or more {@link Subfield} objects.
+     * </p>
+     *
+     * <p>
+     * <b>Note:</b> this method replaces the current {@link List}
+     * of subfields with the subfields in the new {@link List}.
+     * </p>
+     *
+     * @param newList the new data element collection
+     * @deprecated Use {{@link #setSubfields(List)}
      */
-    public boolean hasSubfield(char code)
+    @Deprecated
+    public void setSubfieldList(List<Subfield> subfields)
     {
-        for (Iterator<Subfield> i = list.iterator(); i.hasNext();) {
-            Subfield sf = i.next();
-            if (sf.getCode() == code) return true;
-        }
-        return false;
+        this.setSubfields(subfields);
     }
 
     /**
@@ -296,22 +377,14 @@ public class DataField
      *
      * @param newList the new data element collection
      */
-    public void setSubfieldList(List<Subfield> newList)
+    public void setSubfields(List<Subfield> subfields)
     {
-        if (newList == null) {
-            list = new ArrayList<Subfield>();
+        if (subfields == null || subfields.isEmpty()) {
+            this.subfields = new ArrayList<>();
             return;
         }
-        list = new ArrayList<Subfield>();
-        for (Iterator<Subfield> i = newList.iterator(); i.hasNext();) {
-            Object obj = i.next();
-            if (obj instanceof Subfield) {
-                add((Subfield)obj);
-            } else {
-                throw new IllegalAddException(obj.getClass().getName(),
-                    "a collection of subfields can only contain " + "Subfield objects.");
-            }
-        }
+
+        this.subfields = new ArrayList<>(subfields);
     }
 
     /**
@@ -324,13 +397,11 @@ public class DataField
      */
     public String marshal()
     {
-        StringBuffer dataField = new StringBuffer().append(ind1).append(ind2);
-        Iterator<Subfield> iterator = list.iterator();
-        while (iterator.hasNext()) {
-            Subfield subfield = (Subfield)iterator.next();
+        StringBuilder dataField = new StringBuilder().append(this.ind1).append(this.ind2);
+        for (Subfield subfield : this.subfields) {
             dataField.append(subfield.marshal());
         }
-        dataField.append(FT);
+        dataField.append((char)MarcConstants.FT);
         return dataField.toString();
     }
 
@@ -349,31 +420,29 @@ public class DataField
 
     /*
      * @see java.lang.Object#clone()
+     * @deprecated Use copy constructor  {@link #DataField(DataField)}
      */
+    @Deprecated
     @Override
     public Object clone()
     {
-        // Creamos una nueva instancia
-        DataField instance = new DataField(this.getTag(), this.ind1, this.ind2, DataField.EMPTY_ID);
-
-        // Recorremos la lista de subcampos y clonamos cada uno de ellos
-        if (this.list != null) {
-            ArrayList<Subfield> newList = new ArrayList<>();
-            for (Iterator<Subfield> it = this.list.iterator(); it.hasNext();)
-                newList.add((Subfield)it.next().clone());
-            instance.setSubfieldList(newList);
-        }
-
-        // Devolvemos la nueva instancia
-        return instance;
+        DataField copy = new DataField(this);
+        copy.setId(EMPTY_ID);
+        return copy;
     }
 
     @Override
     public boolean equals(Object obj)
     {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        if (obj.getClass() != getClass()) return false;
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != this.getClass()) {
+            return false;
+        }
 
         DataField that = (DataField)obj;
         return new EqualsBuilder()
@@ -381,7 +450,7 @@ public class DataField
             .append(this.getId(), that.getId())
             .append(this.ind1, that.ind1)
             .append(this.ind2, that.ind2)
-            .append(this.list, that.list) // ArrayList.equals hace un deep equals
+            .append(this.subfields, that.subfields) // ArrayList.equals does a "deep" equals
             .isEquals();
     }
 
@@ -393,7 +462,7 @@ public class DataField
             .append(this.getId())
             .append(this.ind1)
             .append(this.ind2)
-            .append(this.list)
+            .append(this.subfields)
             .toHashCode();
     }
 
@@ -403,14 +472,14 @@ public class DataField
         final StringBuilder sb = new StringBuilder();
         sb
             .append("\n    DATAFIELD    [  tag: ")
-            .append(getTag())
+            .append(this.getTag())
             .append(", Ind1:")
-            .append(getIndicator1())
+            .append(this.getIndicator1())
             .append(", Ind2:")
-            .append(getIndicator2())
+            .append(this.getIndicator2())
             .append(this.getId() != null ? (", id: ") + this.getId() : "")
             .append(",\n        Elements: ")
-            .append(Arrays.toString(list.toArray()))
+            .append(Arrays.toString(this.subfields.toArray()))
             .append(" ] ");
         return sb.toString();
     }

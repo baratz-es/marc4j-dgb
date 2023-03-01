@@ -5,7 +5,7 @@
     <groupId>com.digibis</groupId>
     <artifactId>marc4j</artifactId>
     <packaging>jar</packaging>
-    <version>1.1.3-SNAPSHOT</version>
+    <version>1.2.0-SNAPSHOT</version>
     <name>Digibís MARC4J fork</name>
     <description>An easy to use Application Programming Interface (API) for working with MARC and MARCXML in Java.</description>
 
@@ -30,12 +30,12 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java-release.version>7</java-release.version>
+        <java-release.version>8</java-release.version>
         <java.version>1.${java-release.version}</java.version>
         <groovy.version>2.5.14</groovy.version>
-        <groovy-eclipse-compiler>3.4.0-01</groovy-eclipse-compiler>
-        <groovy-eclipse-batch>2.5.9-01</groovy-eclipse-batch>
-        <spock.version>1.2-groovy-2.5</spock.version>
+        <groovy-eclipse-compiler>3.7.0</groovy-eclipse-compiler>
+        <groovy-eclipse-batch>2.5.14-02</groovy-eclipse-batch>
+        <spock.version>2.0-groovy-2.5</spock.version>
     </properties>
 
     <dependencies>
@@ -50,15 +50,21 @@
             <version>1.7.7</version>
         </dependency>
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.2.3</version>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>2.9.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.fusesource.jansi</groupId>
-            <artifactId>jansi</artifactId>
-            <version>1.17.1</version>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.17.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.17.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -91,6 +97,14 @@
             <version>${groovy.version}</version>
             <scope>test</scope>
         </dependency>
+        <!-- Spock framework -->
+        <dependency>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-bom</artifactId>
+            <version>${spock.version}</version>
+            <type>pom</type>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.spockframework</groupId>
             <artifactId>spock-core</artifactId>
@@ -101,13 +115,17 @@
                   <artifactId>*</artifactId>
                   <groupId>org.codehaus.groovy</groupId>
                 </exclusion>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <!-- Spock needs CGLib and Objenesis to make mockups -->
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib-nodep</artifactId>
-            <version>3.2.7</version>
+            <version>3.3.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -161,6 +179,20 @@
                                 <source>src/test/java</source>
                                 <source>src/test/groovy</source>
                             </sources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>add-test-resource</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>add-test-resource</goal>
+                        </goals>
+                        <configuration>
+                            <resources>
+                                <resource>
+                                    <directory>src/test/resources</directory>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                 </executions>
@@ -222,13 +254,13 @@
                 <configuration>
                     <signature>
                         <groupId>org.codehaus.mojo.signature</groupId>
-                        <artifactId>java17</artifactId>
+                        <artifactId>java18</artifactId>
                         <version>1.0</version>
                     </signature>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>ensure-java-1.7-class-library</id>
+                        <id>ensure-java-1.8-class-library</id>
                         <phase>prepare-package</phase>
                         <goals>
                             <goal>check</goal>
@@ -335,20 +367,10 @@
         <profile>
             <id>groovy3</id>
             <properties>
-                <groovy.version>3.0.7</groovy.version>
-                <groovy-eclipse-compiler>3.7.0</groovy-eclipse-compiler>
-                <groovy-eclipse-batch>3.0.7-03</groovy-eclipse-batch>
+                <groovy.version>3.0.8</groovy.version>
+                <groovy-eclipse-batch>3.0.8-01</groovy-eclipse-batch>
                 <spock.version>2.0-groovy-3.0</spock.version>
             </properties>
-            <dependencies>
-                <dependency>
-                    <groupId>org.spockframework</groupId>
-                    <artifactId>spock-bom</artifactId>
-                    <version>${spock.version}</version>
-                    <type>pom</type>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
         </profile>
     </profiles>
 </project>

@@ -1,4 +1,3 @@
-// $Id: Tag.java,v 1.5 2003/01/10 09:39:43 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -32,9 +31,7 @@ package org.marc4j.marc;
  * ASCII alphabetic characters (uppercase or lowercase, but not both).
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.5 $
- *
+ * @author Bas Peters
  */
 public class Tag
 {
@@ -76,12 +73,14 @@ public class Tag
      *
      * @param tag the tag name
      * @return <code>boolean</code> - tag identifies a control number field
-     *         (true) or not (false)
+     *             (true) or not (false)
      */
     public static boolean isControlNumberField(String tag)
     {
         Verifier.checkTag(tag);
-        if (!tag.equals("001")) return false;
+        if (!"001".equals(tag)) {
+            return false;
+        }
         return true;
     }
 
@@ -97,13 +96,17 @@ public class Tag
      *
      * @param tag the tag name
      * @return <code>boolean</code> - tag identifies a control field (true)
-     *         or a data field (false)
+     *             or a data field (false)
      */
     public static boolean isControlField(String tag)
     {
         Verifier.checkTag(tag);
-        if (tag.charAt(0) != ZERO) return false;
-        if (tag.charAt(1) != ZERO) return false;
+        if (tag.charAt(0) != ZERO) {
+            return false;
+        }
+        if (tag.charAt(1) != ZERO) {
+            return false;
+        }
         return true;
     }
 
@@ -118,12 +121,14 @@ public class Tag
      *
      * @param tag the tag name
      * @return <code>boolean</code> - tag identifies a data field (true)
-     *         or a control field (false)
+     *             or a control field (false)
      */
     public static boolean isDataField(String tag)
     {
         Verifier.checkTag(tag);
-        if (!isControlField(tag)) return true;
+        if (!Tag.isControlField(tag)) {
+            return true;
+        }
         return false;
     }
 

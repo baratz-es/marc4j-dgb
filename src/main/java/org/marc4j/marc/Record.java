@@ -1,4 +1,3 @@
-// $Id: Record.java,v 1.7 2003/03/31 19:55:26 ceyates Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -24,14 +23,16 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * <p>
  * <code>Record</code> defines behaviour for a record.
- * </p>
  *
  * <p>
  * The structure of a record according to the MARC standard is as
@@ -39,29 +40,22 @@ import org.apache.commons.lang3.StringUtils;
  * </p>
  *
  * <pre>
- * LEADER  DIRECTORY  FT  CONTROL_NUMBER_FIELD  FT
- *   CONTROL_FIELD_1  FT   ...   CONTROL_FIELD_n  FT
- *     DATA_FIELD_1  FT   ...   DATA_FIELD_n  FT  RT
+ * LEADER  DIRECTORY  FT  CONTROL_NUMBER_FIELD  FT  CONTROL_FIELD_1  FT   ...   CONTROL_FIELD_n  FT  DATA_FIELD_1  FT   ...   DATA_FIELD_n  FT  RT
  * </pre>
  * <p>
- * This structure is returned by the {@link #marshal()}
- * method.
+ * This structure is returned by the {@link #marshal()} method.
  * </p>
  * <p>
- * <b>Note:</b> the control number field (tag 001) is an instance
- * of a {@link ControlField}. The method {@link #add(ControlField field)}
- * throws an {@link IllegalAddException} when more than one
- * control number field is supplied.
+ * <b>Note:</b> the control number field (tag 001) is an instance of a {@link ControlField}.
+ * The method {@link #add(ControlField field)} throws an {@link IllegalAddException} when more than one control number
+ * field is supplied.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.7 $
- *
+ * @author Bas Peters
  */
 public class Record
     implements Serializable, Cloneable
 {
-
     private static final long serialVersionUID = 1L;
 
     /** The record terminator. */
@@ -71,30 +65,28 @@ public class Record
     private Leader leader;
 
     /** A collection of control fields. */
-    private List<ControlField> controlFieldList = new ArrayList<>();
+    private List<ControlField> controlFields = new ArrayList<>();
 
     /** A collection of data fields. */
-    private List<DataField> dataFieldList = new ArrayList<>();
+    private List<DataField> dataFields = new ArrayList<>();
 
     /**
-     * <p>
      * Default constructor.
-     * </p>
      */
     public Record()
     {
     }
 
+    /**
+     * Builds a instance of Record with an empty Leader
+     */
     public static Record newRecordWithEmptyLeader()
     {
         return new Record(Leader.newEmptyLeader());
     }
 
     /**
-     * <p>
-     * Creates a new instance for a record and registers the
-     * leader.
-     * </p>
+     * Creates a new instance for a record and sets a leader.
      *
      * @param leader the {@link Leader} object
      */
@@ -104,9 +96,7 @@ public class Record
     }
 
     /**
-     * <p>
      * Returns the leader.
-     * </p>
      *
      * @return {@link Leader} - the leader
      */
@@ -116,9 +106,7 @@ public class Record
     }
 
     /**
-     * <p>
      * Registers the leader.
-     * </p>
      *
      * @param leader the {@link Leader} object
      */
@@ -128,10 +116,7 @@ public class Record
     }
 
     /**
-     * <p>
-     * Adds a new {@link ControlField} instance to
-     * the collection of variable fields.
-     * </p>
+     * Adds a new {@link ControlField} instance to the collection of variable fields.
      *
      * <p>
      * Checks if the variable field is a control number field (tag 001).
@@ -141,8 +126,7 @@ public class Record
      * </p>
      *
      * @param field the control field
-     * @throws IllegalAddException when there is already a control
-     *         number field on the field map
+     * @throws IllegalAddException when there is already a control number field on the field map
      */
     public void add(ControlField field)
     {
@@ -151,65 +135,56 @@ public class Record
             if (this.hasControlNumberField()) {
                 throw new IllegalAddException(field.getClass().getName(), "control field number already exists");
             }
-            this.controlFieldList.add(0, field);
+            this.controlFields.add(0, field);
         } else {
-            this.controlFieldList.add(field);
+            this.controlFields.add(field);
         }
     }
 
     /**
-     * <p>
-     * Adds a new {@link DataField} instance to
-     * the collection of variable fields.
-     * </p>
+     * Adds a new {@link DataField} instance to the collection of variable fields.
      *
      * @param field the data field
      */
     public void add(DataField field)
     {
-        this.dataFieldList.add(field);
+        this.dataFields.add(field);
     }
 
     /**
-     * <p>
      * Returns the control number field (tag 001).
-     * </p>
      *
      * @return {@link ControlField} - the control number field
      */
     public ControlField getControlNumberField()
     {
-        ControlField cf = this.controlFieldList.get(0);
-        if (cf.getTag().equals("001")) {
+        ControlField cf = this.controlFields.get(0);
+        if ("001".equals(cf.getTag())) {
             return cf;
         }
         return null;
     }
 
     /**
-     * <p>
      * Returns the control number (contents for tag 001).
-     * </p>
      *
      * @return String - the control number value
      */
     public String getControlNumber()
     {
-        if (this.controlFieldList.isEmpty()) {
+        if (this.controlFields.isEmpty()) {
             return null;
         }
 
-        ControlField cf = this.controlFieldList.get(0);
-        if (cf.getTag().equals("001")) {
+        ControlField cf = this.controlFields.get(0);
+        if ("001".equals(cf.getTag())) {
             return new String(cf.getData());
         }
         return null;
     }
 
     /**
-     * <p>
      * Returns the control field for the given tag.
-     * </p>
      *
      * @param tag the tag name
      * @return ControlField - the control field object
@@ -220,7 +195,7 @@ public class Record
             return null;
         }
 
-        for (ControlField controlField : this.controlFieldList) {
+        for (ControlField controlField : this.controlFields) {
             ControlField cf = controlField;
             if (cf.getTag().equals(tag)) {
                 return cf;
@@ -230,16 +205,14 @@ public class Record
     }
 
     /**
-     * <p>
      * Returns true if there is a variable field with the given tag.
-     * </p>
      *
      * @param tag the tag name
      * @return true if the variable field exists, false if not
      */
     public boolean hasVariableField(String tag)
     {
-        List<VariableField> list = this.getVariableFieldList();
+        List<VariableField> list = this.getVariableFields();
         for (VariableField variableField : list) {
             VariableField vf = variableField;
             if (vf.getTag().equals(tag)) {
@@ -250,20 +223,31 @@ public class Record
     }
 
     /**
-     * <p>
-     * Returns the data field for the given tag.
-     * </p>
+     * Returns the first data field for the given tag.
      *
-     * @param tag the tag name
-     * @return DataField - the control number value
+     * @param tag Tag name
+     * @return DataField
+     * @deprecated Use {@link #getFirstDataField(String)}
      */
+    @Deprecated
     public DataField getDataField(String tag)
+    {
+        return this.getFirstDataField(tag);
+    }
+
+    /**
+     * Returns the first data field for the given tag.
+     *
+     * @param tag Tag name
+     * @return DataField
+     */
+    public DataField getFirstDataField(String tag)
     {
         if (!Tag.isDataField(tag)) {
             return null;
         }
 
-        for (DataField dataField : this.dataFieldList) {
+        for (DataField dataField : this.dataFields) {
             DataField df = dataField;
             if (df.getTag().equals(tag)) {
                 return df;
@@ -279,22 +263,42 @@ public class Record
      * </p>
      *
      * @return <code>boolean</code> - true if there is a control number
-     *         field, false if there is no control
-     *         number field
+     *             field, false if there is no control
+     *             number field
      */
     public boolean hasControlNumberField()
     {
-        if (this.controlFieldList.isEmpty()) {
+        if (this.controlFields.isEmpty()) {
             return false;
         }
-        ControlField cf = this.controlFieldList.get(0);
-        return cf.getTag().equals("001");
+        ControlField cf = this.controlFields.get(0);
+        return "001".equals(cf.getTag());
     }
 
     /**
-     * <p>
      * Returns the collection of control fields.
+     *
+     * <p>
+     * The collection of control fields contains:
      * </p>
+     * <ul>
+     * <li>the control number field
+     * <li>control fields
+     * </ul>
+     * <p>
+     *
+     * @return {@link List} - the control field collection
+     * @see ControlField
+     * @deprecated Use {@link #getControlFields()}
+     */
+    @Deprecated
+    public List<ControlField> getControlFieldList()
+    {
+        return this.getControlFields();
+    }
+
+    /**
+     * Returns the collection of control fields.
      *
      * <p>
      * The collection of control fields contains:
@@ -308,15 +312,13 @@ public class Record
      * @return {@link List} - the control field collection
      * @see ControlField
      */
-    public List<ControlField> getControlFieldList()
+    public List<ControlField> getControlFields()
     {
-        return this.controlFieldList;
+        return this.controlFields;
     }
 
     /**
-     * <p>
      * Sets the collection of control fields.
-     * </p>
      *
      * <p>
      * A collection of control fields is a {@link List} object
@@ -329,42 +331,74 @@ public class Record
      * </p>
      *
      * @param newList the new control field collection
+     * @deprecated Use {@link #setControlFields(List)}
      */
+    @Deprecated
     public void setControlFieldList(List<ControlField> newList)
     {
-        if (newList == null) {
-            this.controlFieldList = new ArrayList<>();
+        this.setControlFields(newList);
+    }
+
+    /**
+     * Sets the collection of control fields.
+     *
+     * <p>
+     * A collection of control fields is a {@link List} object
+     * with null or more {@link ControlField} objects.
+     * </p>
+     *
+     * <p>
+     * <b>Note:</b> this method replaces the current {@link List}
+     * of control fields with the control fields in the new {@link List}.
+     * </p>
+     *
+     * @param newControlFields the new control field collection
+     * @throws IllegalAddException if newList contains an object that isn't an instance of ControlField
+     */
+    public void setControlFields(java.util.Collection<ControlField> newControlFields)
+    {
+        if (newControlFields == null || newControlFields.isEmpty()) {
+            this.controlFields = new ArrayList<>();
             return;
         }
-        this.controlFieldList = new ArrayList<>();
-        for (ControlField controlField : newList) {
-            Object obj = controlField;
-            if (obj instanceof ControlField) {
-                this.add((ControlField)obj);
+
+        this.controlFields = new ArrayList<>();
+        for (ControlField controlField : newControlFields) {
+            if (controlField instanceof ControlField) {
+                this.add(controlField);
             } else {
-                throw new IllegalAddException(obj.getClass().getName(),
+                throw new IllegalAddException(controlField.getClass().getName(),
                     "a collection of control fields can only contain " + "ControlField objects.");
             }
         }
     }
 
     /**
-     * <p>
      * Returns the collection of data fields.
-     * </p>
+     *
+     * @return {@link List} - the data field collection
+     * @see DataField
+     * @deprecated Use {@link #getDataFields()}
+     */
+    @Deprecated
+    public List<DataField> getDataFieldList()
+    {
+        return this.getDataFields();
+    }
+
+    /**
+     * Returns the collection of data fields.
      *
      * @return {@link List} - the data field collection
      * @see DataField
      */
-    public List<DataField> getDataFieldList()
+    public List<DataField> getDataFields()
     {
-        return this.dataFieldList;
+        return this.dataFields;
     }
 
     /**
-     * <p>
      * Sets the collection of data fields.
-     * </p>
      *
      * <p>
      * A collection of data fields is a {@link List} object
@@ -377,23 +411,63 @@ public class Record
      * </p>
      *
      * @param newList the new data field collection
+     * @deprecated Use {@link #setDataFields(List)}
      */
+    @Deprecated
     public void setDataFieldList(List<DataField> newList)
     {
-        if (newList == null) {
-            this.dataFieldList = new ArrayList<>();
-            return;
-        }
-        this.dataFieldList = new ArrayList<>();
-        for (DataField dataField : newList) {
-            this.add(dataField);
-        }
+        this.setDataFields(newList);
     }
 
     /**
+     * Sets the collection of data fields.
+     *
      * <p>
-     * Returns the collection of variable fields.
+     * A collection of data fields is a {@link List} object with null or more {@link DataField} objects.
      * </p>
+     *
+     * <p>
+     * <b>Note:</b> this method replaces the current {@link List} of data fields with the data fields in the new
+     * {@link List}.
+     * </p>
+     *
+     * @param newDataFields the new data field collection
+     */
+    public void setDataFields(java.util.Collection<DataField> newDataFields)
+    {
+        if (newDataFields == null || newDataFields.isEmpty()) {
+            this.dataFields = new ArrayList<>();
+            return;
+        }
+        this.dataFields = new ArrayList<>(newDataFields);
+    }
+
+    /**
+     * Returns the collection of variable fields.
+     *
+     * <p>
+     * The collection of variable fields contains:
+     * </p>
+     * <ul>
+     * <li>the control number field
+     * <li>control fields
+     * <li>data fields
+     * </ul>
+     * <p>
+     *
+     * @return {@link List} - the variable field collection
+     * @see ControlField
+     * @see DataField
+     * @deprecated Use {@link #getVariableFields()}
+     */
+    @Deprecated
+    public List<VariableField> getVariableFieldList()
+    {
+        return this.getVariableFields();
+    }
+
+    /**
+     * Returns the collection of variable fields.
      *
      * <p>
      * The collection of variable fields contains:
@@ -409,22 +483,16 @@ public class Record
      * @see ControlField
      * @see DataField
      */
-    public List<VariableField> getVariableFieldList()
+    public List<VariableField> getVariableFields()
     {
         List<VariableField> variableFields = new ArrayList<>();
-        for (ControlField controlField : this.controlFieldList) {
-            variableFields.add(controlField);
-        }
-        for (DataField dataField : this.dataFieldList) {
-            variableFields.add(dataField);
-        }
+        variableFields.addAll(this.controlFields);
+        variableFields.addAll(this.dataFields);
         return variableFields;
     }
 
     /**
-     * <p>
      * Sets the collection of variable fields.
-     * </p>
      *
      * <p>
      * A collection of variable fields is a {@link List} object
@@ -438,109 +506,291 @@ public class Record
      * </p>
      *
      * @param newList the new variable field collection
+     * @deprecated Use {@link #setVariableFields(List)
      */
+    @Deprecated
     public void setVariableFieldList(List<VariableField> newList)
     {
-        if (newList == null) {
-            this.controlFieldList = new ArrayList<>();
-            this.dataFieldList = new ArrayList<>();
+        this.setVariableFields(newList);
+    }
+
+    /**
+     * Sets the collection of variable fields.
+     *
+     * <p>
+     * A collection of variable fields is a {@link List} object
+     * with null or more {@link ControlField} or {@link DataField}
+     * objects.
+     * </p>
+     *
+     * <p>
+     * <b>Note:</b> this method replaces the current {@link List}
+     * of variable fields with the variable fields in the new {@link List}.
+     * </p>
+     *
+     * @param newVariableFields the new variable field collection
+     */
+    public void setVariableFields(java.util.Collection<VariableField> newVariableFields)
+    {
+        if (newVariableFields == null || newVariableFields.isEmpty()) {
+            this.controlFields = new ArrayList<>();
+            this.dataFields = new ArrayList<>();
             return;
         }
-        this.controlFieldList = new ArrayList<>();
-        this.dataFieldList = new ArrayList<>();
-        for (VariableField variableField : newList) {
-            Object obj = variableField;
-            if (obj instanceof ControlField) {
-                this.add((ControlField)obj);
-            } else if (obj instanceof DataField) {
-                this.add((DataField)obj);
+
+        this.controlFields = new ArrayList<>();
+        this.dataFields = new ArrayList<>();
+        for (VariableField variableField : newVariableFields) {
+            if (variableField instanceof ControlField) {
+                this.add((ControlField)variableField);
+            } else if (variableField instanceof DataField) {
+                this.add((DataField)variableField);
             } else {
-                throw new IllegalAddException(obj.getClass().getName(),
+                throw new IllegalAddException(variableField.getClass().getName(),
                     "a collection of variable fields can only contain " + "ControlField or DataField objects.");
             }
         }
     }
 
     /**
-     * <p>
-     * Returns a <code>String</code> representation for a record
-     * following the structure of a MARC record (tape format).
-     * </p>
-     *
-     * <p>
-     * Variable fields are sorted by tag name.
-     * </p>
-     *
-     * @return <code>String</code> - the MARC record
-     * @throws MarcException if the record contains no leader or no
-     *         control number field
+     * Returns a stream of the variable fields of this record
      */
-    public String marshal()
+    public Stream<VariableField> getVariableFieldsStream()
     {
-
-        // throw exception if record contains no leader
-        if (this.leader == null) {
-            throw new MarcException("Record contains no leader");
-        }
-
-        // throw exception if record contains no control number field
-        if (!this.hasControlNumberField()) {
-            throw new MarcException("Record contains no control number field (tag 001)");
-        }
-
-        StringBuilder data = new StringBuilder();
-        Directory directory = new Directory();
-
-        // append control fields to directory and data
-        for (ControlField controlField : this.controlFieldList) {
-            ControlField cf = controlField;
-            directory.add(cf.getTag(), cf.getLength());
-            data.append(cf.marshal());
-        }
-
-        // append data fields to directory and data
-        for (DataField dataField : this.dataFieldList) {
-            DataField df = dataField;
-            directory.add(df.getTag(), df.getLength());
-            data.append(df.marshal());
-        }
-
-        // add base address of data and logical record length tp the leader
-        int baseAddress = 24 + directory.getLength();
-        int recordLength = baseAddress + data.length() + 1;
-        this.leader.setRecordLength(recordLength);
-        this.leader.setBaseAddressOfData(baseAddress);
-
-        // return record in tape format
-        return this.leader.marshal() + directory.marshal() + data + Record.RT;
+        Stream<VariableField> controlFieldsStream = this.controlFields.stream().map(VariableField.class::cast);
+        Stream<VariableField> dataFieldsStream = this.dataFields.stream().map(VariableField.class::cast);
+        return Stream.concat(controlFieldsStream, dataFieldsStream);
     }
 
     /**
+     * Returns a stream of the variable fields of this record, that have the indicated tag or are prefixed by a tag
+     * value
+     *
+     * @param tagPrefix Complete Fieldtag (ie, 010, 200, 536, etc) or the fieldtag prefix (1 -> returns the datafields
+     * 1XX)
+     * @return A stream of VariableFields that matchs the tag. If the tag is empty, then returns an empty stream.
+     */
+    public Stream<? extends VariableField> getVariableFieldsStreamPrefixedBy(final String tagPrefix)
+    {
+        Stream<? extends VariableField> fields;
+
+        if (StringUtils.isEmpty(tagPrefix)) {
+            return Stream.empty();
+        }
+
+        if ((tagPrefix.length() == 3) && (Tag.isControlField(tagPrefix))) {
+            fields = this.controlFields.stream();
+        } else {
+            fields = this.dataFields.stream();
+        }
+
+        return fields
+            .filter(Objects::nonNull)
+            .filter(field -> StringUtils.equals(field.getTag(), tagPrefix) || field.getTag().startsWith(tagPrefix));
+    }
+
+    /**
+     * Returns a stream of the variable fields of this record, that have the indicated tag
+     *
+     * @param tag Complete Fieldtag (ie, 010, 200, 536, etc)
+     * @return A stream of VariableFields that matchs the tag. If the tag is empty, then returns an empty stream.
+     */
+    public Stream<? extends VariableField> getVariableFieldsStream(final String tag)
+    {
+        Stream<? extends VariableField> fields;
+
+        if (StringUtils.isEmpty(tag)) {
+            return Stream.empty();
+        }
+
+        if ((tag.length() == 3) && (Tag.isControlField(tag))) {
+            fields = this.controlFields.stream();
+        } else {
+            fields = this.dataFields.stream();
+        }
+
+        return fields
+            .filter(Objects::nonNull)
+            .filter(field -> StringUtils.equals(field.getTag(), tag));
+    }
+
+    /**
+     * Returns the first Variable Field for the given tag.
+     *
+     * @param tag Tag name
+     * @return VariableField or null
+     */
+    public VariableField getFirstVariableField(final String tag)
+    {
+        return this.getVariableFieldsStream(tag).findFirst().orElse(null);
+    }
+
+    /**
+     * Returns a stream of the control fields of this record
+     */
+    public Stream<ControlField> getControlFieldsStream()
+    {
+        return this.controlFields.stream();
+    }
+
+    /**
+     * Returns a stream of the control fields of this record, that have the indicated tag or are prefixed by a tag
+     * value
+     *
+     * @param tagPrefix Complete Fieldtag (ie, 010, 001, etc) or the fieldtag prefix (01 -> returns the controlfields
+     * 01X)
+     * @return A stream of ControlField that matchs the tag. If the tag is empty, then returns all the control fields
+     */
+    public Stream<ControlField> getControlFieldsStreamPrefixedBy(final String tagPrefix)
+    {
+        if (StringUtils.isEmpty(tagPrefix)) {
+            return this.getControlFieldsStream();
+        }
+
+        return this.controlFields.stream()
+            .filter(Objects::nonNull)
+            .filter(field -> StringUtils.equals(field.getTag(), tagPrefix) || field.getTag().startsWith(tagPrefix));
+    }
+
+    /**
+     * Returns a stream of the control fields of this record, that have the indicated tag
+     *
+     * @param tag Complete Fieldtag (ie, 010, 001, etc)
+     * @return A stream of ControlField that matchs the tag. If the tag is empty, then returns all the control fields
+     */
+    public Stream<ControlField> getControlFieldsStream(final String tag)
+    {
+        if (StringUtils.isEmpty(tag)) {
+            return this.getControlFieldsStream();
+        }
+
+        return this.controlFields.stream()
+            .filter(Objects::nonNull)
+            .filter(field -> StringUtils.equals(field.getTag(), tag));
+    }
+
+    /**
+     * Returns a stream of the data fields of this record
+     */
+    public Stream<DataField> getDataFieldsStream()
+    {
+        return this.dataFields.stream();
+    }
+
+    /**
+     * Returns a stream of the data fields of this record, that have the indicated tag or are prefixed by a tag
+     * value
+     *
+     * @param tagPrefix Complete Fieldtag (ie, 100, 200, 345, etc) or the fieldtag prefix (1 -> returns the datafields
+     * 1XX)
+     * @return A stream of ControlField that matchs the tag. If the tag is empty, then returns all data fields
+     */
+    public Stream<DataField> getDataFieldsStreamPrefixedBy(final String tagPrefix)
+    {
+        if (StringUtils.isEmpty(tagPrefix)) {
+            return this.getDataFieldsStream();
+        }
+
+        return this.dataFields.stream()
+            .filter(Objects::nonNull)
+            .filter(field -> StringUtils.equals(field.getTag(), tagPrefix) || field.getTag().startsWith(tagPrefix));
+    }
+
+    /**
+     * Returns a stream of the data fields of this record, that have the indicated tag
+     *
+     * @param tag Complete Fieldtag (ie, 100, 200, 345, etc)
+     * @return A stream of ControlField that matchs the tag. If the tag is empty, then returns all data fields
+     */
+    public Stream<DataField> getDataFieldsStream(final String tag)
+    {
+        if (StringUtils.isEmpty(tag)) {
+            return this.getDataFieldsStream();
+        }
+
+        return this.dataFields.stream()
+            .filter(Objects::nonNull)
+            .filter(field -> StringUtils.equals(field.getTag(), tag));
+    }
+
+    /**
+     * Returns a List of VariableField objects that have a data element that matches the given regular expression.
      * <p>
-     * Returns a <code>String</code> representation for a record
-     * following the structure of a MARC record (tape format).
+     * See {@link java.util.regex.Pattern} for more information about Java regular expressions.
      * </p>
+     *
+     * @param pattern An instance of a compiled Pattern to use as matcher
+     * @return A stream of VariableFields that matches the pattern
+     */
+    public Stream<VariableField> find(Pattern pattern)
+    {
+        return this.getVariableFieldsStream()
+            .filter(variablefield -> variablefield.find(pattern));
+    }
+
+    /**
+     * Returns a List of VariableField objects with the given tag that have a data element that matches the given
+     * regular expression.
+     * <p>
+     * See {@link java.util.regex.Pattern} for more information about Java regular expressions.
+     * </p>
+     *
+     * @param tag A field tag value
+     * @param pattern An instance of a compiled Pattern to use as matcher
+     * @return A stream of VariableFields that matches the given tags, and the pattern
+     */
+    public Stream<VariableField> find(String tag, Pattern pattern)
+    {
+        return this.find(Collections.singletonList(tag), pattern);
+    }
+
+    /**
+     * Returns a List of VariableField objects with the given tags that have a data element that matches the given
+     * regular expression.
+     * <p>
+     * See {@link java.util.regex.Pattern} for more information about Java regular expressions.
+     * </p>
+     *
+     * @param tags A collection of tag values
+     * @param pattern An instance of a compiled Pattern to use as matcher
+     * @return A stream of VariableFields that matches any tag of the given tags, and the pattern
+     */
+    public Stream<VariableField> find(java.util.Collection<String> tags, Pattern pattern)
+    {
+        return this.getVariableFieldsStream()
+            .filter(variableField -> tags.contains(variableField.getTag()))
+            .filter(variableField -> variableField.find(pattern));
+    }
+
+    /**
+     * Returns a <code>String</code> representation for a record following the structure of a MARC record (tape format).
      *
      * <p>
      * Variable fields are sorted by tag name.
      * </p>
      *
-     * @param encoding charset enconding used to calculate the
-     *        datafield length.
      * @return <code>String</code> - the MARC record
-     * @throws MarcException if the record contains no leader or no
-     *         control number field
+     * @throws MarcException if the record contains no leader or no control number field
      */
-    /*
-     * NOTA IMPORTANTE: Se sobrecarga el m�todo original marshal haciendo
-     * una copia del original. En el m�todo original se podr�a utilizar
-     * este pas�ndole un encoding null, pero no se hace para evitar que
-     * pudiese haber posibles errores con una clase que se utiliza en
-     * bastantes sitios.
+    public String marshal()
+    {
+        return this.marshal(null);
+    }
+
+    /**
+     * Returns a <code>String</code> representation for a record following the structure of a MARC record (tape format).
+     *
+     * <p>
+     * Variable fields are sorted by tag name.
+     * </p>
+     *
+     * @param encoding charset encoding used to calculate the fields length.
+     * @return <code>String</code> - the MARC record
+     * @throws MarcException if the record contains no leader or no control number field.
+     * @throws MarcException if the encoding is invalid.
      */
     public String marshal(String encoding)
     {
-
         // throw exception if record contains no leader
         if (this.leader == null) {
             throw new MarcException("Record contains no leader");
@@ -556,7 +806,7 @@ public class Record
 
         try {
             // append control fields to directory and data
-            for (ControlField controlField : this.controlFieldList) {
+            for (ControlField controlField : this.controlFields) {
                 ControlField cf = controlField;
                 int fieldLength = 0;
                 if (StringUtils.isNotBlank(encoding)) {
@@ -569,7 +819,7 @@ public class Record
             }
 
             // append data fields to directory and data
-            for (DataField dataField : this.dataFieldList) {
+            for (DataField dataField : this.dataFields) {
                 DataField df = dataField;
                 int fieldLength = 0;
                 if (StringUtils.isNotBlank(encoding)) {
@@ -608,20 +858,20 @@ public class Record
         try {
             instance = (Record)super.clone();
         } catch (CloneNotSupportedException ex) {
-            throw new MarcException("Unssoported clone method.", ex);
+            throw new MarcException("Unsupported clone method.", ex);
         }
 
         instance.leader = (Leader)this.leader.clone();
-        if (this.controlFieldList != null) {
+        if (this.controlFields != null) {
             ArrayList<ControlField> newList = new ArrayList<>();
-            for (ControlField controlField : this.controlFieldList) {
+            for (ControlField controlField : this.controlFields) {
                 newList.add((ControlField)controlField.clone());
             }
             instance.setControlFieldList(newList);
         }
-        if (this.dataFieldList != null) {
+        if (this.dataFields != null) {
             ArrayList<DataField> newList = new ArrayList<>();
-            for (DataField dataField : this.dataFieldList) {
+            for (DataField dataField : this.dataFields) {
                 newList.add((DataField)dataField.clone());
             }
             instance.setDataFieldList(newList);
@@ -637,10 +887,10 @@ public class Record
             .append(this.leader)
             .append(" ]")
             .append("\n controlFieldList:[ ")
-            .append(Arrays.toString(this.controlFieldList.toArray()))
+            .append(Arrays.toString(this.controlFields.toArray()))
             .append(" ] ")
             .append("\n dataFieldList:[ ")
-            .append(Arrays.toString(this.dataFieldList.toArray()))
+            .append(Arrays.toString(this.dataFields.toArray()))
             .append(" ] ")
             .toString();
     }

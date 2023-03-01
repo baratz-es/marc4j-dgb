@@ -1,4 +1,3 @@
-// $Id: MarcSource.java,v 1.7 2002/08/03 15:14:39 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -34,9 +33,7 @@ import org.marc4j.MarcReader;
  * non-MARCXML conversions.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.7 $
- *
+ * @author Bas Peters
  */
 public class MarcSource
     implements Source
@@ -64,7 +61,7 @@ public class MarcSource
      */
     public MarcSource(File file)
     {
-        setSystemId(file);
+        this.setSystemId(file);
     }
 
     /**
@@ -77,8 +74,8 @@ public class MarcSource
      */
     public MarcSource(MarcReader marcReader, File file)
     {
-        setMarcReader(marcReader);
-        setSystemId(file);
+        this.setMarcReader(marcReader);
+        this.setSystemId(file);
     }
 
     /**
@@ -104,7 +101,7 @@ public class MarcSource
     public MarcSource(MarcReader marcReader, InputStream stream)
     {
         this.inputStream = stream;
-        setMarcReader(marcReader);
+        this.setMarcReader(marcReader);
     }
 
     /**
@@ -130,7 +127,7 @@ public class MarcSource
     public MarcSource(MarcReader marcReader, Reader reader)
     {
         this.reader = reader;
-        setMarcReader(marcReader);
+        this.setMarcReader(marcReader);
     }
 
     /**
@@ -156,7 +153,7 @@ public class MarcSource
     public MarcSource(MarcReader marcReader, String systemID)
     {
         this.systemId = systemID;
-        setMarcReader(marcReader);
+        this.setMarcReader(marcReader);
     }
 
     /**
@@ -168,7 +165,7 @@ public class MarcSource
      */
     public InputStream getInputStream()
     {
-        return inputStream;
+        return this.inputStream;
     }
 
     /**
@@ -180,7 +177,7 @@ public class MarcSource
      */
     public String getPublicId()
     {
-        return publicId;
+        return this.publicId;
     }
 
     /**
@@ -192,7 +189,7 @@ public class MarcSource
      */
     public Reader getReader()
     {
-        return reader;
+        return this.reader;
     }
 
     /**
@@ -202,9 +199,10 @@ public class MarcSource
      *
      * @return String - the system identifier
      */
+    @Override
     public String getSystemId()
     {
-        return systemId;
+        return this.systemId;
     }
 
     /**
@@ -216,7 +214,7 @@ public class MarcSource
      */
     public MarcReader getMarcReader()
     {
-        return marcReader;
+        return this.marcReader;
     }
 
     /**
@@ -286,6 +284,7 @@ public class MarcSource
      *
      * @param systemID the system identifier
      */
+    @Override
     public void setSystemId(String systemID)
     {
         this.systemId = systemID;

@@ -1,4 +1,3 @@
-// $Id: Collection.java,v 1.7 2003/03/31 19:55:26 ceyates Exp $
 /**
  * Copyright (C) 2002 Bas Peters
  *
@@ -24,7 +23,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -33,24 +31,23 @@ import java.util.List;
  * <code>Record</code> objects.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.7 $
- *
+ * @author Bas Peters
  */
 public class Collection
     implements Serializable
 {
+  private static final long serialVersionUID = -7628512102418177574L;
 
-    private List list;
+  private List<Record> list;
 
     public Collection()
     {
-        list = new ArrayList();
+      this.list = new ArrayList<>();
     }
 
     public void add(Record record)
     {
-        list.add(record);
+        this.list.add(record);
     }
 
     /**
@@ -63,8 +60,10 @@ public class Collection
      */
     public Record getRecord(int index)
     {
-        if (list.size() < index) return null;
-        return (Record)list.get(index);
+        if (this.list.size() < index) {
+            return null;
+        }
+        return this.list.get(index);
     }
 
     /**
@@ -76,7 +75,7 @@ public class Collection
      */
     public int getSize()
     {
-        return list.size();
+        return this.list.size();
     }
 
     /**
@@ -91,8 +90,7 @@ public class Collection
     public void marshal(Writer out)
         throws IOException, MarcException
     {
-        for (Iterator i = list.iterator(); i.hasNext();) {
-            Record record = (Record)i.next();
+      for (Record record : this.list) {
             out.write(record.marshal());
         }
     }
@@ -102,7 +100,7 @@ public class Collection
     {
         StringBuilder builder = new StringBuilder();
         builder.append("Collection [list=");
-        builder.append(list);
+        builder.append(this.list);
         builder.append("]");
         return builder.toString();
     }

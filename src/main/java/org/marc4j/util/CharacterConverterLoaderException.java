@@ -1,4 +1,3 @@
-// $Id: CharacterConverterLoaderException.java,v 1.2 2003/01/10 09:41:56 bpeters Exp $
 /**
  * Copyright (C) 2002 Bas Peters (mail@bpeters.com)
  *
@@ -26,15 +25,13 @@ package org.marc4j.util;
  * when an error occurs while loading a character conversion class.
  * </p>
  *
- * @author <a href="mailto:mail@bpeters.com">Bas Peters</a>
- * @version $Revision: 1.2 $
- *
+ * @author Bas Peters
  */
 public class CharacterConverterLoaderException
     extends RuntimeException
 {
 
-    private Throwable cause = null;
+    private static final long serialVersionUID = 4771889265835047836L;
 
     /**
      * <p>
@@ -44,7 +41,6 @@ public class CharacterConverterLoaderException
      */
     public CharacterConverterLoaderException()
     {
-        super();
     }
 
     /**
@@ -71,44 +67,6 @@ public class CharacterConverterLoaderException
      */
     public CharacterConverterLoaderException(String message, Throwable ex)
     {
-        super(message);
-        initCause(ex);
+        super(message, ex);
     }
-
-    /**
-     * <p>
-     * Return the root cause or null if there was no
-     * original exception.
-     * </p>
-     *
-     * @return the root cause of this exception
-     */
-    @Override
-    public Throwable getCause()
-    {
-        return cause;
-    }
-
-    /**
-     * <p>
-     * Sets the root cause of this exception. This may
-     * only be called once. Subsequent calls throw an
-     * <code>IllegalStateException</code>.
-     * </p>
-     *
-     * @param cause the root cause of this exception
-     * @return the root cause of this exception
-     * @throws IllegalStateException if this method is called twice.
-     */
-    @Override
-    public Throwable initCause(Throwable cause)
-    {
-        if (this.cause == null) {
-            this.cause = cause;
-        } else {
-            throw new IllegalStateException("Cannot reset the cause");
-        }
-        return cause;
-    }
-
 }
