@@ -1,0 +1,28 @@
+name: Update gh-pages readme
+
+on:
+  push:
+    branches: [ master ]
+    paths: [ '*.md', '*.txt' ]
+
+jobs:
+  api-website:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Prepare files
+        run: |
+          mkdir gh-pages
+          cp *.md gh-pages
+          cp *.txt gh-pages
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4.2.2
+        with:
+          branch: gh-pages
+          folder: gh-pages
+
