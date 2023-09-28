@@ -109,6 +109,15 @@ class RecordSpec extends Specification {
         record.getControlField("008").equals(controlDateField)
         record.getFirstDataField("100").equals(dateField100)
         cloneRecord.marshal() == record.marshal()
+
+        when: "We can use the copy constructor"
+        def copyRecord = new Record(record)
+
+        then: "and are identical"
+        copyRecord.getControlNumberField().equals(controlNumberField)
+        copyRecord.getControlField("008").equals(controlDateField)
+        copyRecord.getFirstDataField("100").equals(dateField100)
+        copyRecord.marshal() == record.marshal()
     }
 
     def "Navigate Summerland record controlfields and datafields"() {

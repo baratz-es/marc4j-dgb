@@ -94,7 +94,24 @@ public class Record
     {
         this.add(leader);
     }
-
+    
+    /**
+     * Copy constructor
+     *
+     * @param other Another instance of {@link Record}, where to copy all the values
+     */
+    public Record(Record other)
+    {
+        this.leader = new Leader(other.leader);
+        
+        other.controlFields.forEach((ControlField controlField) -> {
+            this.controlFields.add(new ControlField(controlField));
+        });
+        other.dataFields.forEach((DataField dataField) -> {
+            this.dataFields.add(new DataField(dataField));
+        });
+    }
+    
     /**
      * Returns the leader.
      *
@@ -848,9 +865,11 @@ public class Record
         return this.leader.marshal() + directory.marshal() + data + Record.RT;
     }
 
-    /*
+    /**
+     * @deprecated Use copy constructor {@link Record(Record)}
      * @see java.lang.Object#clone()
      */
+    @Deprecated
     @Override
     public Object clone()
     {

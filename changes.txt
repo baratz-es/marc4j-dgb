@@ -1,16 +1,20 @@
+Version v1.2.1
+
+* Added missing copy constructor to Record
+
 Version v1.2.0
 
 * Using Maven wrapper
 * Code cleanup
 * Using Java 8
 * Added Streams API
-* Spock 2.0 
+* Spock 2.0
 * Cleaning some spam/noise in the JavaDocs
 * API follows better the Java conventions
 
 Version v1.1.2
 
-* Fix errror parsing leader - subfieldCodeLength
+* Fix error parsing leader - subfieldCodeLength
 
 Version v1.1.1
 
@@ -26,7 +30,7 @@ Version v1.1.0
 * Fix duplication of fields. Append attribute id to VariableField and link code to Subfield to preserve not MARC data when cloning/manipulating MARC4J records.
 * Using Java 7
 
-Changes from Marc4j 2.0 beta 7 to Version v1.0.0 
+Changes from Marc4j 2.0 beta 7 to Version v1.0.0
 
 * Improved debugging of Record (better toString() methods). Added some generics to collections.
 * Fixing unicode support. Fixed export to ISO2709. Fixed wrong field lenght based on bytes intead of characters.
