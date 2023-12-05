@@ -113,6 +113,7 @@ public class DataField
 
     /**
      * Copy constructor
+     * Copy id attribute, so if you don't want has the same, use {@link DataField#copy(DataField)}.
      *
      * @param other Another instance of {@link DataField}, where to copy all the values
      */
@@ -126,6 +127,19 @@ public class DataField
                 this.addSubfield(new Subfield(subfield));
             }
         }
+    }
+
+    /**
+     * Creates a copy of the original instance without copy the id attribute.
+     *
+     * @param original Instance to copy.
+     * @return new copy of original instance without the id attribute.
+     */
+    public static DataField copy (DataField original)
+    {
+        DataField copy = new DataField(original);
+        copy.setId(EMPTY_ID);
+        return copy;
     }
 
     /**
@@ -420,15 +434,13 @@ public class DataField
 
     /*
      * @see java.lang.Object#clone()
-     * @deprecated Use copy constructor  {@link #DataField(DataField)}
+     * @deprecated Use {@link DataField#copy} instead.
      */
     @Deprecated
     @Override
     public Object clone()
     {
-        DataField copy = new DataField(this);
-        copy.setId(EMPTY_ID);
-        return copy;
+        return DataField.copy(this);
     }
 
     @Override
