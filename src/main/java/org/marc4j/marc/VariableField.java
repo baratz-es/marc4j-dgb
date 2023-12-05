@@ -76,7 +76,9 @@ public abstract class VariableField
     }
 
     /**
-     * Copy constructor
+     * Copy constructor.
+     * Copy id attribute, so if you don't want has the same, use setId(VariableField.EMPTY_ID) with
+     * the new created instance.
      *
      * @param other another Variablefield where copy the values
      */

@@ -1,6 +1,8 @@
 Version v1.2.1
 
 * Added missing copy constructor to Record
+* Added copy methods to Record, ControlField and DataField. This methods don't copy id attributes unlike copy constructors.
+* Fix error with SLF4J in Eclipse.
 
 Version v1.2.0
 
