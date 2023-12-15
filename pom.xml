@@ -5,7 +5,7 @@
     <groupId>com.digibis</groupId>
     <artifactId>marc4j</artifactId>
     <packaging>jar</packaging>
-    <version>1.2.1-SNAPSHOT</version>
+    <version>1.2.2-SNAPSHOT</version>
     <name>Digibís MARC4J fork</name>
     <description>An easy to use Application Programming Interface (API) for working with MARC and MARCXML in Java.</description>
 
