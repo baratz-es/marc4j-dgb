@@ -5,7 +5,7 @@
     <groupId>com.digibis</groupId>
     <artifactId>marc4j</artifactId>
     <packaging>jar</packaging>
-    <version>1.2.1</version>
+    <version>1.2.2-SNAPSHOT</version>
     <name>Digibís MARC4J fork</name>
     <description>An easy to use Application Programming Interface (API) for working with MARC and MARCXML in Java.</description>
 
@@ -21,7 +21,7 @@
         <url>https://github.com/Digibis/marc4j</url>
         <connection>scm:git:git@github.com:Digibis/marc4j.git</connection>
         <developerConnection>scm:git:git@github.com:Digibis/marc4j.git</developerConnection>
-        <tag>v1.2.1</tag>
+        <tag>v1.2.0</tag>
     </scm>
 
     <prerequisites>
