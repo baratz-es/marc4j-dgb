@@ -118,6 +118,7 @@ public class ControlField
 
     /**
      * Copy constructor
+     * Copy id attribute, so if you don't want has the same, use {@link ControlField#copy(ControlField)}.
      *
      * @param other Another instance of ControlField
      */
@@ -125,6 +126,19 @@ public class ControlField
     {
         super(other);
         this.data = Arrays.copyOf(other.data, other.data.length);
+    }
+
+    /**
+     * Creates a copy of the original instance without copy the id attribute.
+     *
+     * @param original Instance to copy.
+     * @return new copy of original instance without the id attribute.
+     */
+    public static ControlField copy (ControlField original)
+    {
+        ControlField copy = new ControlField(original);
+        copy.setId(EMPTY_ID);
+        return copy;
     }
 
     /**
@@ -216,13 +230,13 @@ public class ControlField
 
     /*
      * @see java.lang.Object#clone()
-     * @deprecated Use copy constructor  {@link #ControlField(ControlField)}
+     * @deprecated Use {@link ControlField#copy} instead.
      */
     @Deprecated
     @Override
     public Object clone()
     {
-        return new ControlField(this);
+        return ControlField.copy(this);
     }
 
     /*

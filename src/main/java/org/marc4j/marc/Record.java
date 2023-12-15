@@ -96,6 +96,47 @@ public class Record
     }
 
     /**
+     * Copy constructor
+     * Copy id attributes of contained ControlField and DataField instances, so if you don't want has the same, use
+     * {@link Record#copy(Record)}.
+     *
+     * @param other Another instance of {@link Record}, where to copy all the values
+     */
+    public Record(Record other)
+    {
+        this.leader = new Leader(other.leader);
+
+        other.controlFields.forEach((ControlField controlField) -> {
+            this.controlFields.add(new ControlField(controlField));
+        });
+        other.dataFields.forEach((DataField dataField) -> {
+            this.dataFields.add(new DataField(dataField));
+        });
+    }
+
+    /**
+     * Creates a copy of the original instance without copy the id attributes of its ControlField and DataFields
+     * instances.
+     *
+     * @param original Instance to copy.
+     * @return new copy of original instance.
+     */
+    public static Record copy(Record original)
+    {
+        if (original == null) {
+            return null;
+        }
+        Record copy = new Record(original.leader);
+        original.controlFields.forEach((ControlField controlField) -> {
+            copy.controlFields.add(ControlField.copy(controlField));
+        });
+        original.dataFields.forEach((DataField dataField) -> {
+            copy.dataFields.add(DataField.copy(dataField));
+        });
+        return copy;
+    }
+
+    /**
      * Returns the leader.
      *
      * @return {@link Leader} - the leader
@@ -263,8 +304,8 @@ public class Record
      * </p>
      *
      * @return <code>boolean</code> - true if there is a control number
-     *             field, false if there is no control
-     *             number field
+     *     field, false if there is no control
+     *     number field
      */
     public boolean hasControlNumberField()
     {
@@ -848,9 +889,11 @@ public class Record
         return this.leader.marshal() + directory.marshal() + data + Record.RT;
     }
 
-    /*
+    /**
+     * @deprecated Use copy constructor {@link Record(Record)}
      * @see java.lang.Object#clone()
      */
+    @Deprecated
     @Override
     public Object clone()
     {

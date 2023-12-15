@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ '8', '11', '17' ]
+        java: ['11', '17', '21' ]
 
     steps:
       - uses: actions/checkout@v2
@@ -25,4 +25,4 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: Build and run tests with Maven
-        run: mvn -B verify --file pom.xml -Dmaven.javadoc.skip=true -P groovy3
+        run: mvn -B verify --file pom.xml -Dmaven.javadoc.skip=true
