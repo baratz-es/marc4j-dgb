@@ -1,6 +1,6 @@
 Version v1.2.2
 
-* Update Apache Commons Lang 3 to 3.13.0
+* Update Apache Commons Lang 3 to 3.18.0
 
 Version v1.2.1
 
