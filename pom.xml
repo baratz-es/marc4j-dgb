@@ -21,11 +21,11 @@
         <url>https://github.com/Digibis/marc4j</url>
         <connection>scm:git:git@github.com:Digibis/marc4j.git</connection>
         <developerConnection>scm:git:git@github.com:Digibis/marc4j.git</developerConnection>
-        <tag>v1.2.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <prerequisites>
-        <maven>3.3.0</maven>
+        <maven>3.6.0</maven>
     </prerequisites>
 
     <properties>
