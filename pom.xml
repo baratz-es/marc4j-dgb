@@ -221,7 +221,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.6.2</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -357,7 +357,7 @@
         <!-- Foce to JDK 11 or greater to generate javadocs with frames -->
         <profile>
             <id>javadoc-frames</id>
-            <activation><jdk>[1.11,]</jdk></activation>
+            <activation><jdk>[1.11,1.17]</jdk></activation>
             <build>
                 <plugins>
                     <plugin>
