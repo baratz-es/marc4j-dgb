@@ -3,7 +3,7 @@ pipeline {
 
   tools {
     git 'Default'  // Usa la instalación configurada en Jenkins
-    jdk 'OPENJDK 17'
+    jdk 'OPENJDK 21'
     maven 'apache-maven-3.9.9' //vesion de maven para el proyecto
   }
   options {
